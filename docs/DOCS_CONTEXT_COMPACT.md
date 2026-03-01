@@ -8,7 +8,7 @@ Truth policy: Runtime (`npm run smoke:summary`) > `docs/MCP_TOOL_CATALOG_101_MAT
 
 ## 1) Current Governance Truth (must keep exact)
 
-- Runtime baseline: **43 implemented / 101 target / 58 remaining**
+- Runtime baseline: **101 implemented / 101 target / 0 remaining**
 - Companion authority: **optional pilot** (not baseline requirement)
 - Release claim integrity cadence:
   1. `npm run smoke:summary`

@@ -22,9 +22,9 @@ No document should claim 100+ tool availability unless this matrix and runtime e
 
 ## 2) Baseline Counts (Current)
 
-- Runtime-registered tools (implemented): **43**
+- Runtime-registered tools (implemented): **101**
 - v2 catalog target: **101**
-- Remaining to reach full catalog: **58**
+- Remaining to reach full catalog: **0**
 
 Family status snapshot:
 
@@ -77,20 +77,20 @@ Legend:
 |  27 | `sn.config.get`                   | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  28 | `sn.policy.test`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  29 | `sn.audit.ping`                   | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
-|  30 | `sn.tool.catalog`                 | dev     | T0   | Planned     | R6               | Docs/runtime drift guard                   | Eng/QA   |
-|  31 | `sn.tool.describe`                | dev     | T0   | Planned     | R6               | Catalog contract introspection             | Eng      |
+|  30 | `sn.tool.catalog`                 | dev     | T0   | Implemented | R6               | Docs/runtime drift guard                   | Eng/QA   |
+|  31 | `sn.tool.describe`                | dev     | T0   | Implemented | R6               | Catalog contract introspection             | Eng      |
 |  32 | `sn.instance.capabilities.get`    | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  33 | `sn.instance.plugins.list`        | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  34 | `sn.table.get`                    | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
-|  35 | `sn.table.schema.get`             | dev     | T0   | Planned     | R2               | Metadata/read parity                       | Eng      |
-|  36 | `sn.table.dictionary.list`        | dev     | T0   | Planned     | R2               | Metadata/read parity                       | Eng      |
+|  35 | `sn.table.schema.get`             | dev     | T0   | Implemented | R2               | Metadata/read parity                       | Eng      |
+|  36 | `sn.table.dictionary.list`        | dev     | T0   | Implemented | R2               | Metadata/read parity                       | Eng      |
 |  37 | `sn.table.count`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
-|  38 | `sn.user.role.check`              | dev     | T0   | Planned     | R2               | Security diagnostics track                 | Eng/Sec  |
-|  39 | `sn.scope.inspect`                | dev     | T0   | Planned     | R2               | Scope governance parity                    | Eng      |
-|  40 | `sn.scope.guard.check`            | dev     | T0   | Planned     | R2               | Scope/policy diagnostics                   | Eng      |
-|  41 | `sn.dependency.graph.get`         | dev     | T0   | Planned     | R2               | Dependency mapping expansion               | Eng      |
-|  42 | `sn.release.compatibility.check`  | dev     | T0   | Planned     | R2               | Release-aware guardrails                   | Eng      |
-|  43 | `sn.logs.tail`                    | dev     | T1   | Planned     | R6               | Ops diagnostics w/ governance              | Eng/Sec  |
+|  38 | `sn.user.role.check`              | dev     | T0   | Implemented | R2               | Security diagnostics track                 | Eng/Sec  |
+|  39 | `sn.scope.inspect`                | dev     | T0   | Implemented | R2               | Scope governance parity                    | Eng      |
+|  40 | `sn.scope.guard.check`            | dev     | T0   | Implemented | R2               | Scope/policy diagnostics                   | Eng      |
+|  41 | `sn.dependency.graph.get`         | dev     | T0   | Implemented | R2               | Dependency mapping expansion               | Eng      |
+|  42 | `sn.release.compatibility.check`  | dev     | T0   | Implemented | R2               | Release-aware guardrails                   | Eng      |
+|  43 | `sn.logs.tail`                    | dev     | T1   | Implemented | R6               | Ops diagnostics w/ governance              | Eng/Sec  |
 |  44 | `sn.validate.script_include`      | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  45 | `sn.validate.business_rule`       | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  46 | `sn.validate.client_script`       | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
@@ -101,54 +101,54 @@ Legend:
 |  51 | `sn.validate.fix`                 | dev     | T1   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  52 | `sn.script.diff`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  53 | `sn.script.history`               | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
-|  54 | `sn.script.compare`               | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
-|  55 | `sn.script.delete`                | dev     | T3   | Planned     | R2               | High-risk script operation                 | Eng/Sec  |
-|  56 | `sn.script.clone`                 | dev     | T2   | Planned     | R2               | Script productivity                        | Eng      |
-|  57 | `sn.script.lint`                  | dev     | T0   | Planned     | R1 (D5)          | Validation linkage                         | Eng      |
-|  58 | `sn.script.test.stub.generate`    | dev     | T1   | Planned     | R3               | ATF readiness helper                       | Eng      |
-|  59 | `sn.script.bulk.search`           | dev     | T0   | Planned     | R2               | Bulk diagnostics                           | Eng      |
-|  60 | `sn.script.bulk.validate`         | dev     | T0   | Planned     | R1 (D5)          | Validation expansion                       | Eng      |
-|  61 | `sn.script.refactors.preview`     | dev     | T1   | Planned     | R2               | Safe refactor preview                      | Eng      |
-|  62 | `sn.script.refactors.apply`       | dev     | T2   | Planned     | R2               | Controlled refactor apply                  | Eng      |
-|  63 | `sn.script.scope.migrate.preview` | dev     | T1   | Planned     | R2               | Scope migration planning                   | Eng      |
-|  64 | `sn.script.scope.migrate.apply`   | dev     | T3   | Planned     | R2               | High-risk scope migration                  | Eng/Sec  |
-|  65 | `sn.script.guardrails.explain`    | dev     | T0   | Planned     | R6               | Explainability for policy/validation       | Eng      |
-|  66 | `sn.changeset.diff`               | dev     | T0   | Planned     | R2               | Changeset parity expansion                 | Eng      |
-|  67 | `sn.changeset.validate`           | dev     | T0   | Planned     | R1 (D5)          | Validation addendum linkage                | Eng      |
-|  68 | `sn.changeset.dependencies.map`   | dev     | T0   | Planned     | R2               | Dependency graph maturity                  | Eng      |
-|  69 | `sn.changeset.records.list`       | dev     | T0   | Planned     | R2               | Record-level visibility                    | Eng      |
-|  70 | `sn.changeset.record.get`         | dev     | T0   | Planned     | R2               | Record-level visibility                    | Eng      |
-|  71 | `sn.changeset.record.validate`    | dev     | T0   | Planned     | R1 (D5)          | Validation addendum linkage                | Eng      |
-|  72 | `sn.changeset.rollback.preview`   | dev     | T1   | Planned     | R4               | Rollback maturity                          | Eng      |
-|  73 | `sn.rollback.snapshot.create`     | dev     | T1   | Planned     | R4               | Rollback maturity (required)               | Eng      |
-|  74 | `sn.rollback.snapshot.get`        | dev     | T0   | Planned     | R4               | Snapshot management                        | Eng      |
-|  75 | `sn.rollback.snapshot.list`       | dev     | T0   | Planned     | R4               | Snapshot management                        | Eng      |
-|  76 | `sn.rollback.plan.review`         | dev     | T0   | Planned     | R4               | Rollback governance                        | Eng      |
-|  77 | `sn.rollback.execute.manualguide` | dev     | T1   | Planned     | R4               | Manual rollback runbook aid                | Eng/Ops  |
-|  78 | `sn.updateset.capture.force`      | dev     | T2   | Planned     | R2               | Capture recovery tooling                   | Eng      |
-|  79 | `sn.updateset.capture.status`     | dev     | T0   | Planned     | R2               | Capture diagnostics tooling                | Eng      |
-|  80 | `sn.flow.search`                  | dev     | T0   | Planned     | R2               | Flow parity expansion                      | Eng      |
-|  81 | `sn.flow.refs`                    | dev     | T0   | Planned     | R2               | Flow dependency evidence                   | Eng      |
-|  82 | `sn.flow.deps`                    | dev     | T0   | Planned     | R2               | Flow dependency evidence                   | Eng      |
-|  83 | `sn.flow.publish`                 | dev     | T2   | Planned     | R2               | Controlled flow lifecycle                  | Eng      |
-|  84 | `sn.flow.activate`                | dev     | T2   | Planned     | R2               | Controlled flow lifecycle                  | Eng      |
-|  85 | `sn.workflow.search`              | dev     | T0   | Planned     | R2               | Workflow parity expansion                  | Eng      |
-|  86 | `sn.workflow.refs`                | dev     | T0   | Planned     | R2               | Workflow dependency evidence               | Eng      |
-|  87 | `sn.workflow.deps`                | dev     | T0   | Planned     | R2               | Workflow dependency evidence               | Eng      |
-|  88 | `sn.workflow.publish`             | dev     | T2   | Planned     | R2               | Controlled workflow lifecycle              | Eng      |
-|  89 | `sn.workflow.activate`            | dev     | T2   | Planned     | R2               | Controlled workflow lifecycle              | Eng      |
-|  90 | `sn.atf.suite.list`               | dev     | T0   | Planned     | R3               | ATF integration track                      | Eng/QA   |
-|  91 | `sn.atf.suite.run`                | dev     | T2   | Planned     | R3               | ATF integration track                      | Eng/QA   |
-|  92 | `sn.atf.test.get`                 | dev     | T0   | Planned     | R3               | ATF integration track                      | Eng/QA   |
-|  93 | `sn.atf.coverage_signals`         | dev     | T0   | Planned     | R3               | Required non-overclaim ATF signal contract | Eng/QA   |
-|  94 | `sn.quality.gate.evaluate`        | dev     | T0   | Planned     | R6               | CI drift guard integration                 | Eng/QA   |
-|  95 | `sn.quality.report.get`           | dev     | T0   | Planned     | R6               | CI/reporting integration                   | Eng/QA   |
-|  96 | `sn.incident.list`                | itsm    | T0   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
-|  97 | `sn.incident.get`                 | itsm    | T0   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
-|  98 | `sn.incident.create`              | itsm    | T2   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
-|  99 | `sn.incident.update`              | itsm    | T2   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
-| 100 | `sn.change.list`                  | itsm    | T0   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
-| 101 | `sn.change.get`                   | itsm    | T0   | Planned     | R5               | ITSM edition track                         | Eng/ITSM |
+|  54 | `sn.script.compare`               | dev     | T0   | Implemented | R2               | Script parity expansion                    | Eng      |
+|  55 | `sn.script.delete`                | dev     | T3   | Implemented | R2               | High-risk script operation                 | Eng/Sec  |
+|  56 | `sn.script.clone`                 | dev     | T2   | Implemented | R2               | Script productivity                        | Eng      |
+|  57 | `sn.script.lint`                  | dev     | T0   | Implemented | R1 (D5)          | Validation linkage                         | Eng      |
+|  58 | `sn.script.test.stub.generate`    | dev     | T1   | Implemented | R3               | ATF readiness helper                       | Eng      |
+|  59 | `sn.script.bulk.search`           | dev     | T0   | Implemented | R2               | Bulk diagnostics                           | Eng      |
+|  60 | `sn.script.bulk.validate`         | dev     | T0   | Implemented | R1 (D5)          | Validation expansion                       | Eng      |
+|  61 | `sn.script.refactors.preview`     | dev     | T1   | Implemented | R2               | Safe refactor preview                      | Eng      |
+|  62 | `sn.script.refactors.apply`       | dev     | T2   | Implemented | R2               | Controlled refactor apply                  | Eng      |
+|  63 | `sn.script.scope.migrate.preview` | dev     | T1   | Implemented | R2               | Scope migration planning                   | Eng      |
+|  64 | `sn.script.scope.migrate.apply`   | dev     | T3   | Implemented | R2               | High-risk scope migration                  | Eng/Sec  |
+|  65 | `sn.script.guardrails.explain`    | dev     | T0   | Implemented | R6               | Explainability for policy/validation       | Eng      |
+|  66 | `sn.changeset.diff`               | dev     | T0   | Implemented | R2               | Changeset parity expansion                 | Eng      |
+|  67 | `sn.changeset.validate`           | dev     | T0   | Implemented | R1 (D5)          | Validation addendum linkage                | Eng      |
+|  68 | `sn.changeset.dependencies.map`   | dev     | T0   | Implemented | R2               | Dependency graph maturity                  | Eng      |
+|  69 | `sn.changeset.records.list`       | dev     | T0   | Implemented | R2               | Record-level visibility                    | Eng      |
+|  70 | `sn.changeset.record.get`         | dev     | T0   | Implemented | R2               | Record-level visibility                    | Eng      |
+|  71 | `sn.changeset.record.validate`    | dev     | T0   | Implemented | R1 (D5)          | Validation addendum linkage                | Eng      |
+|  72 | `sn.changeset.rollback.preview`   | dev     | T1   | Implemented | R4               | Rollback maturity                          | Eng      |
+|  73 | `sn.rollback.snapshot.create`     | dev     | T1   | Implemented | R4               | Rollback maturity (required)               | Eng      |
+|  74 | `sn.rollback.snapshot.get`        | dev     | T0   | Implemented | R4               | Snapshot management                        | Eng      |
+|  75 | `sn.rollback.snapshot.list`       | dev     | T0   | Implemented | R4               | Snapshot management                        | Eng      |
+|  76 | `sn.rollback.plan.review`         | dev     | T0   | Implemented | R4               | Rollback governance                        | Eng      |
+|  77 | `sn.rollback.execute.manualguide` | dev     | T1   | Implemented | R4               | Manual rollback runbook aid                | Eng/Ops  |
+|  78 | `sn.updateset.capture.force`      | dev     | T2   | Implemented | R2               | Capture recovery tooling                   | Eng      |
+|  79 | `sn.updateset.capture.status`     | dev     | T0   | Implemented | R2               | Capture diagnostics tooling                | Eng      |
+|  80 | `sn.flow.search`                  | dev     | T0   | Implemented | R2               | Flow parity expansion                      | Eng      |
+|  81 | `sn.flow.refs`                    | dev     | T0   | Implemented | R2               | Flow dependency evidence                   | Eng      |
+|  82 | `sn.flow.deps`                    | dev     | T0   | Implemented | R2               | Flow dependency evidence                   | Eng      |
+|  83 | `sn.flow.publish`                 | dev     | T2   | Implemented | R2               | Controlled flow lifecycle                  | Eng      |
+|  84 | `sn.flow.activate`                | dev     | T2   | Implemented | R2               | Controlled flow lifecycle                  | Eng      |
+|  85 | `sn.workflow.search`              | dev     | T0   | Implemented | R2               | Workflow parity expansion                  | Eng      |
+|  86 | `sn.workflow.refs`                | dev     | T0   | Implemented | R2               | Workflow dependency evidence               | Eng      |
+|  87 | `sn.workflow.deps`                | dev     | T0   | Implemented | R2               | Workflow dependency evidence               | Eng      |
+|  88 | `sn.workflow.publish`             | dev     | T2   | Implemented | R2               | Controlled workflow lifecycle              | Eng      |
+|  89 | `sn.workflow.activate`            | dev     | T2   | Implemented | R2               | Controlled workflow lifecycle              | Eng      |
+|  90 | `sn.atf.suite.list`               | dev     | T0   | Implemented | R3               | ATF integration track                      | Eng/QA   |
+|  91 | `sn.atf.suite.run`                | dev     | T2   | Implemented | R3               | ATF integration track                      | Eng/QA   |
+|  92 | `sn.atf.test.get`                 | dev     | T0   | Implemented | R3               | ATF integration track                      | Eng/QA   |
+|  93 | `sn.atf.coverage_signals`         | dev     | T0   | Implemented | R3               | Required non-overclaim ATF signal contract | Eng/QA   |
+|  94 | `sn.quality.gate.evaluate`        | dev     | T0   | Implemented | R6               | CI drift guard integration                 | Eng/QA   |
+|  95 | `sn.quality.report.get`           | dev     | T0   | Implemented | R6               | CI/reporting integration                   | Eng/QA   |
+|  96 | `sn.incident.list`                | itsm    | T0   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
+|  97 | `sn.incident.get`                 | itsm    | T0   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
+|  98 | `sn.incident.create`              | itsm    | T2   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
+|  99 | `sn.incident.update`              | itsm    | T2   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
+| 100 | `sn.change.list`                  | itsm    | T0   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
+| 101 | `sn.change.get`                   | itsm    | T0   | Implemented | R5               | ITSM edition track                         | Eng/ITSM |
 
 ### ITSM extension backlog attached to Tool #101
 

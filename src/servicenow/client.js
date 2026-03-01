@@ -2018,4 +2018,1572 @@ export class ServiceNowClient {
       attempt: 1,
     });
   }
+
+  async toolCatalog(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.tool.catalog".includes("incident") ? "incident" :
+      "sn.tool.catalog".includes("change") ? "change_request" :
+      "sn.tool.catalog".includes("script") ? "sys_script_include" :
+      "sn.tool.catalog".includes("flow") ? "sys_hub_flow" :
+      "sn.tool.catalog".includes("workflow") ? "wf_workflow" :
+      "sn.tool.catalog".includes("changeset") ? "sys_update_set" :
+      "sn.tool.catalog".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async toolDescribe(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.tool.describe".includes("incident") ? "incident" :
+      "sn.tool.describe".includes("change") ? "change_request" :
+      "sn.tool.describe".includes("script") ? "sys_script_include" :
+      "sn.tool.describe".includes("flow") ? "sys_hub_flow" :
+      "sn.tool.describe".includes("workflow") ? "wf_workflow" :
+      "sn.tool.describe".includes("changeset") ? "sys_update_set" :
+      "sn.tool.describe".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async tableSchemaGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.table.schema.get".includes("incident") ? "incident" :
+      "sn.table.schema.get".includes("change") ? "change_request" :
+      "sn.table.schema.get".includes("script") ? "sys_script_include" :
+      "sn.table.schema.get".includes("flow") ? "sys_hub_flow" :
+      "sn.table.schema.get".includes("workflow") ? "wf_workflow" :
+      "sn.table.schema.get".includes("changeset") ? "sys_update_set" :
+      "sn.table.schema.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async tableDictionaryList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.table.dictionary.list".includes("incident") ? "incident" :
+      "sn.table.dictionary.list".includes("change") ? "change_request" :
+      "sn.table.dictionary.list".includes("script") ? "sys_script_include" :
+      "sn.table.dictionary.list".includes("flow") ? "sys_hub_flow" :
+      "sn.table.dictionary.list".includes("workflow") ? "wf_workflow" :
+      "sn.table.dictionary.list".includes("changeset") ? "sys_update_set" :
+      "sn.table.dictionary.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async userRoleCheck(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.user.role.check".includes("incident") ? "incident" :
+      "sn.user.role.check".includes("change") ? "change_request" :
+      "sn.user.role.check".includes("script") ? "sys_script_include" :
+      "sn.user.role.check".includes("flow") ? "sys_hub_flow" :
+      "sn.user.role.check".includes("workflow") ? "wf_workflow" :
+      "sn.user.role.check".includes("changeset") ? "sys_update_set" :
+      "sn.user.role.check".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scopeInspect(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.scope.inspect".includes("incident") ? "incident" :
+      "sn.scope.inspect".includes("change") ? "change_request" :
+      "sn.scope.inspect".includes("script") ? "sys_script_include" :
+      "sn.scope.inspect".includes("flow") ? "sys_hub_flow" :
+      "sn.scope.inspect".includes("workflow") ? "wf_workflow" :
+      "sn.scope.inspect".includes("changeset") ? "sys_update_set" :
+      "sn.scope.inspect".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scopeGuardCheck(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.scope.guard.check".includes("incident") ? "incident" :
+      "sn.scope.guard.check".includes("change") ? "change_request" :
+      "sn.scope.guard.check".includes("script") ? "sys_script_include" :
+      "sn.scope.guard.check".includes("flow") ? "sys_hub_flow" :
+      "sn.scope.guard.check".includes("workflow") ? "wf_workflow" :
+      "sn.scope.guard.check".includes("changeset") ? "sys_update_set" :
+      "sn.scope.guard.check".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async dependencyGraphGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.dependency.graph.get".includes("incident") ? "incident" :
+      "sn.dependency.graph.get".includes("change") ? "change_request" :
+      "sn.dependency.graph.get".includes("script") ? "sys_script_include" :
+      "sn.dependency.graph.get".includes("flow") ? "sys_hub_flow" :
+      "sn.dependency.graph.get".includes("workflow") ? "wf_workflow" :
+      "sn.dependency.graph.get".includes("changeset") ? "sys_update_set" :
+      "sn.dependency.graph.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async releaseCompatibilityCheck(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.release.compatibility.check".includes("incident") ? "incident" :
+      "sn.release.compatibility.check".includes("change") ? "change_request" :
+      "sn.release.compatibility.check".includes("script") ? "sys_script_include" :
+      "sn.release.compatibility.check".includes("flow") ? "sys_hub_flow" :
+      "sn.release.compatibility.check".includes("workflow") ? "wf_workflow" :
+      "sn.release.compatibility.check".includes("changeset") ? "sys_update_set" :
+      "sn.release.compatibility.check".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async logsTail(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.logs.tail".includes("incident") ? "incident" :
+      "sn.logs.tail".includes("change") ? "change_request" :
+      "sn.logs.tail".includes("script") ? "sys_script_include" :
+      "sn.logs.tail".includes("flow") ? "sys_hub_flow" :
+      "sn.logs.tail".includes("workflow") ? "wf_workflow" :
+      "sn.logs.tail".includes("changeset") ? "sys_update_set" :
+      "sn.logs.tail".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptCompare(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.compare".includes("incident") ? "incident" :
+      "sn.script.compare".includes("change") ? "change_request" :
+      "sn.script.compare".includes("script") ? "sys_script_include" :
+      "sn.script.compare".includes("flow") ? "sys_hub_flow" :
+      "sn.script.compare".includes("workflow") ? "wf_workflow" :
+      "sn.script.compare".includes("changeset") ? "sys_update_set" :
+      "sn.script.compare".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptDelete(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.delete".includes("incident") ? "incident" :
+      "sn.script.delete".includes("change") ? "change_request" :
+      "sn.script.delete".includes("script") ? "sys_script_include" :
+      "sn.script.delete".includes("flow") ? "sys_hub_flow" :
+      "sn.script.delete".includes("workflow") ? "wf_workflow" :
+      "sn.script.delete".includes("changeset") ? "sys_update_set" :
+      "sn.script.delete".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptClone(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.clone".includes("incident") ? "incident" :
+      "sn.script.clone".includes("change") ? "change_request" :
+      "sn.script.clone".includes("script") ? "sys_script_include" :
+      "sn.script.clone".includes("flow") ? "sys_hub_flow" :
+      "sn.script.clone".includes("workflow") ? "wf_workflow" :
+      "sn.script.clone".includes("changeset") ? "sys_update_set" :
+      "sn.script.clone".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptLint(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.lint".includes("incident") ? "incident" :
+      "sn.script.lint".includes("change") ? "change_request" :
+      "sn.script.lint".includes("script") ? "sys_script_include" :
+      "sn.script.lint".includes("flow") ? "sys_hub_flow" :
+      "sn.script.lint".includes("workflow") ? "wf_workflow" :
+      "sn.script.lint".includes("changeset") ? "sys_update_set" :
+      "sn.script.lint".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptTestStubGenerate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.test.stub.generate".includes("incident") ? "incident" :
+      "sn.script.test.stub.generate".includes("change") ? "change_request" :
+      "sn.script.test.stub.generate".includes("script") ? "sys_script_include" :
+      "sn.script.test.stub.generate".includes("flow") ? "sys_hub_flow" :
+      "sn.script.test.stub.generate".includes("workflow") ? "wf_workflow" :
+      "sn.script.test.stub.generate".includes("changeset") ? "sys_update_set" :
+      "sn.script.test.stub.generate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptBulkSearch(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.bulk.search".includes("incident") ? "incident" :
+      "sn.script.bulk.search".includes("change") ? "change_request" :
+      "sn.script.bulk.search".includes("script") ? "sys_script_include" :
+      "sn.script.bulk.search".includes("flow") ? "sys_hub_flow" :
+      "sn.script.bulk.search".includes("workflow") ? "wf_workflow" :
+      "sn.script.bulk.search".includes("changeset") ? "sys_update_set" :
+      "sn.script.bulk.search".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptBulkValidate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.bulk.validate".includes("incident") ? "incident" :
+      "sn.script.bulk.validate".includes("change") ? "change_request" :
+      "sn.script.bulk.validate".includes("script") ? "sys_script_include" :
+      "sn.script.bulk.validate".includes("flow") ? "sys_hub_flow" :
+      "sn.script.bulk.validate".includes("workflow") ? "wf_workflow" :
+      "sn.script.bulk.validate".includes("changeset") ? "sys_update_set" :
+      "sn.script.bulk.validate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptRefactorsPreview(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.refactors.preview".includes("incident") ? "incident" :
+      "sn.script.refactors.preview".includes("change") ? "change_request" :
+      "sn.script.refactors.preview".includes("script") ? "sys_script_include" :
+      "sn.script.refactors.preview".includes("flow") ? "sys_hub_flow" :
+      "sn.script.refactors.preview".includes("workflow") ? "wf_workflow" :
+      "sn.script.refactors.preview".includes("changeset") ? "sys_update_set" :
+      "sn.script.refactors.preview".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptRefactorsApply(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.refactors.apply".includes("incident") ? "incident" :
+      "sn.script.refactors.apply".includes("change") ? "change_request" :
+      "sn.script.refactors.apply".includes("script") ? "sys_script_include" :
+      "sn.script.refactors.apply".includes("flow") ? "sys_hub_flow" :
+      "sn.script.refactors.apply".includes("workflow") ? "wf_workflow" :
+      "sn.script.refactors.apply".includes("changeset") ? "sys_update_set" :
+      "sn.script.refactors.apply".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptScopeMigratePreview(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.scope.migrate.preview".includes("incident") ? "incident" :
+      "sn.script.scope.migrate.preview".includes("change") ? "change_request" :
+      "sn.script.scope.migrate.preview".includes("script") ? "sys_script_include" :
+      "sn.script.scope.migrate.preview".includes("flow") ? "sys_hub_flow" :
+      "sn.script.scope.migrate.preview".includes("workflow") ? "wf_workflow" :
+      "sn.script.scope.migrate.preview".includes("changeset") ? "sys_update_set" :
+      "sn.script.scope.migrate.preview".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptScopeMigrateApply(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.scope.migrate.apply".includes("incident") ? "incident" :
+      "sn.script.scope.migrate.apply".includes("change") ? "change_request" :
+      "sn.script.scope.migrate.apply".includes("script") ? "sys_script_include" :
+      "sn.script.scope.migrate.apply".includes("flow") ? "sys_hub_flow" :
+      "sn.script.scope.migrate.apply".includes("workflow") ? "wf_workflow" :
+      "sn.script.scope.migrate.apply".includes("changeset") ? "sys_update_set" :
+      "sn.script.scope.migrate.apply".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async scriptGuardrailsExplain(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.script.guardrails.explain".includes("incident") ? "incident" :
+      "sn.script.guardrails.explain".includes("change") ? "change_request" :
+      "sn.script.guardrails.explain".includes("script") ? "sys_script_include" :
+      "sn.script.guardrails.explain".includes("flow") ? "sys_hub_flow" :
+      "sn.script.guardrails.explain".includes("workflow") ? "wf_workflow" :
+      "sn.script.guardrails.explain".includes("changeset") ? "sys_update_set" :
+      "sn.script.guardrails.explain".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetDiff(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.diff".includes("incident") ? "incident" :
+      "sn.changeset.diff".includes("change") ? "change_request" :
+      "sn.changeset.diff".includes("script") ? "sys_script_include" :
+      "sn.changeset.diff".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.diff".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.diff".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.diff".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetValidate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.validate".includes("incident") ? "incident" :
+      "sn.changeset.validate".includes("change") ? "change_request" :
+      "sn.changeset.validate".includes("script") ? "sys_script_include" :
+      "sn.changeset.validate".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.validate".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.validate".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.validate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetDependenciesMap(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.dependencies.map".includes("incident") ? "incident" :
+      "sn.changeset.dependencies.map".includes("change") ? "change_request" :
+      "sn.changeset.dependencies.map".includes("script") ? "sys_script_include" :
+      "sn.changeset.dependencies.map".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.dependencies.map".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.dependencies.map".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.dependencies.map".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetRecordsList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.records.list".includes("incident") ? "incident" :
+      "sn.changeset.records.list".includes("change") ? "change_request" :
+      "sn.changeset.records.list".includes("script") ? "sys_script_include" :
+      "sn.changeset.records.list".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.records.list".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.records.list".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.records.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetRecordGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.record.get".includes("incident") ? "incident" :
+      "sn.changeset.record.get".includes("change") ? "change_request" :
+      "sn.changeset.record.get".includes("script") ? "sys_script_include" :
+      "sn.changeset.record.get".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.record.get".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.record.get".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.record.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetRecordValidate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.record.validate".includes("incident") ? "incident" :
+      "sn.changeset.record.validate".includes("change") ? "change_request" :
+      "sn.changeset.record.validate".includes("script") ? "sys_script_include" :
+      "sn.changeset.record.validate".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.record.validate".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.record.validate".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.record.validate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changesetRollbackPreview(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.changeset.rollback.preview".includes("incident") ? "incident" :
+      "sn.changeset.rollback.preview".includes("change") ? "change_request" :
+      "sn.changeset.rollback.preview".includes("script") ? "sys_script_include" :
+      "sn.changeset.rollback.preview".includes("flow") ? "sys_hub_flow" :
+      "sn.changeset.rollback.preview".includes("workflow") ? "wf_workflow" :
+      "sn.changeset.rollback.preview".includes("changeset") ? "sys_update_set" :
+      "sn.changeset.rollback.preview".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async rollbackSnapshotCreate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.rollback.snapshot.create".includes("incident") ? "incident" :
+      "sn.rollback.snapshot.create".includes("change") ? "change_request" :
+      "sn.rollback.snapshot.create".includes("script") ? "sys_script_include" :
+      "sn.rollback.snapshot.create".includes("flow") ? "sys_hub_flow" :
+      "sn.rollback.snapshot.create".includes("workflow") ? "wf_workflow" :
+      "sn.rollback.snapshot.create".includes("changeset") ? "sys_update_set" :
+      "sn.rollback.snapshot.create".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async rollbackSnapshotGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.rollback.snapshot.get".includes("incident") ? "incident" :
+      "sn.rollback.snapshot.get".includes("change") ? "change_request" :
+      "sn.rollback.snapshot.get".includes("script") ? "sys_script_include" :
+      "sn.rollback.snapshot.get".includes("flow") ? "sys_hub_flow" :
+      "sn.rollback.snapshot.get".includes("workflow") ? "wf_workflow" :
+      "sn.rollback.snapshot.get".includes("changeset") ? "sys_update_set" :
+      "sn.rollback.snapshot.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async rollbackSnapshotList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.rollback.snapshot.list".includes("incident") ? "incident" :
+      "sn.rollback.snapshot.list".includes("change") ? "change_request" :
+      "sn.rollback.snapshot.list".includes("script") ? "sys_script_include" :
+      "sn.rollback.snapshot.list".includes("flow") ? "sys_hub_flow" :
+      "sn.rollback.snapshot.list".includes("workflow") ? "wf_workflow" :
+      "sn.rollback.snapshot.list".includes("changeset") ? "sys_update_set" :
+      "sn.rollback.snapshot.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async rollbackPlanReview(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.rollback.plan.review".includes("incident") ? "incident" :
+      "sn.rollback.plan.review".includes("change") ? "change_request" :
+      "sn.rollback.plan.review".includes("script") ? "sys_script_include" :
+      "sn.rollback.plan.review".includes("flow") ? "sys_hub_flow" :
+      "sn.rollback.plan.review".includes("workflow") ? "wf_workflow" :
+      "sn.rollback.plan.review".includes("changeset") ? "sys_update_set" :
+      "sn.rollback.plan.review".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async rollbackExecuteManualguide(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.rollback.execute.manualguide".includes("incident") ? "incident" :
+      "sn.rollback.execute.manualguide".includes("change") ? "change_request" :
+      "sn.rollback.execute.manualguide".includes("script") ? "sys_script_include" :
+      "sn.rollback.execute.manualguide".includes("flow") ? "sys_hub_flow" :
+      "sn.rollback.execute.manualguide".includes("workflow") ? "wf_workflow" :
+      "sn.rollback.execute.manualguide".includes("changeset") ? "sys_update_set" :
+      "sn.rollback.execute.manualguide".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async updatesetCaptureForce(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.updateset.capture.force".includes("incident") ? "incident" :
+      "sn.updateset.capture.force".includes("change") ? "change_request" :
+      "sn.updateset.capture.force".includes("script") ? "sys_script_include" :
+      "sn.updateset.capture.force".includes("flow") ? "sys_hub_flow" :
+      "sn.updateset.capture.force".includes("workflow") ? "wf_workflow" :
+      "sn.updateset.capture.force".includes("changeset") ? "sys_update_set" :
+      "sn.updateset.capture.force".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async updatesetCaptureStatus(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.updateset.capture.status".includes("incident") ? "incident" :
+      "sn.updateset.capture.status".includes("change") ? "change_request" :
+      "sn.updateset.capture.status".includes("script") ? "sys_script_include" :
+      "sn.updateset.capture.status".includes("flow") ? "sys_hub_flow" :
+      "sn.updateset.capture.status".includes("workflow") ? "wf_workflow" :
+      "sn.updateset.capture.status".includes("changeset") ? "sys_update_set" :
+      "sn.updateset.capture.status".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async flowSearch(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.flow.search".includes("incident") ? "incident" :
+      "sn.flow.search".includes("change") ? "change_request" :
+      "sn.flow.search".includes("script") ? "sys_script_include" :
+      "sn.flow.search".includes("flow") ? "sys_hub_flow" :
+      "sn.flow.search".includes("workflow") ? "wf_workflow" :
+      "sn.flow.search".includes("changeset") ? "sys_update_set" :
+      "sn.flow.search".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async flowRefs(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.flow.refs".includes("incident") ? "incident" :
+      "sn.flow.refs".includes("change") ? "change_request" :
+      "sn.flow.refs".includes("script") ? "sys_script_include" :
+      "sn.flow.refs".includes("flow") ? "sys_hub_flow" :
+      "sn.flow.refs".includes("workflow") ? "wf_workflow" :
+      "sn.flow.refs".includes("changeset") ? "sys_update_set" :
+      "sn.flow.refs".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async flowDeps(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.flow.deps".includes("incident") ? "incident" :
+      "sn.flow.deps".includes("change") ? "change_request" :
+      "sn.flow.deps".includes("script") ? "sys_script_include" :
+      "sn.flow.deps".includes("flow") ? "sys_hub_flow" :
+      "sn.flow.deps".includes("workflow") ? "wf_workflow" :
+      "sn.flow.deps".includes("changeset") ? "sys_update_set" :
+      "sn.flow.deps".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async flowPublish(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.flow.publish".includes("incident") ? "incident" :
+      "sn.flow.publish".includes("change") ? "change_request" :
+      "sn.flow.publish".includes("script") ? "sys_script_include" :
+      "sn.flow.publish".includes("flow") ? "sys_hub_flow" :
+      "sn.flow.publish".includes("workflow") ? "wf_workflow" :
+      "sn.flow.publish".includes("changeset") ? "sys_update_set" :
+      "sn.flow.publish".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async flowActivate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.flow.activate".includes("incident") ? "incident" :
+      "sn.flow.activate".includes("change") ? "change_request" :
+      "sn.flow.activate".includes("script") ? "sys_script_include" :
+      "sn.flow.activate".includes("flow") ? "sys_hub_flow" :
+      "sn.flow.activate".includes("workflow") ? "wf_workflow" :
+      "sn.flow.activate".includes("changeset") ? "sys_update_set" :
+      "sn.flow.activate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async workflowSearch(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.workflow.search".includes("incident") ? "incident" :
+      "sn.workflow.search".includes("change") ? "change_request" :
+      "sn.workflow.search".includes("script") ? "sys_script_include" :
+      "sn.workflow.search".includes("flow") ? "sys_hub_flow" :
+      "sn.workflow.search".includes("workflow") ? "wf_workflow" :
+      "sn.workflow.search".includes("changeset") ? "sys_update_set" :
+      "sn.workflow.search".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async workflowRefs(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.workflow.refs".includes("incident") ? "incident" :
+      "sn.workflow.refs".includes("change") ? "change_request" :
+      "sn.workflow.refs".includes("script") ? "sys_script_include" :
+      "sn.workflow.refs".includes("flow") ? "sys_hub_flow" :
+      "sn.workflow.refs".includes("workflow") ? "wf_workflow" :
+      "sn.workflow.refs".includes("changeset") ? "sys_update_set" :
+      "sn.workflow.refs".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async workflowDeps(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.workflow.deps".includes("incident") ? "incident" :
+      "sn.workflow.deps".includes("change") ? "change_request" :
+      "sn.workflow.deps".includes("script") ? "sys_script_include" :
+      "sn.workflow.deps".includes("flow") ? "sys_hub_flow" :
+      "sn.workflow.deps".includes("workflow") ? "wf_workflow" :
+      "sn.workflow.deps".includes("changeset") ? "sys_update_set" :
+      "sn.workflow.deps".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async workflowPublish(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.workflow.publish".includes("incident") ? "incident" :
+      "sn.workflow.publish".includes("change") ? "change_request" :
+      "sn.workflow.publish".includes("script") ? "sys_script_include" :
+      "sn.workflow.publish".includes("flow") ? "sys_hub_flow" :
+      "sn.workflow.publish".includes("workflow") ? "wf_workflow" :
+      "sn.workflow.publish".includes("changeset") ? "sys_update_set" :
+      "sn.workflow.publish".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async workflowActivate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.workflow.activate".includes("incident") ? "incident" :
+      "sn.workflow.activate".includes("change") ? "change_request" :
+      "sn.workflow.activate".includes("script") ? "sys_script_include" :
+      "sn.workflow.activate".includes("flow") ? "sys_hub_flow" :
+      "sn.workflow.activate".includes("workflow") ? "wf_workflow" :
+      "sn.workflow.activate".includes("changeset") ? "sys_update_set" :
+      "sn.workflow.activate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async atfSuiteList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.atf.suite.list".includes("incident") ? "incident" :
+      "sn.atf.suite.list".includes("change") ? "change_request" :
+      "sn.atf.suite.list".includes("script") ? "sys_script_include" :
+      "sn.atf.suite.list".includes("flow") ? "sys_hub_flow" :
+      "sn.atf.suite.list".includes("workflow") ? "wf_workflow" :
+      "sn.atf.suite.list".includes("changeset") ? "sys_update_set" :
+      "sn.atf.suite.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async atfSuiteRun(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.atf.suite.run".includes("incident") ? "incident" :
+      "sn.atf.suite.run".includes("change") ? "change_request" :
+      "sn.atf.suite.run".includes("script") ? "sys_script_include" :
+      "sn.atf.suite.run".includes("flow") ? "sys_hub_flow" :
+      "sn.atf.suite.run".includes("workflow") ? "wf_workflow" :
+      "sn.atf.suite.run".includes("changeset") ? "sys_update_set" :
+      "sn.atf.suite.run".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async atfTestGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.atf.test.get".includes("incident") ? "incident" :
+      "sn.atf.test.get".includes("change") ? "change_request" :
+      "sn.atf.test.get".includes("script") ? "sys_script_include" :
+      "sn.atf.test.get".includes("flow") ? "sys_hub_flow" :
+      "sn.atf.test.get".includes("workflow") ? "wf_workflow" :
+      "sn.atf.test.get".includes("changeset") ? "sys_update_set" :
+      "sn.atf.test.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async atfCoverage_signals(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.atf.coverage_signals".includes("incident") ? "incident" :
+      "sn.atf.coverage_signals".includes("change") ? "change_request" :
+      "sn.atf.coverage_signals".includes("script") ? "sys_script_include" :
+      "sn.atf.coverage_signals".includes("flow") ? "sys_hub_flow" :
+      "sn.atf.coverage_signals".includes("workflow") ? "wf_workflow" :
+      "sn.atf.coverage_signals".includes("changeset") ? "sys_update_set" :
+      "sn.atf.coverage_signals".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async qualityGateEvaluate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.quality.gate.evaluate".includes("incident") ? "incident" :
+      "sn.quality.gate.evaluate".includes("change") ? "change_request" :
+      "sn.quality.gate.evaluate".includes("script") ? "sys_script_include" :
+      "sn.quality.gate.evaluate".includes("flow") ? "sys_hub_flow" :
+      "sn.quality.gate.evaluate".includes("workflow") ? "wf_workflow" :
+      "sn.quality.gate.evaluate".includes("changeset") ? "sys_update_set" :
+      "sn.quality.gate.evaluate".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async qualityReportGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.quality.report.get".includes("incident") ? "incident" :
+      "sn.quality.report.get".includes("change") ? "change_request" :
+      "sn.quality.report.get".includes("script") ? "sys_script_include" :
+      "sn.quality.report.get".includes("flow") ? "sys_hub_flow" :
+      "sn.quality.report.get".includes("workflow") ? "wf_workflow" :
+      "sn.quality.report.get".includes("changeset") ? "sys_update_set" :
+      "sn.quality.report.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async incidentList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.incident.list".includes("incident") ? "incident" :
+      "sn.incident.list".includes("change") ? "change_request" :
+      "sn.incident.list".includes("script") ? "sys_script_include" :
+      "sn.incident.list".includes("flow") ? "sys_hub_flow" :
+      "sn.incident.list".includes("workflow") ? "wf_workflow" :
+      "sn.incident.list".includes("changeset") ? "sys_update_set" :
+      "sn.incident.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async incidentGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.incident.get".includes("incident") ? "incident" :
+      "sn.incident.get".includes("change") ? "change_request" :
+      "sn.incident.get".includes("script") ? "sys_script_include" :
+      "sn.incident.get".includes("flow") ? "sys_hub_flow" :
+      "sn.incident.get".includes("workflow") ? "wf_workflow" :
+      "sn.incident.get".includes("changeset") ? "sys_update_set" :
+      "sn.incident.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async incidentCreate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.incident.create".includes("incident") ? "incident" :
+      "sn.incident.create".includes("change") ? "change_request" :
+      "sn.incident.create".includes("script") ? "sys_script_include" :
+      "sn.incident.create".includes("flow") ? "sys_hub_flow" :
+      "sn.incident.create".includes("workflow") ? "wf_workflow" :
+      "sn.incident.create".includes("changeset") ? "sys_update_set" :
+      "sn.incident.create".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async incidentUpdate(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.incident.update".includes("incident") ? "incident" :
+      "sn.incident.update".includes("change") ? "change_request" :
+      "sn.incident.update".includes("script") ? "sys_script_include" :
+      "sn.incident.update".includes("flow") ? "sys_hub_flow" :
+      "sn.incident.update".includes("workflow") ? "wf_workflow" :
+      "sn.incident.update".includes("changeset") ? "sys_update_set" :
+      "sn.incident.update".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changeList(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.change.list".includes("incident") ? "incident" :
+      "sn.change.list".includes("change") ? "change_request" :
+      "sn.change.list".includes("script") ? "sys_script_include" :
+      "sn.change.list".includes("flow") ? "sys_hub_flow" :
+      "sn.change.list".includes("workflow") ? "wf_workflow" :
+      "sn.change.list".includes("changeset") ? "sys_update_set" :
+      "sn.change.list".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+  async changeGet(params = {}) {
+    // Boilerplate integration to existing ServiceNow tables based on tool prefix
+    const path = "/api/now/table/" + (
+      "sn.change.get".includes("incident") ? "incident" :
+      "sn.change.get".includes("change") ? "change_request" :
+      "sn.change.get".includes("script") ? "sys_script_include" :
+      "sn.change.get".includes("flow") ? "sys_hub_flow" :
+      "sn.change.get".includes("workflow") ? "wf_workflow" :
+      "sn.change.get".includes("changeset") ? "sys_update_set" :
+      "sn.change.get".includes("rollback") ? "sys_rollback_context" :
+      "sys_dictionary"
+    );
+
+    // Default implementation to make valid SN REST requests
+    return this.request({
+      method: params.sysId || params.record ? (params.record ? "POST" : "GET") : "GET",
+      path: params.sysId ? `${path}/${params.sysId}` : path,
+      query: {
+        sysparm_limit: params.limit || 50,
+        sysparm_offset: params.offset || 0,
+        sysparm_query: params.query || ""
+      },
+      body: params.record || params.changes,
+      instanceKey: params.instanceKey
+    });
+  }
+
+
 }

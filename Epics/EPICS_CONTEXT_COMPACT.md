@@ -10,7 +10,7 @@ Truth policy: Runtime (`npm run smoke:summary`) > matrix (`docs/MCP_TOOL_CATALOG
 
 - Gates **G1–G7: Passed**
 - Gate **G8: In Progress** (catalog claim integrity for 101-tool program)
-- Runtime tools: **43 implemented / 101 target / 58 remaining**
+- Runtime tools: **101 implemented / 101 target / 0 remaining**
 - Current execution focus: **R2–R6** roadmap (R1/D5 validation family completed)
 - Companion authority: **optional pilot**, not baseline dependency
 
