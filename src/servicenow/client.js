@@ -124,7 +124,14 @@ export class ServiceNowClient {
         clearTimeout(timeout);
 
         const text = await response.text();
-        const payload = text ? JSON.parse(text) : {};
+        let payload = {};
+        if (text) {
+          try {
+            payload = JSON.parse(text);
+          } catch {
+            payload = { raw_response: text };
+          }
+        }
 
         if (!response.ok) {
           const normalizedError = normalizeServiceNowError({
@@ -280,6 +287,38 @@ export class ServiceNowClient {
     };
   }
 
+  async getScriptInclude({ sysId, name, instanceKey } = {}) {
+    let query = "";
+    if (sysId) {
+      query = `sys_id=${sysId}`;
+    } else if (name) {
+      query = `name=${name}`;
+    }
+
+    const response = await this.request({
+      method: "GET",
+      path: "/api/now/table/sys_script_include",
+      query: {
+        sysparm_limit: 1,
+        sysparm_offset: 0,
+        sysparm_query: query,
+      },
+      instanceKey,
+    });
+
+    const records = Array.isArray(response?.data?.result) ? response.data.result : [];
+    const script = records[0] || null;
+
+    return {
+      found: Boolean(script),
+      script,
+      query: {
+        sys_id: sysId || null,
+        name: name || null,
+      },
+    };
+  }
+
   mockRequest({ path, query = {}, instance }) {
     if (path.includes("/sys_plugins")) {
       return Promise.resolve({
@@ -290,6 +329,41 @@ export class ServiceNowClient {
             { name: "com.glide.update_set" },
             { name: "com.glide.script.fencing" },
           ],
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_script_include")) {
+      const sampleRecords = [
+        {
+          sys_id: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          name: "x_demo_utility",
+          api_name: "x_demo_utility",
+          sys_scope: { display_value: "x_demo_scope", value: "x_demo_scope" },
+          active: "true",
+          script: "var gr = new GlideRecord('incident');\ngr.query();\nwhile (gr.next()) {\n  // noop\n}\n",
+          description: "Mock script include used for baseline retrieval",
+          sys_updated_on: "2026-02-28 19:00:00",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleRecords;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleRecords.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleRecords.filter((record) => record.name === target);
+      }
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: filtered,
         },
         headers: {},
         attempt: 1,

@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 20:04 PST
+Last Updated: 2026-02-28 20:26 PST
 
 ---
 
@@ -173,6 +173,24 @@ Each entry should include:
 - **Reason:** Added URL-first MCP transport with HTTP/SSE endpoint support and JSON-RPC tool routing so LLM clients can connect via `http://localhost:3001/mcp`.
 - **Evidence:** `src/server/http-sse.js`, `src/config.js`, `src/index.js`, `package.json`; verification via `npm start`, `GET /mcp`, `POST /mcp`
 - **Next step:** Update README and integration docs with URL-based client examples and stdio fallback guidance.
+
+### 2026-02-28 20:26 PST
+
+- **Item:** E1 (minimal)
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented minimal `sn.script.get` tool for Script Include retrieval and attached deterministic `validation_summary` on read to satisfy Gate G1 baseline.
+- **Evidence:** `src/index.js`, `src/servicenow/client.js`; smoke run `npm run smoke` includes `script_get_result` with validation summary.
+- **Next step:** Continue D1 validation runtime framework and complete E1 full list/search scope.
+
+### 2026-02-28 20:26 PST
+
+- **Item:** G1
+- **Change:** `In Progress -> Passed`
+- **Owner:** Engineering
+- **Reason:** Remaining Gate G1 checklist items (E1 minimal and first vertical-slice demo evidence) completed and validated.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, smoke output from `npm run smoke`.
+- **Next step:** Enter Gate G2 execution path (D1 → D2 → D3, then E1 full and E2/E3).
 
 ---
 

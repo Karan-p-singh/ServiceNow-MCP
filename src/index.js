@@ -5,6 +5,44 @@ import { ServiceNowClient } from "./servicenow/client.js";
 
 function registerBaselineTools(server) {
   server.registerTool({
+    name: "sn.script.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getScriptInclude({
+        sysId: input?.sys_id,
+        name: input?.name,
+        instanceKey: input?.instance_key,
+      });
+
+      const script = result.script;
+      const scriptBody = script?.script || "";
+      const lineCount = scriptBody ? scriptBody.split("\n").length : 0;
+      const hasGlideRecord = scriptBody.includes("GlideRecord");
+      const hasEval = /\beval\s*\(/.test(scriptBody);
+
+      return {
+        data: {
+          found: result.found,
+          query: result.query,
+          artifact_type: "sys_script_include",
+          record: script,
+        },
+        validation_summary: {
+          findings_count_by_severity: {
+            CRITICAL: hasEval ? 1 : 0,
+            HIGH: hasGlideRecord ? 1 : 0,
+            MEDIUM: lineCount > 200 ? 1 : 0,
+            LOW: script && !script.description ? 1 : 0,
+          },
+          blocked: false,
+          source: "minimal-e1-baseline",
+        },
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.instance.info",
     tier: "T0",
     handler: async (input, context) => {
@@ -141,6 +179,9 @@ async function main() {
       limit: 2,
       offset: 0,
     });
+    const scriptGetResult = await server.invoke("sn.script.get", {
+      name: "x_demo_utility",
+    });
     const tierBlocked = await server.invoke("sn.script.update", {
       scope: "x_demo_scope",
       sys_id: "abc123",
@@ -165,6 +206,7 @@ async function main() {
       tools: server.listTools(),
       smoke_result: result,
       table_list_result: paged,
+      script_get_result: scriptGetResult,
       tier_blocked_result: tierBlocked,
       t3_blocked_result: t3Blocked,
       policy_blocked_result: policyBlocked,

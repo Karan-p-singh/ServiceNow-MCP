@@ -50,7 +50,13 @@ This project is designed to be **honest and safe**:
 
 ### 2) Configure Environment
 
-Create `.env` (or set environment variables via your secret manager):
+Create local env from the template (recommended):
+
+```bash
+copy .env.example .env
+```
+
+Then update `.env` with your instance and local credentials (or set environment variables via your secret manager):
 
 ```bash
 # Edition: dev | itsm
@@ -84,6 +90,11 @@ VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 ```
 
 > Production guidance: default `MCP_TIER_MAX=T0` and disable all write bundles.
+
+Security note:
+
+- `.env` is ignored by git and should never be committed.
+- `.env.example` is safe to commit and share as a setup template.
 
 ---
 

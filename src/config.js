@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 const DEFAULTS = {
   edition: "dev",
   transport: "http-sse",
@@ -18,6 +21,42 @@ const DEFAULTS = {
   breakGlassEnabled: false,
   exceptionAllowlist: [],
 };
+
+function loadDotEnvFile(cwd = process.cwd()) {
+  const envPath = path.join(cwd, ".env");
+  if (!fs.existsSync(envPath)) {
+    return {};
+  }
+
+  const raw = fs.readFileSync(envPath, "utf8");
+  const parsed = {};
+
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const equalsIndex = trimmed.indexOf("=");
+    if (equalsIndex <= 0) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, equalsIndex).trim();
+    let value = trimmed.slice(equalsIndex + 1).trim();
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    parsed[key] = value;
+  }
+
+  return parsed;
+}
 
 function parseBoolean(value, defaultValue = false) {
   if (value === undefined || value === null || value === "") {
@@ -120,37 +159,43 @@ function normalizeInstances(env) {
 }
 
 export function loadConfig(env = process.env) {
-  const instanceConfig = normalizeInstances(env);
+  const fileEnv = loadDotEnvFile();
+  const mergedEnv = {
+    ...fileEnv,
+    ...env,
+  };
+
+  const instanceConfig = normalizeInstances(mergedEnv);
   const selectedInstance = instanceConfig.instances[instanceConfig.defaultInstance];
 
   return {
-    edition: env.MCP_EDITION || DEFAULTS.edition,
-    transport: env.MCP_TRANSPORT || DEFAULTS.transport,
+    edition: mergedEnv.MCP_EDITION || DEFAULTS.edition,
+    transport: mergedEnv.MCP_TRANSPORT || DEFAULTS.transport,
     server: {
-      host: env.MCP_SERVER_HOST || DEFAULTS.serverHost,
-      port: parseInteger(env.MCP_SERVER_PORT, DEFAULTS.serverPort),
-      path: env.MCP_SERVER_PATH || DEFAULTS.serverPath,
+      host: mergedEnv.MCP_SERVER_HOST || DEFAULTS.serverHost,
+      port: parseInteger(mergedEnv.MCP_SERVER_PORT, DEFAULTS.serverPort),
+      path: mergedEnv.MCP_SERVER_PATH || DEFAULTS.serverPath,
     },
     instanceUrl: selectedInstance?.instanceUrl || DEFAULTS.instanceUrl,
     defaultInstance: instanceConfig.defaultInstance,
     instances: instanceConfig.instances,
     retry: {
-      maxAttempts: parseInteger(env.SN_RETRY_MAX_ATTEMPTS, DEFAULTS.retryMaxAttempts),
-      baseDelayMs: parseInteger(env.SN_RETRY_BASE_DELAY_MS, DEFAULTS.retryBaseDelayMs),
-      requestTimeoutMs: parseInteger(env.SN_REQUEST_TIMEOUT_MS, DEFAULTS.requestTimeoutMs),
+      maxAttempts: parseInteger(mergedEnv.SN_RETRY_MAX_ATTEMPTS, DEFAULTS.retryMaxAttempts),
+      baseDelayMs: parseInteger(mergedEnv.SN_RETRY_BASE_DELAY_MS, DEFAULTS.retryBaseDelayMs),
+      requestTimeoutMs: parseInteger(mergedEnv.SN_REQUEST_TIMEOUT_MS, DEFAULTS.requestTimeoutMs),
     },
-    tierMax: env.MCP_TIER_MAX || DEFAULTS.tierMax,
-    allowedScopes: parseCsv(env.MCP_ALLOWED_SCOPES, DEFAULTS.allowedScopes),
-    denyGlobalWrites: parseBoolean(env.MCP_DENY_GLOBAL_WRITES, DEFAULTS.denyGlobalWrites),
+    tierMax: mergedEnv.MCP_TIER_MAX || DEFAULTS.tierMax,
+    allowedScopes: parseCsv(mergedEnv.MCP_ALLOWED_SCOPES, DEFAULTS.allowedScopes),
+    denyGlobalWrites: parseBoolean(mergedEnv.MCP_DENY_GLOBAL_WRITES, DEFAULTS.denyGlobalWrites),
     enforceChangesetScope: parseBoolean(
-      env.MCP_ENFORCE_CHANGESET_SCOPE,
+      mergedEnv.MCP_ENFORCE_CHANGESET_SCOPE,
       DEFAULTS.enforceChangesetScope,
     ),
-    changesetScope: env.MCP_CHANGESET_SCOPE || DEFAULTS.changesetScope,
+    changesetScope: mergedEnv.MCP_CHANGESET_SCOPE || DEFAULTS.changesetScope,
     breakGlassEnabled: parseBoolean(
-      env.MCP_BREAK_GLASS_ENABLED,
+      mergedEnv.MCP_BREAK_GLASS_ENABLED,
       DEFAULTS.breakGlassEnabled,
     ),
-    exceptionAllowlist: parseCsv(env.MCP_EXCEPTION_ALLOWLIST, DEFAULTS.exceptionAllowlist),
+    exceptionAllowlist: parseCsv(mergedEnv.MCP_EXCEPTION_ALLOWLIST, DEFAULTS.exceptionAllowlist),
   };
 }

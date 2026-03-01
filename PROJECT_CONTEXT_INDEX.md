@@ -50,7 +50,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 3) Technical Entry Points
 
-### `README_ServiceNow_MCP_Server.md`
+### `README.md`
 
 - Use for: architecture overview, safety model summary, expected project layout.
 - Best when: onboarding or aligning implementation details to intended structure.
@@ -78,9 +78,9 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 5) Status Snapshot (Current)
 
-- EPIC-A is active.
-- EPIC-A stories:
-  - Done: **A1**
-  - Ready: **A2, A3, A5**
-  - Backlog: **A4**
+- Phase 1 is in progress (~70% on board) with **EPIC-A** and **EPIC-B** completed.
+- Current gate focus is **G1 remaining items**:
+  - E1 minimal (`sn.script.get` + validation summary attachment)
+  - Demo evidence for first vertical slice
+- Next queued stories are **E1, D1, D2, D3**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

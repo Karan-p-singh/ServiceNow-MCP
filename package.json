@@ -7,7 +7,9 @@
 	"scripts": {
 		"start": "node src/index.js",
 		"start:stdio": "set MCP_TRANSPORT=stdio&&node src/index.js",
-		"smoke": "node src/index.js --smoke"
+		"smoke": "node src/index.js --smoke",
+		"test:live": "node scripts/test-live-connection.js",
+		"test:live:mcp": "node scripts/test-live-mcp-transport.js"
 	},
 	"engines": {
 		"node": ">=18"
