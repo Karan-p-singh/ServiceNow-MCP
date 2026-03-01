@@ -36,6 +36,27 @@ function normalizeTier(tier) {
   return Object.prototype.hasOwnProperty.call(TIER_ORDER, normalized) ? normalized : "T0";
 }
 
+function normalizeInvocationError(error) {
+  if (isPlainObject(error)) {
+    return {
+      code: typeof error.code === "string" ? error.code : "TOOL_INVOCATION_FAILED",
+      message:
+        typeof error.message === "string" && error.message.trim().length > 0
+          ? error.message
+          : "Tool invocation failed",
+      status: Number.isFinite(error.status) ? error.status : undefined,
+      status_text: typeof error.status_text === "string" ? error.status_text : undefined,
+      retriable: typeof error.retriable === "boolean" ? error.retriable : undefined,
+      details: isPlainObject(error.details) ? error.details : undefined,
+    };
+  }
+
+  return {
+    code: "TOOL_INVOCATION_FAILED",
+    message: error instanceof Error ? error.message : "Unknown tool error",
+  };
+}
+
 function isWriteLikeTool(tool) {
   return normalizeTier(tool?.tier) !== "T0";
 }
@@ -444,12 +465,14 @@ export class MCPServer {
 
       return envelope;
     } catch (error) {
+      const invocationError = normalizeInvocationError(error);
+
       this.logger.error?.("[mcp] invoke failed", {
         request_id: requestContext.request_id,
         correlation_id: requestContext.correlation_id,
         tool: tool.name,
         tier: tool.tier,
-        error: error instanceof Error ? error.message : String(error),
+        error: invocationError,
       });
 
       const envelope = buildEnvelope({
@@ -462,8 +485,12 @@ export class MCPServer {
           validation_summary: defaultValidationSummary(),
           errors: [
             {
-              code: "TOOL_INVOCATION_FAILED",
-              message: error instanceof Error ? error.message : "Unknown tool error",
+              code: invocationError.code,
+              message: invocationError.message,
+              status: invocationError.status,
+              status_text: invocationError.status_text,
+              retriable: invocationError.retriable,
+              details: invocationError.details,
             },
           ],
         },

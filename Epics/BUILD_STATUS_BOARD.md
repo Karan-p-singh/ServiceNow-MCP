@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-02-28 20:26 PST
+Last Updated: 2026-02-28 21:13 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -29,7 +29,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | EPIC-D  | Validation Engine & Rulepacks       | Eng     | Ready       | TBD        | TBD        |       0% | EPIC-A, EPIC-B            |
 | EPIC-E  | Developer Artifact Tooling          | Eng     | In Progress | 2026-02-28 | TBD        |      15% | EPIC-B, EPIC-D            |
 | EPIC-F  | Update Set & Commit Operations      | Eng     | Backlog     | TBD        | TBD        |       0% | EPIC-E (baseline), EPIC-C |
-| EPIC-G  | Quality Engineering & Test Strategy | Eng/QA  | Backlog     | TBD        | TBD        |       0% | Core feature completeness |
+| EPIC-G  | Quality Engineering & Test Strategy | Eng/QA  | In Progress | 2026-02-28 | TBD        |      10% | Core feature completeness |
 | EPIC-H  | Enterprise Hardening                | Eng/Sec | Backlog     | TBD        | TBD        |       0% | EPIC-A..G maturity        |
 
 ---
@@ -72,6 +72,8 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - B4 — README-aligned structure adoption (incremental, migration-safe)
 - E1 (minimal) — `sn.script.get` read path + validation summary attachment
 - G1 demo evidence — first vertical slice smoke evidence captured
+- G1 connectivity diagnostics baseline — `npm run test:live` and `npm run test:live:mcp` scripts added and validated
+- Secure env publishing baseline — `.env.example` template + `.gitignore` protection + README setup guidance
 
 ---
 

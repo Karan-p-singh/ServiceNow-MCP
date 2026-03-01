@@ -122,6 +122,38 @@ Expected behavior:
 - All artifact reads include a `validation_summary` block.
 - Writes are blocked on CRITICAL validation findings.
 
+### Connectivity Diagnostics (Gate G1 Evidence)
+
+Run expanded live instance diagnostics (outside smoke):
+
+```bash
+npm run test:live
+```
+
+This verifies:
+
+- auth handshake (`sys_user`)
+- REST stats endpoint (`/api/now/stats/sys_user`)
+- capability probe (`sn.instance.info` path)
+- table/metadata access (`sys_plugins`, `sys_db_object`)
+- script include read (`sys_script_include`)
+- classified failure output (`401/403/429/5xx`) with remediation guidance
+
+Run MCP transport diagnostics:
+
+```bash
+npm run test:live:mcp
+```
+
+This validates:
+
+- MCP endpoint readiness (`GET /mcp`)
+- JSON-RPC `initialize`
+- JSON-RPC `tools/list`
+- JSON-RPC `tools/call` (currently `sn.instance.info`)
+
+Known current behavior in some instances: `sys_plugins` may return `403` even when other probes pass; treat this as endpoint-level authorization scope, not full connectivity failure.
+
 ---
 
 ## Project Layout (Recommended)

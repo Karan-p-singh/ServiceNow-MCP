@@ -39,6 +39,21 @@ function normalizeServiceNowError({ error, status, statusText, details, path, in
   };
 }
 
+function buildInstanceDescriptor(instance) {
+  return {
+    instance: {
+      key: instance.key,
+      url: instance.instanceUrl,
+    },
+    auth: {
+      mode: instance.auth?.mode || "oauth",
+      credentials_configured:
+        Boolean(instance.auth?.accessToken) ||
+        (Boolean(instance.auth?.username) && Boolean(instance.auth?.password)),
+    },
+  };
+}
+
 export class ServiceNowClient {
   constructor({ config, fetchImpl = globalThis.fetch, logger = console } = {}) {
     this.config = config || {};
@@ -219,19 +234,11 @@ export class ServiceNowClient {
 
   async getInstanceInfo({ instanceKey } = {}) {
     const instance = this.resolveInstance(instanceKey);
+    const descriptor = buildInstanceDescriptor(instance);
 
     if (this.isMockInstance(instance.instanceUrl)) {
       return {
-        instance: {
-          key: instance.key,
-          url: instance.instanceUrl,
-        },
-        auth: {
-          mode: instance.auth?.mode || "oauth",
-          credentials_configured:
-            Boolean(instance.auth?.accessToken) ||
-            (Boolean(instance.auth?.username) && Boolean(instance.auth?.password)),
-        },
+        ...descriptor,
         connectivity: {
           reachable: true,
           source: "mock",
@@ -249,28 +256,48 @@ export class ServiceNowClient {
       };
     }
 
-    const pluginPage = await this.listTable({
-      table: "sys_plugins",
-      limit: 10,
-      offset: 0,
-      instanceKey,
-    });
+    let tableApiAccessible = false;
+    let tableApiProbe = null;
+    try {
+      await this.listTable({
+        table: "sys_db_object",
+        limit: 1,
+        offset: 0,
+        instanceKey,
+      });
+      tableApiAccessible = true;
+      tableApiProbe = { table: "sys_db_object", status: "ok" };
+    } catch (error) {
+      tableApiProbe = {
+        table: "sys_db_object",
+        status: "failed",
+        error: isObject(error) ? error : { message: String(error) },
+      };
+    }
 
-    const plugins = pluginPage.records
-      .map((record) => record.name || record.id || record.sys_id)
-      .filter(Boolean);
+    let plugins = [];
+    let pluginProbe = null;
+    try {
+      const pluginPage = await this.listTable({
+        table: "sys_plugins",
+        limit: 10,
+        offset: 0,
+        instanceKey,
+      });
+      plugins = pluginPage.records
+        .map((record) => record.name || record.id || record.sys_id)
+        .filter(Boolean);
+      pluginProbe = { table: "sys_plugins", status: "ok", plugin_count: plugins.length };
+    } catch (error) {
+      pluginProbe = {
+        table: "sys_plugins",
+        status: "failed",
+        error: isObject(error) ? error : { message: String(error) },
+      };
+    }
 
     return {
-      instance: {
-        key: instance.key,
-        url: instance.instanceUrl,
-      },
-      auth: {
-        mode: instance.auth?.mode || "oauth",
-        credentials_configured:
-          Boolean(instance.auth?.accessToken) ||
-          (Boolean(instance.auth?.username) && Boolean(instance.auth?.password)),
-      },
+      ...descriptor,
       connectivity: {
         reachable: true,
         source: "live",
@@ -280,8 +307,12 @@ export class ServiceNowClient {
         supports: {
           oauth: true,
           basic: true,
-          table_api: true,
+          table_api: tableApiAccessible,
           pagination: true,
+        },
+        probes: {
+          table_api: tableApiProbe,
+          plugins: pluginProbe,
         },
       },
     };

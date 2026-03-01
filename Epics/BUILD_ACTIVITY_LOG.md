@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 20:26 PST
+Last Updated: 2026-02-28 21:12 PST
 
 ---
 
@@ -191,6 +191,42 @@ Each entry should include:
 - **Reason:** Remaining Gate G1 checklist items (E1 minimal and first vertical-slice demo evidence) completed and validated.
 - **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, smoke output from `npm run smoke`.
 - **Next step:** Enter Gate G2 execution path (D1 → D2 → D3, then E1 full and E2/E3).
+
+### 2026-02-28 20:46 PST
+
+- **Item:** SEC-CONFIG-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added secure environment publishing pattern so local secrets remain private while onboarding template is public.
+- **Evidence:** `.gitignore` (`.env` ignored, `.env.example` allowed), `.env.example`, `README.md` env setup updates.
+- **Next step:** Validate live connectivity with repeatable standalone diagnostics.
+
+### 2026-02-28 20:40 PST
+
+- **Item:** G1-CONNECTIVITY-HARDENING
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added deeper live diagnostics and MCP transport verification scripts for repeatable Gate G1 connectivity evidence.
+- **Evidence:** `scripts/test-live-connection.js`, `scripts/test-live-mcp-transport.js`, `package.json` scripts (`test:live`, `test:live:mcp`).
+- **Next step:** Capture and track live diagnostics outcomes in gate notes.
+
+### 2026-02-28 20:31 PST
+
+- **Item:** B2-ROBUSTNESS-1
+- **Change:** `Done -> Done (enhanced)`
+- **Owner:** Engineering
+- **Reason:** Improved configuration/runtime robustness by loading `.env` directly in config and handling non-JSON ServiceNow responses without parser crashes.
+- **Evidence:** `src/config.js` (`.env` loader), `src/servicenow/client.js` (safe JSON parse fallback).
+- **Next step:** Continue narrowing endpoint-specific authorization differences surfaced by live tests.
+
+### 2026-02-28 20:40 PST
+
+- **Item:** LIVE-TEST-RESULTS-1
+- **Change:** `Not Started -> Logged`
+- **Owner:** Engineering
+- **Reason:** Executed expanded live diagnostics against configured instance and captured partial pass/fail matrix.
+- **Evidence:** `npm run test:live`, `npm run test:live:mcp`.
+- **Next step:** Resolve `sys_plugins` authorization (403) or switch capability probe table while preserving release/plugin discovery requirements.
 
 ---
 

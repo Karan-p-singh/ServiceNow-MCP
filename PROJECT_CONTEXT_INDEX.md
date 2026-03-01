@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-02-28 18:12 PST
+Last Updated: 2026-02-28 21:14 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -61,6 +61,15 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `src/server/tool-registry.js` → tool registration abstraction
 - `src/server/request-context.js` → request/correlation context generation
 - `src/server/mcp.js` → server lifecycle + invocation orchestration
+- `src/server/http-sse.js` → HTTP/SSE transport host + JSON-RPC bridge (`/mcp`, `/mcp/sse`)
+- `src/servicenow/client.js` → ServiceNow REST adapter (auth, retries, normalization, capability discovery)
+- `src/config.js` → environment parsing + local `.env` loading and merged config resolution
+
+### `scripts/` (diagnostics + verification)
+
+- `scripts/test-live-connection.js` → expanded live instance diagnostics matrix (auth, stats, metadata, script read, failure classification)
+- `scripts/test-live-mcp-transport.js` → MCP transport/runtime verification (`GET /mcp`, JSON-RPC initialize/list/call)
+- `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`
 
 ---
 
@@ -78,9 +87,8 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 5) Status Snapshot (Current)
 
-- Phase 1 is in progress (~70% on board) with **EPIC-A** and **EPIC-B** completed.
-- Current gate focus is **G1 remaining items**:
-  - E1 minimal (`sn.script.get` + validation summary attachment)
-  - Demo evidence for first vertical slice
-- Next queued stories are **E1, D1, D2, D3**.
+- Phase 1 is complete with **Gate G1 passed**; **EPIC-A** and **EPIC-B** are complete and **EPIC-E** remains in progress.
+- G1 evidence now includes live diagnostics tooling (`test:live`, `test:live:mcp`) and secure env publishing baseline (`.env.example` + `.gitignore`).
+- Known operational risk: endpoint-specific authorization gap on `sys_plugins` (403) while other probes pass; tracked in gate/activity logs.
+- Next queued stories are **D1, D2, D3, E1 (full scope)**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

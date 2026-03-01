@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-02-28 20:26 PST
+Last Updated: 2026-02-28 21:14 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -115,14 +115,17 @@ Status: `Not Started`
 
 ## 3) Gate Decision Log
 
-| Date       | Gate | Decision    | Notes                                                                                                              |
-| ---------- | ---- | ----------- | ------------------------------------------------------------------------------------------------------------------ |
-| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                                                    |
-| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                                              |
-| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                                                   |
-| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                             |
-| 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence               |
-| 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence             |
-| 2026-02-28 | G1   | In Progress | A6 completed: URL-first HTTP/SSE MCP endpoint added (`http://localhost:3001/mcp`) with stdio fallback              |
-| 2026-02-28 | G1   | Passed      | E1 minimal (`sn.script.get` + validation summary) implemented and smoke evidence captured for first vertical slice |
-| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                                  |
+| Date       | Gate | Decision    | Notes                                                                                                                                                                                           |
+| ---------- | ---- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                                                                                                                                 |
+| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                                                                                                                           |
+| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                                                                                                                                |
+| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                                                                                                          |
+| 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence                                                                                            |
+| 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence                                                                                          |
+| 2026-02-28 | G1   | In Progress | A6 completed: URL-first HTTP/SSE MCP endpoint added (`http://localhost:3001/mcp`) with stdio fallback                                                                                           |
+| 2026-02-28 | G1   | Passed      | E1 minimal (`sn.script.get` + validation summary) implemented and smoke evidence captured for first vertical slice                                                                              |
+| 2026-02-28 | G1   | Passed      | Expanded live connectivity diagnostics introduced (`npm run test:live`, `npm run test:live:mcp`); evidence now includes handshake/stats/metadata/script-read/transport plus classified failures |
+| 2026-02-28 | G1   | Passed      | Secure env publishing baseline completed (`.env.example` + `.gitignore` + README setup notes) for GitHub-safe onboarding without credential exposure                                            |
+| 2026-02-28 | G1   | At Risk     | Endpoint-specific authorization gap remains on `sys_plugins` (403) while other probes pass; track under connectivity remediation without reopening transport baseline                           |
+| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                                                                                                               |
