@@ -1,8 +1,14 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-02-28 17:57 PST
+Last Updated: 2026-02-28 18:22 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
+
+Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
+
+- EPIC-A is complete (`Done`)
+- Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`
+- Next queued cross-epic focus: `B1`, `B2`, `B3` (then `E1`, `D1`)
 
 ---
 

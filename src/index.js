@@ -14,6 +14,56 @@ function registerBaselineTools(server) {
       };
     },
   });
+
+  server.registerTool({
+    name: "sn.script.update",
+    tier: "T2",
+    handler: async (input, context) => {
+      return {
+        data: {
+          updated: true,
+          table: "sys_script_include",
+          sys_id: input?.sys_id || "mock-sys-id",
+          scope: input?.scope || "global",
+          actor: "mcp",
+        },
+        validation_summary: {
+          findings_count_by_severity: {
+            CRITICAL: 0,
+            HIGH: 0,
+            MEDIUM: 0,
+            LOW: 0,
+          },
+          blocked: false,
+        },
+        policy: {
+          evaluated: true,
+          allowed: true,
+          decisions: [
+            {
+              check: "mock_write_path",
+              passed: true,
+              details: {
+                tool: context.tool.name,
+              },
+            },
+          ],
+        },
+        errors: [],
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.commit",
+    tier: "T3",
+    handler: async (input) => {
+      return {
+        committed: true,
+        changeset: input?.changeset || "mock-changeset",
+      };
+    },
+  });
 }
 
 async function main() {
@@ -33,9 +83,33 @@ async function main() {
 
   if (process.argv.includes("--smoke")) {
     const result = await server.invoke("sn.instance.info", {});
+    const tierBlocked = await server.invoke("sn.script.update", {
+      scope: "x_demo_scope",
+      sys_id: "abc123",
+    });
+    const t3Blocked = await server.invoke("sn.changeset.commit", {
+      changeset: "u_demo_changeset",
+    });
+    const policyBlocked = await server.invoke("sn.script.update", {
+      scope: "global",
+      sys_id: "abc124",
+      break_glass: false,
+    });
+    const breakGlassAllowed = await server.invoke("sn.script.update", {
+      scope: "global",
+      sys_id: "abc125",
+      break_glass: true,
+      break_glass_reason: "Emergency fix approved",
+      reason: "Emergency fix approved",
+    });
+
     console.log(JSON.stringify({
       tools: server.listTools(),
       smoke_result: result,
+      tier_blocked_result: tierBlocked,
+      t3_blocked_result: t3Blocked,
+      policy_blocked_result: policyBlocked,
+      break_glass_result: breakGlassAllowed,
     }, null, 2));
     await server.stop();
     return;
