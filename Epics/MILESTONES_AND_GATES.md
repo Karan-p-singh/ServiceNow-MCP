@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-03-01 02:54 PST
+Last Updated: 2026-03-01 03:36 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -13,8 +13,8 @@ Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 | M2           | Phase 2 Exit — Validation MVP + Script E2E       | Week 5        | Passed      | Engineering            |
 | M3           | Phase 3 Exit — Optional Companion ACL Authority  | Week 8        | Passed      | Engineering + SN Dev   |
 | M4           | Phase 4 Exit — Update Set MVP                    | Week 12       | Passed      | Engineering            |
-| M5           | Phase 5 Exit — Controlled Commit + Rollback Plan | Week 16       | In Progress | Engineering            |
-| M6           | Phase 6 Exit — Flow/Workflow Coverage            | Week 20       | Not Started | Engineering            |
+| M5           | Phase 5 Exit — Controlled Commit + Rollback Plan | Week 16       | Passed      | Engineering            |
+| M6           | Phase 6 Exit — Flow/Workflow Coverage            | Week 20       | Passed      | Engineering            |
 | M7           | Phase 7 Exit — Enterprise Readiness              | Week 24       | Not Started | Engineering + Security |
 
 ---
@@ -87,20 +87,20 @@ Status: `Passed`
 
 ## Gate G5 — Commit/Rollback Planning (M5)
 
-Status: `In Progress`
+Status: `Passed`
 
 - [x] F4 complete: dry-run commit preview
-- [ ] F5 complete: T3 controlled commit with confirm/reason + snapshot matrix
-- [ ] F6 complete: rollback plan generator with non-restorable declarations
-- [ ] High-risk operation audit trace validated
+- [x] F5 complete: T3 controlled commit with confirm/reason + snapshot matrix
+- [x] F6 complete: rollback plan generator with non-restorable declarations
+- [x] High-risk operation audit trace validated
 
 ## Gate G6 — Artifact Parity (M6)
 
-Status: `Not Started`
+Status: `Passed`
 
-- [ ] E4 complete: flow list/get/validate
-- [ ] E5 complete: workflow list/get/validate
-- [ ] D coverage expanded for flow/workflow rulepacks
+- [x] E4 complete: flow list/get/validate
+- [x] E5 complete: workflow list/get/validate
+- [x] D coverage expanded for flow/workflow rulepacks
 
 ## Gate G7 — Enterprise Readiness (M7)
 
@@ -117,29 +117,31 @@ Status: `Not Started`
 
 ## 3) Gate Decision Log
 
-| Date       | Gate | Decision    | Notes                                                                                                                                                                                                                                                 |
-| ---------- | ---- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                                                                                                                                                                                       |
-| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                                                                                                                                                                                 |
-| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                                                                                                                                                                                      |
-| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                                                                                                                                                                |
-| 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence                                                                                                                                                  |
-| 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence                                                                                                                                                |
-| 2026-02-28 | G1   | In Progress | A6 completed: URL-first HTTP/SSE MCP endpoint added (`http://localhost:3001/mcp`) with stdio fallback                                                                                                                                                 |
-| 2026-02-28 | G1   | Passed      | E1 minimal (`sn.script.get` + validation summary) implemented and smoke evidence captured for first vertical slice                                                                                                                                    |
-| 2026-02-28 | G1   | Passed      | Expanded live connectivity diagnostics introduced (`npm run test:live`, `npm run test:live:mcp`); evidence now includes handshake/stats/metadata/script-read/transport plus classified failures                                                       |
-| 2026-02-28 | G1   | Passed      | Secure env publishing baseline completed (`.env.example` + `.gitignore` + README setup notes) for GitHub-safe onboarding without credential exposure                                                                                                  |
-| 2026-02-28 | G1   | At Risk     | Endpoint-specific authorization gap remains on `sys_plugins` (403) while other probes pass; track under connectivity remediation without reopening transport baseline                                                                                 |
-| 2026-02-28 | G1   | Passed      | Transport and tool-call diagnostics upgraded to assertion-based contract tests (positive + negative JSON-RPC paths) with deterministic failure behavior for CI-style gating                                                                           |
-| 2026-02-28 | G1   | Passed      | Re-run confirmed `test:live:mcp` full pass and `test:live` stabilization; `sys_plugins` 403 is now treated as restricted-access warning rather than full connectivity failure                                                                         |
-| 2026-02-28 | G1   | Passed      | Plugin probe strategy updated to `v_plugin` preferred with `sys_plugins` fallback; live diagnostics and gate interpretation now reflect table-level policy variance without masking failures                                                          |
-| 2026-02-28 | G2   | Passed      | Implemented validation runtime + script rulepack v1, full script lifecycle tooling (`get/list/search/refs/deps/create/update`), CRITICAL/HIGH write gating, audit metadata, and unit test coverage                                                    |
-| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                                                                                                                                                                     |
-| 2026-03-01 | G3   | Passed      | Completed C1/C2/C4 as optional companion authority pilot: health/version contract, authoritative `sn.acl.trace`, and dual-mode degraded behavior with deterministic reason codes validated via `npm test`                                             |
-| 2026-03-01 | G3   | Passed      | Live deployment verification completed on Zurich target instance; companion endpoint base URI auto-discovered (`/api/240215/v1`) and verified via `npm run test:companion:live`                                                                       |
-| 2026-03-01 | G3   | At Risk     | Strict scope-governance hardening now shows companion artifacts remain `sys_scope=global` when deployed via Table API path; functional endpoints pass but true scoped ownership requires Studio/scoped install path                                   |
-| 2026-03-01 | G3   | At Risk     | Deployment automation now enforces scope-bootstrap + scoped-update only (no global artifact create path). Current state is blocked on recreating companion role/includes/REST records in true `x_mcp_companion` scope.                                |
-| 2026-03-01 | G4   | In Progress | F1 changeset read tooling completed (`sn.changeset.list/get/contents/export`) with pagination-aware client support, smoke registration evidence, and unit test coverage; moving to F2/F3 for Gate G4 exit.                                            |
-| 2026-03-01 | G4   | In Progress | F2/F3 delivered: `sn.changeset.gaps` and `sn.updateset.capture.verify` added with deterministic confidence/reason contracts, validated by `npm test`, smoke, and `npm run test:g4`; remaining exit criterion is non-prod integration flow validation. |
-| 2026-03-01 | G4   | Passed      | Added and executed non-prod live integration validation (`npm run test:g4:live`) with passing evidence artifact `artifacts/g4-integration-summary.json`; all Gate G4 checklist criteria now complete.                                                 |
-| 2026-03-01 | G5   | In Progress | F4 commit preview dry-run delivered via `sn.changeset.commit.preview` with read-only/no-side-effect contract, scope impact reporting, potential conflict candidates, and mitigation guidance; Gate G5 advanced while F5/F6 remain pending.              |
+| Date       | Gate | Decision    | Notes                                                                                                                                                                                                                                                        |
+| ---------- | ---- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                                                                                                                                                                                              |
+| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                                                                                                                                                                                        |
+| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                                                                                                                                                                                             |
+| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                                                                                                                                                                       |
+| 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence                                                                                                                                                         |
+| 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence                                                                                                                                                       |
+| 2026-02-28 | G1   | In Progress | A6 completed: URL-first HTTP/SSE MCP endpoint added (`http://localhost:3001/mcp`) with stdio fallback                                                                                                                                                        |
+| 2026-02-28 | G1   | Passed      | E1 minimal (`sn.script.get` + validation summary) implemented and smoke evidence captured for first vertical slice                                                                                                                                           |
+| 2026-02-28 | G1   | Passed      | Expanded live connectivity diagnostics introduced (`npm run test:live`, `npm run test:live:mcp`); evidence now includes handshake/stats/metadata/script-read/transport plus classified failures                                                              |
+| 2026-02-28 | G1   | Passed      | Secure env publishing baseline completed (`.env.example` + `.gitignore` + README setup notes) for GitHub-safe onboarding without credential exposure                                                                                                         |
+| 2026-02-28 | G1   | At Risk     | Endpoint-specific authorization gap remains on `sys_plugins` (403) while other probes pass; track under connectivity remediation without reopening transport baseline                                                                                        |
+| 2026-02-28 | G1   | Passed      | Transport and tool-call diagnostics upgraded to assertion-based contract tests (positive + negative JSON-RPC paths) with deterministic failure behavior for CI-style gating                                                                                  |
+| 2026-02-28 | G1   | Passed      | Re-run confirmed `test:live:mcp` full pass and `test:live` stabilization; `sys_plugins` 403 is now treated as restricted-access warning rather than full connectivity failure                                                                                |
+| 2026-02-28 | G1   | Passed      | Plugin probe strategy updated to `v_plugin` preferred with `sys_plugins` fallback; live diagnostics and gate interpretation now reflect table-level policy variance without masking failures                                                                 |
+| 2026-02-28 | G2   | Passed      | Implemented validation runtime + script rulepack v1, full script lifecycle tooling (`get/list/search/refs/deps/create/update`), CRITICAL/HIGH write gating, audit metadata, and unit test coverage                                                           |
+| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                                                                                                                                                                            |
+| 2026-03-01 | G3   | Passed      | Completed C1/C2/C4 as optional companion authority pilot: health/version contract, authoritative `sn.acl.trace`, and dual-mode degraded behavior with deterministic reason codes validated via `npm test`                                                    |
+| 2026-03-01 | G3   | Passed      | Live deployment verification completed on Zurich target instance; companion endpoint base URI auto-discovered (`/api/240215/v1`) and verified via `npm run test:companion:live`                                                                              |
+| 2026-03-01 | G3   | At Risk     | Strict scope-governance hardening now shows companion artifacts remain `sys_scope=global` when deployed via Table API path; functional endpoints pass but true scoped ownership requires Studio/scoped install path                                          |
+| 2026-03-01 | G3   | At Risk     | Deployment automation now enforces scope-bootstrap + scoped-update only (no global artifact create path). Current state is blocked on recreating companion role/includes/REST records in true `x_mcp_companion` scope.                                       |
+| 2026-03-01 | G4   | In Progress | F1 changeset read tooling completed (`sn.changeset.list/get/contents/export`) with pagination-aware client support, smoke registration evidence, and unit test coverage; moving to F2/F3 for Gate G4 exit.                                                   |
+| 2026-03-01 | G4   | In Progress | F2/F3 delivered: `sn.changeset.gaps` and `sn.updateset.capture.verify` added with deterministic confidence/reason contracts, validated by `npm test`, smoke, and `npm run test:g4`; remaining exit criterion is non-prod integration flow validation.        |
+| 2026-03-01 | G4   | Passed      | Added and executed non-prod live integration validation (`npm run test:g4:live`) with passing evidence artifact `artifacts/g4-integration-summary.json`; all Gate G4 checklist criteria now complete.                                                        |
+| 2026-03-01 | G5   | In Progress | F4 commit preview dry-run delivered via `sn.changeset.commit.preview` with read-only/no-side-effect contract, scope impact reporting, potential conflict candidates, and mitigation guidance; Gate G5 advanced while F5/F6 remain pending.                   |
+| 2026-03-01 | G5   | Passed      | Completed F5/F6 with `sn.changeset.commit` controlled contract (T3 confirm/reason + snapshot matrix + high-risk audit trace) and `sn.rollback.plan.generate`; validation evidence captured via `npm run test:g5` and `artifacts/g5-validation-summary.json`. |
+| 2026-03-01 | G6   | Passed      | Delivered flow/workflow parity (`sn.flow.*`, `sn.workflow.*`) plus rulepack-backed validation coverage (`flows-v1`, `workflows-v1`); evidence captured via `npm run test:g6` and `artifacts/g6-validation-summary.json`.                                     |

@@ -1,4 +1,13 @@
 const RETRYABLE_HTTP_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504]);
+const RESTORABLE_TABLES = new Set([
+  "sys_script_include",
+  "sys_properties",
+  "sys_ui_action",
+  "sys_dictionary",
+  "sys_choice",
+  "wf_workflow",
+  "sys_hub_flow",
+]);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -425,6 +434,112 @@ export class ServiceNowClient {
     });
   }
 
+  async listFlows({ limit = 25, offset = 0, query = "", instanceKey } = {}) {
+    return this.listTable({
+      table: "sys_hub_flow",
+      limit,
+      offset,
+      query,
+      instanceKey,
+    });
+  }
+
+  async getFlow({ sysId, name, query, instanceKey } = {}) {
+    if (sysId) {
+      const response = await this.request({
+        method: "GET",
+        path: `/api/now/table/sys_hub_flow/${sysId}`,
+        instanceKey,
+      });
+
+      return {
+        found: Boolean(response?.data?.result),
+        record: response?.data?.result || null,
+        query: {
+          sys_id: sysId,
+          name: name || null,
+          sysparm_query: query || "",
+        },
+      };
+    }
+
+    let resolvedQuery = String(query || "").trim();
+    if (!resolvedQuery && name) {
+      resolvedQuery = `name=${name}`;
+    }
+
+    const page = await this.listFlows({
+      limit: 1,
+      offset: 0,
+      query: resolvedQuery,
+      instanceKey,
+    });
+
+    const record = page.records?.[0] || null;
+    return {
+      found: Boolean(record),
+      record,
+      query: {
+        sys_id: sysId || null,
+        name: name || null,
+        sysparm_query: resolvedQuery,
+      },
+    };
+  }
+
+  async listWorkflows({ limit = 25, offset = 0, query = "", instanceKey } = {}) {
+    return this.listTable({
+      table: "wf_workflow",
+      limit,
+      offset,
+      query,
+      instanceKey,
+    });
+  }
+
+  async getWorkflow({ sysId, name, query, instanceKey } = {}) {
+    if (sysId) {
+      const response = await this.request({
+        method: "GET",
+        path: `/api/now/table/wf_workflow/${sysId}`,
+        instanceKey,
+      });
+
+      return {
+        found: Boolean(response?.data?.result),
+        record: response?.data?.result || null,
+        query: {
+          sys_id: sysId,
+          name: name || null,
+          sysparm_query: query || "",
+        },
+      };
+    }
+
+    let resolvedQuery = String(query || "").trim();
+    if (!resolvedQuery && name) {
+      resolvedQuery = `name=${name}`;
+    }
+
+    const page = await this.listWorkflows({
+      limit: 1,
+      offset: 0,
+      query: resolvedQuery,
+      instanceKey,
+    });
+
+    const record = page.records?.[0] || null;
+    return {
+      found: Boolean(record),
+      record,
+      query: {
+        sys_id: sysId || null,
+        name: name || null,
+        sysparm_query: resolvedQuery,
+      },
+    };
+  }
+
   async getChangeset({ sysId, name, query, instanceKey } = {}) {
     if (sysId) {
       const response = await this.request({
@@ -743,6 +858,204 @@ export class ServiceNowClient {
     };
   }
 
+  async commitChangesetControlled({ changesetSysId, reason, confirm = false, instanceKey } = {}) {
+    const resolvedChangesetSysId = String(changesetSysId || "").trim();
+    if (!resolvedChangesetSysId) {
+      return {
+        commit_requested: false,
+        commit_executed: false,
+        error: {
+          code: "INVALID_PARAMS",
+          message: "changeset_sys_id is required for controlled commit.",
+        },
+      };
+    }
+
+    const instance = this.resolveInstance(instanceKey);
+    const changeset = await this.getChangeset({
+      sysId: resolvedChangesetSysId,
+      instanceKey,
+    });
+    const contents = await this.listChangesetContents({
+      changesetSysId: resolvedChangesetSysId,
+      limit: 500,
+      offset: 0,
+      instanceKey,
+    });
+    const records = Array.isArray(contents?.records) ? contents.records : [];
+
+    const byArtifactTypeMap = new Map();
+    let restorableCount = 0;
+    let nonRestorableCount = 0;
+    let unknownCount = 0;
+
+    for (const record of records) {
+      const table = String(record?.target_table || "").trim() || "unknown";
+      const hasTarget = Boolean(String(record?.target_sys_id || "").trim());
+      const restorable = RESTORABLE_TABLES.has(table);
+      const classification = !hasTarget
+        ? "unknown"
+        : restorable
+          ? "restorable"
+          : "non_restorable";
+
+      if (classification === "restorable") {
+        restorableCount += 1;
+      } else if (classification === "non_restorable") {
+        nonRestorableCount += 1;
+      } else {
+        unknownCount += 1;
+      }
+
+      const current = byArtifactTypeMap.get(table) || {
+        artifact_type: table,
+        captured: 0,
+        restorable: 0,
+        non_restorable: 0,
+        unknown: 0,
+      };
+      current.captured += 1;
+      if (classification === "restorable") {
+        current.restorable += 1;
+      } else if (classification === "non_restorable") {
+        current.non_restorable += 1;
+      } else {
+        current.unknown += 1;
+      }
+      byArtifactTypeMap.set(table, current);
+    }
+
+    const sourceScope =
+      changeset?.record?.application?.display_value ||
+      changeset?.record?.application?.value ||
+      changeset?.record?.application ||
+      "unknown";
+    const globalScopeDetected = String(sourceScope).toLowerCase() === "global";
+    const isMock = this.isMockInstance(instance.instanceUrl);
+
+    return {
+      commit_requested: true,
+      commit_executed: isMock && confirm,
+      execution_mode: isMock ? "mock_commit" : "controlled_noop",
+      reason_code: isMock ? "COMMIT_EXECUTED_MOCK" : "COMMIT_NOT_EXECUTED_LIVE_SAFE_MODE",
+      changeset: {
+        sys_id: resolvedChangesetSysId,
+        found: Boolean(changeset?.found),
+        record: changeset?.record || null,
+      },
+      snapshot_coverage_matrix: {
+        captured: records.length,
+        restorable: restorableCount,
+        non_restorable: nonRestorableCount,
+        unknown: unknownCount,
+        by_artifact_type: Array.from(byArtifactTypeMap.values()),
+      },
+      high_risk_audit_trace: {
+        operation: "sn.changeset.commit",
+        tier: "T3",
+        confirm_required: true,
+        confirm_received: Boolean(confirm),
+        reason: String(reason || "").trim(),
+        requested_at: new Date().toISOString(),
+        actor: "mcp",
+        source_scope: sourceScope,
+        global_scope_detected: globalScopeDetected,
+      },
+      limitations: [
+        "Controlled commit output is evidence-driven and does not guarantee transactional rollback semantics.",
+        isMock
+          ? "Mock mode marks commit_executed for contract testing only."
+          : "Live mode currently returns controlled_noop to avoid unsafe write side effects without platform-native transaction controls.",
+      ],
+      page: contents?.page || null,
+    };
+  }
+
+  async generateRollbackPlan({ changesetSysId, instanceKey } = {}) {
+    const resolvedChangesetSysId = String(changesetSysId || "").trim();
+    if (!resolvedChangesetSysId) {
+      return {
+        generated: false,
+        error: {
+          code: "INVALID_PARAMS",
+          message: "changeset_sys_id is required for rollback planning.",
+        },
+      };
+    }
+
+    const changeset = await this.getChangeset({
+      sysId: resolvedChangesetSysId,
+      instanceKey,
+    });
+    const contents = await this.listChangesetContents({
+      changesetSysId: resolvedChangesetSysId,
+      limit: 500,
+      offset: 0,
+      instanceKey,
+    });
+    const records = Array.isArray(contents?.records) ? contents.records : [];
+
+    const restorable = [];
+    const nonRestorable = [];
+    for (const record of records) {
+      const table = String(record?.target_table || "").trim() || "unknown";
+      const item = {
+        table,
+        sys_id: String(record?.target_sys_id || "").trim() || null,
+        name: record?.name || null,
+        update_xml: record?.sys_id || null,
+      };
+
+      if (RESTORABLE_TABLES.has(table)) {
+        restorable.push({
+          ...item,
+          rollback_method: "restore_previous_version_or_reapply_prior_update_set",
+        });
+      } else {
+        nonRestorable.push({
+          ...item,
+          non_restorable_reason: "MANUAL_RECONSTRUCTION_REQUIRED",
+        });
+      }
+    }
+
+    const sourceScope =
+      changeset?.record?.application?.display_value ||
+      changeset?.record?.application?.value ||
+      changeset?.record?.application ||
+      "unknown";
+    const globalScopeDetected = String(sourceScope).toLowerCase() === "global";
+    const riskLevel = nonRestorable.length > 0 || globalScopeDetected ? "high" : "medium";
+
+    return {
+      generated: true,
+      changeset: {
+        sys_id: resolvedChangesetSysId,
+        found: Boolean(changeset?.found),
+        record: changeset?.record || null,
+      },
+      restorable,
+      non_restorable: nonRestorable,
+      declarations: {
+        fully_restorable: nonRestorable.length === 0,
+        contains_non_restorable: nonRestorable.length > 0,
+      },
+      manual_steps: [
+        "Export current update set and preserve a point-in-time artifact snapshot before rollback operations.",
+        "For restorable records, apply prior known-good versions or revert using targeted update entries.",
+        "For non-restorable entries, execute documented manual remediation and verify post-state in instance.",
+        "Run smoke/integration checks after rollback to confirm platform stability.",
+      ],
+      risk_level: riskLevel,
+      reason_code: nonRestorable.length > 0 ? "ROLLBACK_PARTIAL_MANUAL_REQUIRED" : "ROLLBACK_RESTORABLE_WITH_STEPS",
+      limitations: [
+        "Rollback planning is advisory and does not perform automatic revert operations.",
+        "Non-restorable entries require explicit human approval and manual execution.",
+      ],
+      page: contents?.page || null,
+    };
+  }
+
   mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
     if (path.includes("/api/x_mcp_companion/v1/health")) {
       return Promise.resolve({
@@ -991,6 +1304,144 @@ export class ServiceNowClient {
       if (sysparmQuery.startsWith("name=")) {
         const target = sysparmQuery.replace("name=", "");
         filtered = sampleChangesets.filter((entry) => entry.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_hub_flow")) {
+      const sampleFlows = [
+        {
+          sys_id: "f1111111f2222222f3333333f4444444",
+          name: "x_demo_incident_flow",
+          description: "Sample flow for incident orchestration",
+          status: "published",
+          trigger_type: "record",
+          steps: [{ id: "step_1", type: "action" }],
+        },
+        {
+          sys_id: "f5555555f6666666f7777777f8888888",
+          name: "x_demo_scheduled_flow",
+          description: "",
+          status: "active",
+          trigger_type: "schedule",
+          steps: [{ id: "step_1", type: "wait" }],
+        },
+      ];
+
+      const upperMethod = String(method).toUpperCase();
+      if (upperMethod === "GET" && /\/sys_hub_flow\/[a-z0-9]+$/i.test(path)) {
+        const sysId = path.split("/").pop();
+        const record = sampleFlows.find((entry) => entry.sys_id === sysId);
+        if (!record) {
+          return Promise.reject({
+            code: "SN_RESOURCE_NOT_FOUND",
+            message: "No Record found",
+            status: 404,
+            status_text: "Not Found",
+            retriable: false,
+            details: {
+              instance: instance.instanceUrl,
+              path,
+              attempt: 1,
+            },
+          });
+        }
+
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: record,
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleFlows;
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleFlows.filter((entry) => entry.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/wf_workflow")) {
+      const sampleWorkflows = [
+        {
+          sys_id: "w1111111w2222222w3333333w4444444",
+          name: "x_demo_workflow",
+          description: "Classic workflow sample",
+          active: "true",
+          activities: [{ id: "activity_1", type: "task" }],
+        },
+        {
+          sys_id: "w5555555w6666666w7777777w8888888",
+          name: "x_demo_wait_workflow",
+          description: "",
+          active: "true",
+          activities: [{ id: "activity_1", type: "wait_timer" }],
+        },
+      ];
+
+      const upperMethod = String(method).toUpperCase();
+      if (upperMethod === "GET" && /\/wf_workflow\/[a-z0-9]+$/i.test(path)) {
+        const sysId = path.split("/").pop();
+        const record = sampleWorkflows.find((entry) => entry.sys_id === sysId);
+        if (!record) {
+          return Promise.reject({
+            code: "SN_RESOURCE_NOT_FOUND",
+            message: "No Record found",
+            status: 404,
+            status_text: "Not Found",
+            retriable: false,
+            details: {
+              instance: instance.instanceUrl,
+              path,
+              attempt: 1,
+            },
+          });
+        }
+
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: record,
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleWorkflows;
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleWorkflows.filter((entry) => entry.name === target);
       }
 
       const limit = Number(query.sysparm_limit || filtered.length || 1);

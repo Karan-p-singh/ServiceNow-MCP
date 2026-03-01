@@ -3,7 +3,12 @@ import { HttpSseTransport } from "./server/http-sse.js";
 import { MCPServer } from "./server/mcp.js";
 import { CompanionClient } from "./servicenow/companion-client.js";
 import { ServiceNowClient } from "./servicenow/client.js";
-import { evaluateScriptValidation, evaluateWriteGate } from "./validation/engine.js";
+import {
+  evaluateFlowValidation,
+  evaluateScriptValidation,
+  evaluateWorkflowValidation,
+  evaluateWriteGate,
+} from "./validation/engine.js";
 
 function extractScriptRecord(result) {
   return result?.script || null;
@@ -509,6 +514,162 @@ function registerBaselineTools(server) {
   });
 
   server.registerTool({
+    name: "sn.flow.list",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(100, Math.max(1, Number(input?.limit || 25)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+      const query = String(input?.query || "");
+
+      const page = await client.listFlows({
+        limit,
+        offset,
+        query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          records: page.records,
+          page: page.page,
+          query,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getFlow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          query: result.query,
+          record: result.record,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.validate",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getFlow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+      const flowRecord = result?.record || {};
+      const validation = evaluateFlowValidation({
+        flow: flowRecord,
+        record: flowRecord,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_hub_flow",
+          query: result.query,
+          record: flowRecord,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.list",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(100, Math.max(1, Number(input?.limit || 25)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+      const query = String(input?.query || "");
+
+      const page = await client.listWorkflows({
+        limit,
+        offset,
+        query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          records: page.records,
+          page: page.page,
+          query,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getWorkflow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          query: result.query,
+          record: result.record,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.validate",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getWorkflow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+      const workflowRecord = result?.record || {};
+      const validation = evaluateWorkflowValidation({
+        workflow: workflowRecord,
+        record: workflowRecord,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "wf_workflow",
+          query: result.query,
+          record: workflowRecord,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.script.update",
     tier: "T2",
     handler: async (input, context) => {
@@ -690,10 +851,35 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.changeset.commit",
     tier: "T3",
-    handler: async (input) => {
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const resolvedChangesetSysId = input?.changeset_sys_id || input?.sys_id;
+
+      const result = await client.commitChangesetControlled({
+        changesetSysId: resolvedChangesetSysId,
+        reason: input?.reason,
+        confirm: input?.confirm === true,
+        instanceKey: input?.instance_key,
+      });
+
       return {
-        committed: true,
-        changeset: input?.changeset || "mock-changeset",
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.plan.generate",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.generateRollbackPlan({
+        changesetSysId: input?.changeset_sys_id || input?.sys_id,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
       };
     },
   });
@@ -799,6 +985,34 @@ async function main() {
       changeset_sys_id: previewChangesetSysId,
       include_conflicts: true,
     });
+    const rollbackPlanResult = await server.invoke("sn.rollback.plan.generate", {
+      changeset_sys_id: previewChangesetSysId,
+    });
+    const controlledCommitResult = await server.invoke("sn.changeset.commit", {
+      changeset_sys_id: previewChangesetSysId,
+      confirm: true,
+      reason: "Gate G5 controlled commit contract validation",
+    });
+    const flowListResult = await server.invoke("sn.flow.list", {
+      limit: 2,
+      offset: 0,
+    });
+    const flowGetResult = await server.invoke("sn.flow.get", {
+      name: "x_demo_incident_flow",
+    });
+    const flowValidateResult = await server.invoke("sn.flow.validate", {
+      name: "x_demo_scheduled_flow",
+    });
+    const workflowListResult = await server.invoke("sn.workflow.list", {
+      limit: 2,
+      offset: 0,
+    });
+    const workflowGetResult = await server.invoke("sn.workflow.get", {
+      name: "x_demo_workflow",
+    });
+    const workflowValidateResult = await server.invoke("sn.workflow.validate", {
+      name: "x_demo_wait_workflow",
+    });
     const aclTraceResult = await server.invoke("sn.acl.trace", {
       table: "incident",
       operation: "read",
@@ -881,6 +1095,27 @@ async function main() {
         commitPreviewResult?.data?.preview_generated === true &&
         commitPreviewResult?.data?.write_side_effects === false &&
         Array.isArray(commitPreviewResult?.data?.recommended_mitigations),
+      f5_controlled_commit_contract_available:
+        controlledCommitResult?.tool === "sn.changeset.commit" &&
+        controlledCommitResult?.data?.commit_requested === true &&
+        Boolean(controlledCommitResult?.data?.snapshot_coverage_matrix) &&
+        Boolean(controlledCommitResult?.data?.high_risk_audit_trace),
+      f6_rollback_plan_generator_available:
+        rollbackPlanResult?.tool === "sn.rollback.plan.generate" &&
+        rollbackPlanResult?.data?.generated === true &&
+        Array.isArray(rollbackPlanResult?.data?.restorable) &&
+        Array.isArray(rollbackPlanResult?.data?.non_restorable) &&
+        rollbackPlanResult?.data?.declarations?.contains_non_restorable !== undefined,
+      e4_flow_list_get_validate_available:
+        flowListResult?.tool === "sn.flow.list" &&
+        flowGetResult?.tool === "sn.flow.get" &&
+        flowValidateResult?.tool === "sn.flow.validate" &&
+        flowValidateResult?.validation_summary?.rulepack?.id === "flows-v1",
+      e5_workflow_list_get_validate_available:
+        workflowListResult?.tool === "sn.workflow.list" &&
+        workflowGetResult?.tool === "sn.workflow.get" &&
+        workflowValidateResult?.tool === "sn.workflow.validate" &&
+        workflowValidateResult?.validation_summary?.rulepack?.id === "workflows-v1",
     };
 
     const smokePayload = {
@@ -900,6 +1135,14 @@ async function main() {
       changeset_gaps_result: changesetGapsResult,
       capture_verify_result: captureVerifyResult,
       commit_preview_result: commitPreviewResult,
+      rollback_plan_result: rollbackPlanResult,
+      controlled_commit_result: controlledCommitResult,
+      flow_list_result: flowListResult,
+      flow_get_result: flowGetResult,
+      flow_validate_result: flowValidateResult,
+      workflow_list_result: workflowListResult,
+      workflow_get_result: workflowGetResult,
+      workflow_validate_result: workflowValidateResult,
       acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,

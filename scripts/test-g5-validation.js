@@ -53,8 +53,8 @@ function resolveSmokeEnvForGate(gateId) {
   };
 }
 
-function runSmokeForG4() {
-  const smokeEnv = resolveSmokeEnvForGate("G4");
+function runSmokeForG5() {
+  const smokeEnv = resolveSmokeEnvForGate("G5");
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["src/index.js", "--smoke"], {
       env: smokeEnv,
@@ -89,40 +89,41 @@ function runSmokeForG4() {
 
 function evaluateGateCriteria(payload) {
   const toolNames = (payload.tools || []).map((entry) => entry.name);
-  const validReasonCodes = ["CAPTURED_IN_TARGET_SET", "CAPTURED_IN_DIFFERENT_SET", "NOT_CAPTURED"];
 
   return [
     {
-      id: "F1",
-      label: "Changeset read tooling list/get/contents/export is registered and smoke-available",
+      id: "F5",
+      label: "Controlled T3 commit emits confirmation-aware high-risk audit trace and snapshot matrix",
       passed:
-        payload?.smoke_summary?.f1_changeset_read_tools_available === true &&
-        ["sn.changeset.list", "sn.changeset.get", "sn.changeset.contents", "sn.changeset.export"]
-          .every((name) => toolNames.includes(name)),
+        payload?.smoke_summary?.f5_controlled_commit_contract_available === true &&
+        toolNames.includes("sn.changeset.commit") &&
+        payload?.controlled_commit_result?.data?.high_risk_audit_trace?.tier === "T3" &&
+        Boolean(payload?.controlled_commit_result?.data?.snapshot_coverage_matrix),
     },
     {
-      id: "F2",
-      label: "Gap detection exposes confidence-tier evidence buckets",
+      id: "F6",
+      label: "Rollback plan generator splits restorable vs non-restorable and includes manual guidance",
       passed:
-        payload?.smoke_summary?.f2_changeset_gap_detection_available === true &&
-        toolNames.includes("sn.changeset.gaps") &&
-        Array.isArray(payload?.changeset_gaps_result?.data?.hard_dependencies) &&
-        Array.isArray(payload?.changeset_gaps_result?.data?.soft_dependencies) &&
-        Array.isArray(payload?.changeset_gaps_result?.data?.heuristic_candidates),
+        payload?.smoke_summary?.f6_rollback_plan_generator_available === true &&
+        toolNames.includes("sn.rollback.plan.generate") &&
+        Array.isArray(payload?.rollback_plan_result?.data?.restorable) &&
+        Array.isArray(payload?.rollback_plan_result?.data?.non_restorable) &&
+        Array.isArray(payload?.rollback_plan_result?.data?.manual_steps),
     },
     {
-      id: "F3",
-      label: "Capture verification emits deterministic reason codes",
+      id: "G5-AUDIT",
+      label: "High-risk operation audit trace includes operation/tier/confirm contract",
       passed:
-        payload?.smoke_summary?.f3_capture_verify_reason_codes_deterministic === true &&
-        toolNames.includes("sn.updateset.capture.verify") &&
-        validReasonCodes.includes(payload?.capture_verify_result?.data?.reason_code),
+        payload?.controlled_commit_result?.data?.high_risk_audit_trace?.operation === "sn.changeset.commit" &&
+        payload?.controlled_commit_result?.data?.high_risk_audit_trace?.confirm_required === true &&
+        payload?.controlled_commit_result?.data?.high_risk_audit_trace?.confirm_received === true &&
+        typeof payload?.controlled_commit_result?.data?.high_risk_audit_trace?.reason === "string",
     },
   ];
 }
 
 function printChecklist(criteria) {
-  console.log("\n=== Gate G4 End-User Validation ===");
+  console.log("\n=== Gate G5 End-User Validation ===");
   for (const item of criteria) {
     console.log(`${item.passed ? "✅" : "❌"} ${item.id}: ${item.label}`);
   }
@@ -134,22 +135,18 @@ function printChecklist(criteria) {
 async function writeSummaryArtifact({ criteria, payload }) {
   const artifactsDir = path.join(process.cwd(), "artifacts");
   await fs.mkdir(artifactsDir, { recursive: true });
-  const outputPath = path.join(artifactsDir, "g4-validation-summary.json");
+  const outputPath = path.join(artifactsDir, "g5-validation-summary.json");
 
   const report = {
     generated_at: new Date().toISOString(),
-    gate: "G4",
+    gate: "G5",
     passed: criteria.every((item) => item.passed),
     criteria,
     evidence: {
       smoke_summary: payload?.smoke_summary || {},
       tools_registered: (payload?.tools || []).map((entry) => entry.name),
-      changeset_gaps_counts: {
-        hard: payload?.changeset_gaps_result?.data?.hard_dependencies?.length || 0,
-        soft: payload?.changeset_gaps_result?.data?.soft_dependencies?.length || 0,
-        heuristic: payload?.changeset_gaps_result?.data?.heuristic_candidates?.length || 0,
-      },
-      capture_verify: payload?.capture_verify_result?.data || null,
+      controlled_commit: payload?.controlled_commit_result?.data || null,
+      rollback_plan: payload?.rollback_plan_result?.data || null,
     },
   };
 
@@ -158,14 +155,14 @@ async function writeSummaryArtifact({ criteria, payload }) {
 }
 
 async function main() {
-  const payload = await runSmokeForG4();
+  const payload = await runSmokeForG5();
   const criteria = evaluateGateCriteria(payload);
   printChecklist(criteria);
   const artifactPath = await writeSummaryArtifact({ criteria, payload });
 
   const failed = criteria.filter((item) => !item.passed);
   if (failed.length > 0) {
-    console.log("\nGuidance: One or more Gate G4 checks failed.");
+    console.log("\nGuidance: One or more Gate G5 checks failed.");
     for (const item of failed) {
       console.log(`- ${item.id}: inspect smoke output + ${artifactPath}`);
     }
@@ -173,12 +170,12 @@ async function main() {
     return;
   }
 
-  console.log("\n✅ Gate G4 validation succeeded.");
+  console.log("\n✅ Gate G5 validation succeeded.");
   console.log(`Report artifact: ${artifactPath}`);
 }
 
 main().catch((error) => {
-  console.error("❌ Gate G4 validation script failed");
+  console.error("❌ Gate G5 validation script failed");
   console.error(error);
   process.exit(1);
 });

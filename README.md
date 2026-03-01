@@ -163,6 +163,12 @@ Run the end-user Gate G2 validation checklist (human-readable + JSON artifact):
 npm run test:g2
 ```
 
+Run the same checklist against your **actual ServiceNow instance from `.env`**:
+
+```bash
+npm run test:g2:live
+```
+
 Expected output includes a criterion-by-criterion checklist like:
 
 - `✅ D1: Validation runtime is deterministic`
@@ -183,15 +189,68 @@ Run the end-user Gate G4 validation checklist (human-readable + JSON artifact):
 npm run test:g4
 ```
 
+Run the same Gate G4 checklist against your **actual ServiceNow instance from `.env`**:
+
+```bash
+npm run test:g4:live:gate
+```
+
 Machine-readable report is generated at:
 
 - `artifacts/g4-validation-summary.json`
+
+Run the end-user Gate G5 validation checklist (human-readable + JSON artifact):
+
+```bash
+npm run test:g5
+```
+
+Run the same checklist against your **actual ServiceNow instance from `.env`**:
+
+```bash
+npm run test:g5:live
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g5-validation-summary.json`
+
+Run the end-user Gate G6 validation checklist (human-readable + JSON artifact):
+
+```bash
+npm run test:g6
+```
+
+Run the same checklist against your **actual ServiceNow instance from `.env`**:
+
+```bash
+npm run test:g6:live
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g6-validation-summary.json`
 
 Run the non-prod live integration validation used for final Gate G4 exit evidence:
 
 ```bash
 npm run test:g4:live
 ```
+
+Run all current G1–G6 live validations in one sequence:
+
+```bash
+npm run test:gates:g1-g6:live
+```
+
+Live gate safety guards:
+
+- `test:g2:live`, `test:g4:live:gate`, `test:g5:live`, and `test:g6:live` require:
+  - `GATE_TEST_TARGET=live`
+  - `ALLOW_LIVE_GATE_TESTS=true`
+  - `ALLOW_LIVE_GATE_WRITES=true`
+- These are set by the npm scripts above.
+- Live runs fail fast if `SN_INSTANCE_URL` is missing or still points to `example.service-now.com`.
 
 Machine-readable report is generated at:
 
@@ -385,7 +444,7 @@ All script read tools attach validation summaries. Write tools enforce:
 
 ### Update Set Deployment Readiness
 
-Current implemented F-series tools (F1-F4):
+Current implemented F-series tools (F1-F6):
 
 - `sn.changeset.list`
 - `sn.changeset.get`
@@ -394,9 +453,6 @@ Current implemented F-series tools (F1-F4):
 - `sn.changeset.gaps`
 - `sn.updateset.capture.verify`
 - `sn.changeset.commit.preview`
-
-Planned next tools (F4+):
-
 - `sn.changeset.commit`
 - `sn.rollback.plan.generate`
 
@@ -405,6 +461,13 @@ Planned next tools (F4+):
 3. `sn.updateset.capture.verify` for key records
 4. `sn.changeset.commit.preview`
 5. `sn.changeset.commit` (if allowed) + `sn.rollback.plan.generate`
+
+### Flow/Workflow Artifact Parity (Gate G6)
+
+- Flow tools: `sn.flow.list`, `sn.flow.get`, `sn.flow.validate`
+- Workflow tools: `sn.workflow.list`, `sn.workflow.get`, `sn.workflow.validate`
+- Validation coverage: flow/workflow reads now include rulepack-backed `validation_summary`
+  (`flows-v1`, `workflows-v1`) with deterministic findings output.
 
 ---
 

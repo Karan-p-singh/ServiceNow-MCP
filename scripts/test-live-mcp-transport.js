@@ -40,6 +40,15 @@ function hasOwn(obj, key) {
   return obj && Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+function unwrapSysId(value) {
+  if (!value) return null;
+  if (typeof value === "string") return value;
+  if (typeof value === "object") {
+    return value.value || value.display_value || null;
+  }
+  return null;
+}
+
 const TIER_ORDER = {
   T0: 0,
   T1: 1,
@@ -307,24 +316,44 @@ async function run() {
       },
     );
 
-    const changesetPreview = await rpcCall(endpoint, 12, "tools/call", {
-      name: "sn.changeset.commit.preview",
+    const changesetListProbe = await rpcCall(endpoint, 12, "tools/call", {
+      name: "sn.changeset.list",
       arguments: {
-        changeset_sys_id: "a1111111b2222222c3333333d4444444",
-        include_conflicts: true,
+        limit: 1,
+        offset: 0,
       },
     });
-    log("RPC tools/call sn.changeset.commit.preview", changesetPreview);
-    const previewEnvelope = changesetPreview?.body?.result?.structuredContent;
-    assertCheck(
-      "tools/call sn.changeset.commit.preview returns read-only dry-run contract",
-      changesetPreview.status === 200 &&
-        previewEnvelope?.tool === "sn.changeset.commit.preview" &&
-        previewEnvelope?.data?.preview_generated === true &&
-        previewEnvelope?.data?.write_side_effects === false &&
-        Array.isArray(previewEnvelope?.data?.recommended_mitigations),
-      previewEnvelope,
-    );
+    log("RPC tools/call sn.changeset.list (preview probe)", changesetListProbe);
+    const listEnvelope = changesetListProbe?.body?.result?.structuredContent;
+    const probedChangesetSysId = unwrapSysId(listEnvelope?.data?.records?.[0]?.sys_id);
+
+    if (probedChangesetSysId) {
+      const changesetPreview = await rpcCall(endpoint, 13, "tools/call", {
+        name: "sn.changeset.commit.preview",
+        arguments: {
+          changeset_sys_id: probedChangesetSysId,
+          include_conflicts: true,
+        },
+      });
+      log("RPC tools/call sn.changeset.commit.preview", changesetPreview);
+      const previewEnvelope = changesetPreview?.body?.result?.structuredContent;
+      assertCheck(
+        "tools/call sn.changeset.commit.preview returns read-only dry-run contract",
+        changesetPreview.status === 200 &&
+          previewEnvelope?.tool === "sn.changeset.commit.preview" &&
+          previewEnvelope?.data?.preview_generated === true &&
+          previewEnvelope?.data?.write_side_effects === false &&
+          Array.isArray(previewEnvelope?.data?.recommended_mitigations),
+        { probed_changeset_sys_id: probedChangesetSysId, preview: previewEnvelope },
+      );
+    } else {
+      pass(
+        "tools/call sn.changeset.commit.preview skipped when no update set is discoverable",
+        {
+          reason: "No sys_update_set record returned by sn.changeset.list in target instance/permissions.",
+        },
+      );
+    }
 
     const unknownMethod = await rpcCall(endpoint, 6, "unknown/method", {});
     log("RPC unknown method", unknownMethod);

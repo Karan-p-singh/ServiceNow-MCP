@@ -1,0 +1,195 @@
+{
+  "generated_at": "2026-03-01T11:55:49.556Z",
+  "gate": "G5",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "F5",
+      "label": "Controlled T3 commit emits confirmation-aware high-risk audit trace and snapshot matrix",
+      "passed": true
+    },
+    {
+      "id": "F6",
+      "label": "Rollback plan generator splits restorable vs non-restorable and includes manual guidance",
+      "passed": true
+    },
+    {
+      "id": "G5-AUDIT",
+      "label": "High-risk operation audit trace includes operation/tier/confirm contract",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "smoke_summary": {
+      "d1_runtime_deterministic": true,
+      "d2_rulepack_versioned": true,
+      "d3_critical_blocks_write": true,
+      "d3_high_ack_required_or_satisfied": false,
+      "e1_get_list_search_available": true,
+      "e2_refs_deps_evidence_available": true,
+      "e3_create_update_auditable": false,
+      "f1_changeset_read_tools_available": true,
+      "f2_changeset_gap_detection_available": true,
+      "f3_capture_verify_reason_codes_deterministic": true,
+      "f4_commit_preview_dry_run_available": true,
+      "f5_controlled_commit_contract_available": true,
+      "f6_rollback_plan_generator_available": true,
+      "e4_flow_list_get_validate_available": true,
+      "e5_workflow_list_get_validate_available": true
+    },
+    "tools_registered": [
+      "sn.script.get",
+      "sn.script.list",
+      "sn.script.search",
+      "sn.script.refs",
+      "sn.script.deps",
+      "sn.instance.info",
+      "sn.acl.trace",
+      "sn.table.list",
+      "sn.changeset.list",
+      "sn.changeset.get",
+      "sn.changeset.contents",
+      "sn.changeset.export",
+      "sn.changeset.gaps",
+      "sn.updateset.capture.verify",
+      "sn.changeset.commit.preview",
+      "sn.flow.list",
+      "sn.flow.get",
+      "sn.flow.validate",
+      "sn.workflow.list",
+      "sn.workflow.get",
+      "sn.workflow.validate",
+      "sn.script.update",
+      "sn.script.create",
+      "sn.changeset.commit",
+      "sn.rollback.plan.generate"
+    ],
+    "controlled_commit": {
+      "commit_requested": true,
+      "commit_executed": false,
+      "execution_mode": "controlled_noop",
+      "reason_code": "COMMIT_NOT_EXECUTED_LIVE_SAFE_MODE",
+      "changeset": {
+        "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+        "found": true,
+        "record": {
+          "base_update_set": "",
+          "parent": "",
+          "origin_sys_id": "",
+          "batch_install_plan": "",
+          "completed_on": "2026-03-01 08:55:15",
+          "installed_from": "",
+          "sys_mod_count": "0",
+          "description": "Automatically created by the system",
+          "remote_sys_id": "",
+          "sys_updated_on": "2026-03-01 08:55:15",
+          "is_default": "true",
+          "sys_tags": "",
+          "merged_to": "",
+          "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+          "sys_updated_by": "admin",
+          "application": {
+            "link": "https://dev317439.service-now.com/api/now/table/sys_scope/74ae6926839f321071f3cbb6feaad368",
+            "value": "74ae6926839f321071f3cbb6feaad368"
+          },
+          "release_date": "",
+          "sys_created_on": "2026-03-01 08:55:15",
+          "name": "Default",
+          "install_date": "",
+          "state": "in progress",
+          "completed_by": "",
+          "sys_created_by": "admin"
+        }
+      },
+      "snapshot_coverage_matrix": {
+        "captured": 0,
+        "restorable": 0,
+        "non_restorable": 0,
+        "unknown": 0,
+        "by_artifact_type": []
+      },
+      "high_risk_audit_trace": {
+        "operation": "sn.changeset.commit",
+        "tier": "T3",
+        "confirm_required": true,
+        "confirm_received": true,
+        "reason": "Gate G5 controlled commit contract validation",
+        "requested_at": "2026-03-01T11:55:47.965Z",
+        "actor": "mcp",
+        "source_scope": "74ae6926839f321071f3cbb6feaad368",
+        "global_scope_detected": false
+      },
+      "limitations": [
+        "Controlled commit output is evidence-driven and does not guarantee transactional rollback semantics.",
+        "Live mode currently returns controlled_noop to avoid unsafe write side effects without platform-native transaction controls."
+      ],
+      "page": {
+        "limit": 500,
+        "offset": 0,
+        "returned": 0,
+        "has_more": false,
+        "next_offset": null
+      }
+    },
+    "rollback_plan": {
+      "generated": true,
+      "changeset": {
+        "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+        "found": true,
+        "record": {
+          "base_update_set": "",
+          "parent": "",
+          "origin_sys_id": "",
+          "batch_install_plan": "",
+          "completed_on": "2026-03-01 08:55:15",
+          "installed_from": "",
+          "sys_mod_count": "0",
+          "description": "Automatically created by the system",
+          "remote_sys_id": "",
+          "sys_updated_on": "2026-03-01 08:55:15",
+          "is_default": "true",
+          "sys_tags": "",
+          "merged_to": "",
+          "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+          "sys_updated_by": "admin",
+          "application": {
+            "link": "https://dev317439.service-now.com/api/now/table/sys_scope/74ae6926839f321071f3cbb6feaad368",
+            "value": "74ae6926839f321071f3cbb6feaad368"
+          },
+          "release_date": "",
+          "sys_created_on": "2026-03-01 08:55:15",
+          "name": "Default",
+          "install_date": "",
+          "state": "in progress",
+          "completed_by": "",
+          "sys_created_by": "admin"
+        }
+      },
+      "restorable": [],
+      "non_restorable": [],
+      "declarations": {
+        "fully_restorable": true,
+        "contains_non_restorable": false
+      },
+      "manual_steps": [
+        "Export current update set and preserve a point-in-time artifact snapshot before rollback operations.",
+        "For restorable records, apply prior known-good versions or revert using targeted update entries.",
+        "For non-restorable entries, execute documented manual remediation and verify post-state in instance.",
+        "Run smoke/integration checks after rollback to confirm platform stability."
+      ],
+      "risk_level": "medium",
+      "reason_code": "ROLLBACK_RESTORABLE_WITH_STEPS",
+      "limitations": [
+        "Rollback planning is advisory and does not perform automatic revert operations.",
+        "Non-restorable entries require explicit human approval and manual execution."
+      ],
+      "page": {
+        "limit": 500,
+        "offset": 0,
+        "returned": 0,
+        "has_more": false,
+        "next_offset": null
+      }
+    }
+  }
+}

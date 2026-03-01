@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-03-01 02:56 PST
+Last Updated: 2026-03-01 03:38 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -12,8 +12,10 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 - Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`, `A6 — HTTP/SSE transport endpoint + URL-first MCP runtime`
 - Completed in EPIC-B: `B1 — Auth + client abstraction`, `B2 — Retry/pagination/error normalization`, `B3 — Instance capability discovery`, `B4 — README-aligned structure adoption`
 - Completed in EPIC-C optional pilot: `C1 — Scoped app packaging + version contract`, `C2 — ACL authoritative endpoint`, `C4 — Dual-mode sn.acl.trace`
-- EPIC-F has completed Gate G4 scope with F1/F2/F3 plus non-prod integration validation (`npm run test:g4:live`), and F4 (`sn.changeset.commit.preview`) is now complete
-- Gate G5 is now in progress; next queued cross-epic focus: `E4`, `F5`, `G2`
+- EPIC-F is now complete through F6, including controlled commit and rollback planning deliverables (`sn.changeset.commit`, `sn.rollback.plan.generate`)
+- EPIC-E is now complete through E5 with flow/workflow tooling parity (`sn.flow.*`, `sn.workflow.*`)
+- Gate G5 and Gate G6 are now passed with checklist evidence artifacts (`artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`)
+- Next queued cross-epic focus: `G2`, `G4`, `D4`
 
 ---
 

@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { evaluateScriptValidation, evaluateWriteGate } from "../src/validation/engine.js";
+import {
+  evaluateFlowValidation,
+  evaluateScriptValidation,
+  evaluateWorkflowValidation,
+  evaluateWriteGate,
+} from "../src/validation/engine.js";
 
 test("evaluateScriptValidation returns deterministic summary and rulepack metadata", () => {
   const script = "var gr = new GlideRecord('incident');\ngr.query();";
@@ -40,4 +45,39 @@ test("evaluateWriteGate requires acknowledgments for HIGH findings", () => {
     acknowledgedFindings: ["SCRIPT_GLIDERECORD_USAGE"],
   });
   assert.equal(allowed.blocked, false);
+});
+
+test("evaluateFlowValidation returns rulepack metadata and deterministic output", () => {
+  const flow = {
+    name: "x_demo_flow",
+    description: "demo",
+    status: "published",
+    trigger_type: "record",
+    steps: [{ id: "step_1", type: "action" }],
+  };
+
+  const first = evaluateFlowValidation({ flow, record: flow });
+  const second = evaluateFlowValidation({ flow, record: flow });
+
+  assert.deepEqual(first.findings, second.findings);
+  assert.equal(first.summary.rulepack.id, "flows-v1");
+  assert.equal(first.summary.rulepack.version, "1.0.0");
+  assert.equal(first.summary.deterministic, true);
+});
+
+test("evaluateWorkflowValidation returns rulepack metadata and deterministic output", () => {
+  const workflow = {
+    name: "x_demo_workflow",
+    description: "demo",
+    active: "true",
+    activities: [{ id: "activity_1", type: "task" }],
+  };
+
+  const first = evaluateWorkflowValidation({ workflow, record: workflow });
+  const second = evaluateWorkflowValidation({ workflow, record: workflow });
+
+  assert.deepEqual(first.findings, second.findings);
+  assert.equal(first.summary.rulepack.id, "workflows-v1");
+  assert.equal(first.summary.rulepack.version, "1.0.0");
+  assert.equal(first.summary.deterministic, true);
 });

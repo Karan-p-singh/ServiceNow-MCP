@@ -1,0 +1,190 @@
+{
+  "generated_at": "2026-03-01T11:55:19.379Z",
+  "gate": "G6",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "E4",
+      "label": "Flow list/get/validate tooling available with validation summary",
+      "passed": true
+    },
+    {
+      "id": "E5",
+      "label": "Workflow list/get/validate tooling available with validation summary",
+      "passed": true
+    },
+    {
+      "id": "D-COVERAGE",
+      "label": "Validation coverage expanded with flow/workflow rulepack versions",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "smoke_summary": {
+      "d1_runtime_deterministic": true,
+      "d2_rulepack_versioned": true,
+      "d3_critical_blocks_write": true,
+      "d3_high_ack_required_or_satisfied": false,
+      "e1_get_list_search_available": true,
+      "e2_refs_deps_evidence_available": true,
+      "e3_create_update_auditable": false,
+      "f1_changeset_read_tools_available": true,
+      "f2_changeset_gap_detection_available": true,
+      "f3_capture_verify_reason_codes_deterministic": true,
+      "f4_commit_preview_dry_run_available": true,
+      "f5_controlled_commit_contract_available": true,
+      "f6_rollback_plan_generator_available": true,
+      "e4_flow_list_get_validate_available": true,
+      "e5_workflow_list_get_validate_available": true
+    },
+    "tools_registered": [
+      "sn.script.get",
+      "sn.script.list",
+      "sn.script.search",
+      "sn.script.refs",
+      "sn.script.deps",
+      "sn.instance.info",
+      "sn.acl.trace",
+      "sn.table.list",
+      "sn.changeset.list",
+      "sn.changeset.get",
+      "sn.changeset.contents",
+      "sn.changeset.export",
+      "sn.changeset.gaps",
+      "sn.updateset.capture.verify",
+      "sn.changeset.commit.preview",
+      "sn.flow.list",
+      "sn.flow.get",
+      "sn.flow.validate",
+      "sn.workflow.list",
+      "sn.workflow.get",
+      "sn.workflow.validate",
+      "sn.script.update",
+      "sn.script.create",
+      "sn.changeset.commit",
+      "sn.rollback.plan.generate"
+    ],
+    "flow_validation": {
+      "request_id": "req-000038",
+      "correlation_id": "corr-000037",
+      "instance": "https://dev317439.service-now.com/",
+      "edition": "dev",
+      "tool": "sn.flow.validate",
+      "tier": "T0",
+      "policy": {
+        "evaluated": true,
+        "allowed": true,
+        "decisions": []
+      },
+      "validation_summary": {
+        "findings_count_by_severity": {
+          "CRITICAL": 0,
+          "HIGH": 1,
+          "MEDIUM": 1,
+          "LOW": 1
+        },
+        "blocked": false,
+        "source": "validation-runtime",
+        "rulepack": {
+          "id": "flows-v1",
+          "version": "1.0.0",
+          "artifact_type": "sys_hub_flow"
+        },
+        "execution_ms": 0,
+        "deterministic": true
+      },
+      "data": {
+        "found": false,
+        "artifact_type": "sys_hub_flow",
+        "query": {
+          "sys_id": null,
+          "name": "x_demo_scheduled_flow",
+          "sysparm_query": "name=x_demo_scheduled_flow"
+        },
+        "record": {},
+        "findings": [
+          {
+            "id": "FLOW_MISSING_NAME",
+            "severity": "HIGH",
+            "message": "Flow is missing a stable name identifier.",
+            "evidence": []
+          },
+          {
+            "id": "FLOW_MISSING_DESCRIPTION",
+            "severity": "LOW",
+            "message": "Flow is missing description metadata.",
+            "evidence": []
+          },
+          {
+            "id": "FLOW_NO_STEPS",
+            "severity": "MEDIUM",
+            "message": "Flow does not define executable steps/actions.",
+            "evidence": []
+          }
+        ]
+      },
+      "errors": []
+    },
+    "workflow_validation": {
+      "request_id": "req-000044",
+      "correlation_id": "corr-000043",
+      "instance": "https://dev317439.service-now.com/",
+      "edition": "dev",
+      "tool": "sn.workflow.validate",
+      "tier": "T0",
+      "policy": {
+        "evaluated": true,
+        "allowed": true,
+        "decisions": []
+      },
+      "validation_summary": {
+        "findings_count_by_severity": {
+          "CRITICAL": 0,
+          "HIGH": 1,
+          "MEDIUM": 1,
+          "LOW": 1
+        },
+        "blocked": false,
+        "source": "validation-runtime",
+        "rulepack": {
+          "id": "workflows-v1",
+          "version": "1.0.0",
+          "artifact_type": "wf_workflow"
+        },
+        "execution_ms": 0,
+        "deterministic": true
+      },
+      "data": {
+        "found": false,
+        "artifact_type": "wf_workflow",
+        "query": {
+          "sys_id": null,
+          "name": "x_demo_wait_workflow",
+          "sysparm_query": "name=x_demo_wait_workflow"
+        },
+        "record": {},
+        "findings": [
+          {
+            "id": "WORKFLOW_MISSING_NAME",
+            "severity": "HIGH",
+            "message": "Workflow is missing a stable name identifier.",
+            "evidence": []
+          },
+          {
+            "id": "WORKFLOW_MISSING_DESCRIPTION",
+            "severity": "LOW",
+            "message": "Workflow is missing description metadata.",
+            "evidence": []
+          },
+          {
+            "id": "WORKFLOW_NO_ACTIVITIES",
+            "severity": "MEDIUM",
+            "message": "Workflow has no modeled activities/stages.",
+            "evidence": []
+          }
+        ]
+      },
+      "errors": []
+    }
+  }
+}

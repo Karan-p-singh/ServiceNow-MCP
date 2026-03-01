@@ -1,22 +1,63 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
+import { loadConfig } from "../src/config.js";
+
+function resolveSmokeEnvForGate(gateId) {
+  const config = loadConfig();
+  const target = String(process.env.GATE_TEST_TARGET || "mock").trim().toLowerCase();
+  if (target === "live") {
+    if (String(process.env.ALLOW_LIVE_GATE_TESTS || "").toLowerCase() !== "true") {
+      throw new Error(
+        `${gateId} live validation requires ALLOW_LIVE_GATE_TESTS=true to avoid accidental live-instance execution.`,
+      );
+    }
+
+    const instanceUrl = String(process.env.SN_INSTANCE_URL || config.instanceUrl || "").trim();
+    if (!instanceUrl) {
+      throw new Error(`${gateId} live validation requires SN_INSTANCE_URL in environment.`);
+    }
+    if (instanceUrl.includes("example.service-now.com")) {
+      throw new Error(
+        `${gateId} live validation refused: SN_INSTANCE_URL points to mock placeholder (${instanceUrl}).`,
+      );
+    }
+    if (String(process.env.ALLOW_LIVE_GATE_WRITES || "").toLowerCase() !== "true") {
+      throw new Error(
+        `${gateId} live validation requires ALLOW_LIVE_GATE_WRITES=true because smoke checks invoke write-path probes.`,
+      );
+    }
+
+    return {
+      ...process.env,
+      SN_INSTANCE_KEY: process.env.SN_INSTANCE_KEY || "default",
+      SN_INSTANCE_URL: instanceUrl,
+      MCP_TIER_MAX: process.env.MCP_TIER_MAX || "T3",
+      MCP_ALLOWED_SCOPES: "x_demo_scope,global",
+      MCP_DENY_GLOBAL_WRITES: "false",
+      MCP_ENFORCE_CHANGESET_SCOPE: "false",
+    };
+  }
+
+  return {
+    ...process.env,
+    SN_INSTANCE_KEY: "default",
+    SN_INSTANCE_URL: "https://example.service-now.com",
+    SN_AUTH_MODE: "basic",
+    SN_USERNAME: "mock",
+    SN_PASSWORD: "mock",
+    MCP_TIER_MAX: "T3",
+    MCP_ALLOWED_SCOPES: "x_demo_scope,global",
+    MCP_DENY_GLOBAL_WRITES: "false",
+    MCP_ENFORCE_CHANGESET_SCOPE: "false",
+  };
+}
 
 function runSmokeForG2() {
+  const smokeEnv = resolveSmokeEnvForGate("G2");
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["src/index.js", "--smoke"], {
-      env: {
-        ...process.env,
-        SN_INSTANCE_KEY: "default",
-        SN_INSTANCE_URL: "https://example.service-now.com",
-        SN_AUTH_MODE: "basic",
-        SN_USERNAME: "mock",
-        SN_PASSWORD: "mock",
-        MCP_TIER_MAX: "T3",
-        MCP_ALLOWED_SCOPES: "x_demo_scope,global",
-        MCP_DENY_GLOBAL_WRITES: "false",
-        MCP_ENFORCE_CHANGESET_SCOPE: "false",
-      },
+      env: smokeEnv,
       stdio: ["ignore", "pipe", "pipe"],
     });
 

@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 02:55 PST
+Last Updated: 2026-03-01 03:42 PST
 
 ---
 
@@ -598,3 +598,84 @@ When work executes, append entries for:
 - **Reason:** Synchronized README/context/tracking artifacts to reflect F4 completion and Phase 5 progression.
 - **Evidence:** `README.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
 - **Next step:** Keep cross-doc sync atomic as F5/F6 are implemented.
+
+### 2026-03-01 03:34 PST
+
+- **Item:** F5
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented controlled T3 commit contract with explicit confirm/reason handling, snapshot coverage matrix output, and high-risk audit trace metadata.
+- **Evidence:** `src/index.js` (`sn.changeset.commit`), `src/servicenow/client.js` (`commitChangesetControlled`), `tests/script.tooling.test.js`; runs: `npm test`, `npm run test:g5`.
+- **Next step:** Complete F6 rollback plan generator and gate-level validation evidence.
+
+### 2026-03-01 03:34 PST
+
+- **Item:** F6
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Added rollback plan generator with restorable/non-restorable split, manual rollback steps, risk level, and non-restorable declarations.
+- **Evidence:** `src/index.js` (`sn.rollback.plan.generate`), `src/servicenow/client.js` (`generateRollbackPlan`), `tests/script.tooling.test.js`; runs: `npm test`, `npm run test:g5`.
+- **Next step:** Mark Gate G5 passed after validating high-risk audit trace and checklist evidence.
+
+### 2026-03-01 03:35 PST
+
+- **Item:** E4
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Delivered flow artifact tooling parity with list/get/validate contracts and rulepack-backed validation summaries.
+- **Evidence:** `src/index.js` (`sn.flow.list`, `sn.flow.get`, `sn.flow.validate`), `src/servicenow/client.js` (flow read helpers), `src/validation/rulepacks/flows-v1.js`; runs: `npm test`, `npm run test:g6`.
+- **Next step:** Complete E5 workflow parity and validate Gate G6 end-to-end.
+
+### 2026-03-01 03:35 PST
+
+- **Item:** E5
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Delivered workflow artifact tooling parity with list/get/validate contracts and rulepack-backed validation summaries.
+- **Evidence:** `src/index.js` (`sn.workflow.list`, `sn.workflow.get`, `sn.workflow.validate`), `src/servicenow/client.js` (workflow read helpers), `src/validation/rulepacks/workflows-v1.js`; runs: `npm test`, `npm run test:g6`.
+- **Next step:** Close Gate G6 and sync tracking docs.
+
+### 2026-03-01 03:35 PST
+
+- **Item:** G5-VALIDATION-HARNESS-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added dedicated Gate G5 end-user checklist validation script and evidence artifact generation.
+- **Evidence:** `scripts/test-g5-validation.js`, `package.json` (`test:g5`), `artifacts/g5-validation-summary.json`; run: `npm run test:g5`.
+- **Next step:** Add Gate G6 harness and complete final doc sync.
+
+### 2026-03-01 03:35 PST
+
+- **Item:** G6-VALIDATION-HARNESS-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added dedicated Gate G6 end-user checklist validation script and evidence artifact generation.
+- **Evidence:** `scripts/test-g6-validation.js`, `package.json` (`test:g6`), `artifacts/g6-validation-summary.json`; run: `npm run test:g6`.
+- **Next step:** Mark G5/G6 milestones and board statuses as passed.
+
+### 2026-03-01 03:36 PST
+
+- **Item:** G5
+- **Change:** `In Progress -> Passed`
+- **Owner:** Engineering
+- **Reason:** Gate G5 checklist is fully complete with controlled commit contract, rollback plan generator, and validated high-risk audit trace evidence.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `scripts/test-g5-validation.js`, `artifacts/g5-validation-summary.json`, `npm run test:g5`.
+- **Next step:** Advance program tracking to Gate G6 closure and remaining quality-hardening stories.
+
+### 2026-03-01 03:36 PST
+
+- **Item:** G6
+- **Change:** `Not Started -> Passed`
+- **Owner:** Engineering
+- **Reason:** Gate G6 checklist is fully complete with flow/workflow tooling parity and expanded validation coverage rulepacks.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `scripts/test-g6-validation.js`, `artifacts/g6-validation-summary.json`, `npm run test:g6`.
+- **Next step:** Continue with integration/CI quality gates and enterprise hardening queue.
+
+### 2026-03-01 03:42 PST
+
+- **Item:** DOCS-G5-G6-FINAL-SYNC-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Finalized post-G5/G6 governance synchronization so risk posture, ADR decisions, and context index status snapshot match passed gate state.
+- **Evidence:** `Epics/RISKS_AND_DECISIONS.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_ACTIVITY_LOG.md`.
+- **Next step:** Re-run validation commands for final evidence consistency and close the G5/G6 completion request.

@@ -198,3 +198,61 @@ test("changeset commit preview returns deterministic invalid-params contract wit
   assert.equal(preview.write_side_effects, false);
   assert.equal(preview.error.code, "INVALID_PARAMS");
 });
+
+test("changeset controlled commit returns snapshot coverage matrix and high-risk audit trace", async () => {
+  const client = createMockClient();
+
+  const commit = await client.commitChangesetControlled({
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+    confirm: true,
+    reason: "Gate G5 contract test",
+  });
+
+  assert.equal(commit.commit_requested, true);
+  assert.equal(commit.execution_mode, "mock_commit");
+  assert.equal(commit.commit_executed, true);
+  assert.equal(typeof commit.snapshot_coverage_matrix.captured, "number");
+  assert.equal(Array.isArray(commit.snapshot_coverage_matrix.by_artifact_type), true);
+  assert.equal(commit.high_risk_audit_trace.operation, "sn.changeset.commit");
+  assert.equal(commit.high_risk_audit_trace.tier, "T3");
+  assert.equal(commit.high_risk_audit_trace.confirm_received, true);
+});
+
+test("rollback plan generator returns restorable and non-restorable splits", async () => {
+  const client = createMockClient();
+
+  const plan = await client.generateRollbackPlan({
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+  });
+
+  assert.equal(plan.generated, true);
+  assert.equal(Array.isArray(plan.restorable), true);
+  assert.equal(Array.isArray(plan.non_restorable), true);
+  assert.equal(Array.isArray(plan.manual_steps), true);
+  assert.equal(typeof plan.declarations.contains_non_restorable, "boolean");
+  assert.equal(typeof plan.risk_level, "string");
+});
+
+test("flow tooling list/get returns structured records", async () => {
+  const client = createMockClient();
+
+  const listPage = await client.listFlows({ limit: 1, offset: 0 });
+  assert.equal(listPage.records.length, 1);
+  assert.equal(listPage.page.limit, 1);
+
+  const flow = await client.getFlow({ name: "x_demo_incident_flow" });
+  assert.equal(flow.found, true);
+  assert.equal(flow.record.name, "x_demo_incident_flow");
+});
+
+test("workflow tooling list/get returns structured records", async () => {
+  const client = createMockClient();
+
+  const listPage = await client.listWorkflows({ limit: 1, offset: 0 });
+  assert.equal(listPage.records.length, 1);
+  assert.equal(listPage.page.limit, 1);
+
+  const workflow = await client.getWorkflow({ name: "x_demo_workflow" });
+  assert.equal(workflow.found, true);
+  assert.equal(workflow.record.name, "x_demo_workflow");
+});

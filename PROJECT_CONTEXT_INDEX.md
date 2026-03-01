@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 02:56 PST
+Last Updated: 2026-03-01 03:41 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -73,7 +73,9 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `scripts/test-g4-integration-live.js` → non-prod live Gate G4 integration validation for update set flow exit evidence
 - `scripts/deploy-companion-update-set.js` → Optional companion deployment helper with strict scope invariants (not required for baseline runtime)
 - `scripts/test-companion-live.js` → Optional companion live endpoint verification for scoped/global pilot modes
-- `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`, `npm run test:g4:live`
+- `scripts/test-g5-validation.js` → Gate G5 checklist validation (`F5`, `F6`, high-risk audit trace) and summary artifact generation
+- `scripts/test-g6-validation.js` → Gate G6 checklist validation (`E4`, `E5`, flow/workflow rulepack coverage) and summary artifact generation
+- `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`, `npm run test:g4:live`, `npm run test:g5`, `npm run test:g6`
 
 ---
 
@@ -99,7 +101,9 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
 - Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
 - **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
-- EPIC-F has **F1/F2/F3/F4 complete**; Gate G4 is **Passed** and Gate G5 is now **In Progress**.
-- `sn.changeset.commit.preview` is available with read-only/no-side-effect preview output, scope impact summary, conflict candidates, and mitigation guidance.
-- Next queued stories are **E4, F5, G2**.
+- EPIC-F is complete through **F6** and EPIC-E is complete through **E5**.
+- Gates **G4**, **G5**, and **G6** are **Passed** with validation artifacts in `artifacts/g4-*.json`, `artifacts/g5-validation-summary.json`, and `artifacts/g6-validation-summary.json`.
+- `sn.changeset.commit` now exposes the controlled T3 commit contract (confirm/reason + snapshot coverage + high-risk audit trace), and `sn.rollback.plan.generate` provides rollback planning with restorable/non-restorable declarations.
+- Flow/workflow parity tooling is available via `sn.flow.*` and `sn.workflow.*`, each with deterministic rulepack-backed validation summaries.
+- Next queued stories are **G2, G4, C3, D4** (then enterprise hardening sequence in the status board queue).
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

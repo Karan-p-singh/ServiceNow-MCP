@@ -1,4 +1,6 @@
 import { evaluateScriptRulepackV1 } from "./rulepacks/scripts-v1.js";
+import { evaluateFlowRulepackV1 } from "./rulepacks/flows-v1.js";
+import { evaluateWorkflowRulepackV1 } from "./rulepacks/workflows-v1.js";
 
 const SEVERITIES = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
 
@@ -32,6 +34,44 @@ function normalizeAcknowledgedFindings(value) {
 export function evaluateScriptValidation({ script = "", record = {} } = {}) {
   const startedAt = Date.now();
   const rulepackResult = evaluateScriptRulepackV1({ script, record });
+  const durationMs = Date.now() - startedAt;
+  const findings = rulepackResult.findings || [];
+
+  return {
+    findings,
+    summary: {
+      findings_count_by_severity: severityCounts(findings),
+      blocked: false,
+      source: "validation-runtime",
+      rulepack: rulepackResult.rulepack,
+      execution_ms: durationMs,
+      deterministic: true,
+    },
+  };
+}
+
+export function evaluateFlowValidation({ flow = {}, record = {} } = {}) {
+  const startedAt = Date.now();
+  const rulepackResult = evaluateFlowRulepackV1({ flow, record });
+  const durationMs = Date.now() - startedAt;
+  const findings = rulepackResult.findings || [];
+
+  return {
+    findings,
+    summary: {
+      findings_count_by_severity: severityCounts(findings),
+      blocked: false,
+      source: "validation-runtime",
+      rulepack: rulepackResult.rulepack,
+      execution_ms: durationMs,
+      deterministic: true,
+    },
+  };
+}
+
+export function evaluateWorkflowValidation({ workflow = {}, record = {} } = {}) {
+  const startedAt = Date.now();
+  const rulepackResult = evaluateWorkflowRulepackV1({ workflow, record });
   const durationMs = Date.now() - startedAt;
   const findings = rulepackResult.findings || [];
 

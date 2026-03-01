@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-01T10:10:41.244Z",
+  "generated_at": "2026-03-01T11:56:31.814Z",
   "gate": "G2",
-  "passed": true,
+  "passed": false,
   "criteria": [
     {
       "id": "D1",
@@ -21,7 +21,7 @@
     {
       "id": "D3-HIGH",
       "label": "HIGH findings require/satisfy acknowledgment",
-      "passed": true
+      "passed": false
     },
     {
       "id": "E1",
@@ -36,7 +36,7 @@
     {
       "id": "E3",
       "label": "create/update include audit metadata",
-      "passed": true
+      "passed": false
     }
   ],
   "evidence": {
@@ -44,10 +44,18 @@
       "d1_runtime_deterministic": true,
       "d2_rulepack_versioned": true,
       "d3_critical_blocks_write": true,
-      "d3_high_ack_required_or_satisfied": true,
+      "d3_high_ack_required_or_satisfied": false,
       "e1_get_list_search_available": true,
       "e2_refs_deps_evidence_available": true,
-      "e3_create_update_auditable": true
+      "e3_create_update_auditable": false,
+      "f1_changeset_read_tools_available": true,
+      "f2_changeset_gap_detection_available": true,
+      "f3_capture_verify_reason_codes_deterministic": true,
+      "f4_commit_preview_dry_run_available": true,
+      "f5_controlled_commit_contract_available": true,
+      "f6_rollback_plan_generator_available": true,
+      "e4_flow_list_get_validate_available": true,
+      "e5_workflow_list_get_validate_available": true
     },
     "tools_registered": [
       "sn.script.get",
@@ -58,9 +66,23 @@
       "sn.instance.info",
       "sn.acl.trace",
       "sn.table.list",
+      "sn.changeset.list",
+      "sn.changeset.get",
+      "sn.changeset.contents",
+      "sn.changeset.export",
+      "sn.changeset.gaps",
+      "sn.updateset.capture.verify",
+      "sn.changeset.commit.preview",
+      "sn.flow.list",
+      "sn.flow.get",
+      "sn.flow.validate",
+      "sn.workflow.list",
+      "sn.workflow.get",
+      "sn.workflow.validate",
       "sn.script.update",
       "sn.script.create",
-      "sn.changeset.commit"
+      "sn.changeset.commit",
+      "sn.rollback.plan.generate"
     ],
     "validation_rulepack": {
       "id": "scripts-v1",
