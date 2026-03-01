@@ -1,6 +1,20 @@
 # ServiceNow MCP Optional Companion Authority Contract
 
+Status: Optional pilot path (not baseline runtime requirement)
+
 This repository includes an **optional** companion authority contract.
+
+Important positioning:
+
+- Baseline MCP delivery is discovery-first and companion-independent.
+- Companion should be treated as an opt-in pilot for teams that explicitly need authoritative ACL tracing.
+- If companion is unavailable, baseline tooling must remain operational with explicit degraded-mode signaling.
+
+Catalog claim integrity boundary:
+
+- Companion enablement changes `sn.acl.trace` confidence/mode semantics (`discovery` vs `authoritative`) but does **not** increase the number of runtime-registered MCP tools by itself.
+- Tool-count claims must follow runtime-first evidence (`npm run smoke:summary`) and then the program matrix (`docs/MCP_TOOL_CATALOG_101_MATRIX.md`).
+- Planned tools remain planned until they are runtime-registered and reconciled in governance trackers.
 
 - **Phase A (default):** no companion dependency (`SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`)
 - **Phase B (optional pilot):** enable companion authority for `sn.acl.trace` (`scoped` or `global`)
@@ -140,6 +154,8 @@ Companion deployment is **not required** when all are true:
 2. `SN_COMPANION_MODE=none`
 3. `sn.acl.trace` returns `mode=discovery` with deterministic degraded reason codes.
 
+This is the recommended default for most environments.
+
 ### Phase B scoped/global pilot
 
 Companion app is acceptable only when all are true:
@@ -149,3 +165,13 @@ Companion app is acceptable only when all are true:
 3. `npm run deploy:companion` completes without invariant failures.
 4. `npm run test:companion:live` shows **0 required failures**.
 5. Companion records are owned by `sys_scope=x_mcp_companion` (not `global`).
+
+## Catalog Claim Safety Note
+
+Do not use companion pilot readiness as evidence for “100+ tools enabled.”
+
+Before any catalog-size claim, reconcile in this order:
+
+1. `npm run smoke:summary`
+2. `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+3. README + epics tracker synchronization

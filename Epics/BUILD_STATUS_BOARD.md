@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 04:22 PST
+Last Updated: 2026-03-01 05:22 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -34,6 +34,31 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
 
+## 2.1) 101-Tool Catalog Enablement Progress (Authoritative Program View)
+
+Source of truth: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+
+| Metric                             |   Value |
+| ---------------------------------- | ------: |
+| Runtime implemented tools          |      25 |
+| v2 target catalog                  |     101 |
+| Remaining tools                    |      76 |
+| Catalog lock artifact (R0)         |    Done |
+| Validation addendum family (R1/D5) | Pending |
+| Dev parity clusters (R2)           | Pending |
+| ATF signal track (R3)              | Pending |
+| Rollback snapshot maturity (R4)    | Pending |
+| ITSM/Admin edition track (R5)      | Pending |
+| Drift guards + claim checks (R6)   | Pending |
+
+Operational integrity cadence (required for release claims):
+
+1. Run `npm run smoke:summary`, `npm run test:g4:ci`, `npm run test:g7` on release-candidate cuts.
+2. Reconcile runtime implemented count against matrix (`docs/MCP_TOOL_CATALOG_101_MATRIX.md`).
+3. Synchronize README + epics + runbook/release checklist before external/internal “100+ tools” statements.
+
+---
+
 ## 3) Story Kanban
 
 ## In Progress
@@ -48,6 +73,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 - C3 — Scope/capture helper endpoints
 - D4 — Rulepack and gating governance
+- D5 — Validation addendum expansion (`sn.validate.*` + cross-cutting rule coverage)
 
 ## Blocked
 
@@ -108,18 +134,20 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - H4 completed: admin runbook (`docs/ADMIN_RUNBOOK.md`)
 - G7 readiness automation completed: `scripts/test-g7-readiness.js` + `npm run test:g7` and `artifacts/g7-readiness-summary.json`
 - Gate G7 passed: enterprise readiness checks (`G4-CI`, `G7-DOCS`, `DOCS-PACK`) all green
+- Docs v2 contract alignment pass completed: README tool catalog now distinguishes implemented vs planned tools; PRD/timeline updated to revised high-risk tool contracts and validation addendum semantics
+- H5 completed: documentation contract integrity and non-overclaim governance are now tracked as completed program work across README/PRD/timeline/epics/ops docs
 
 ---
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. C3 — Scope/capture helper endpoints (optional companion pilot enhancement)
-2. D4 — Rulepack and gating governance controls
-3. Optional companion scoped-ownership hardening closure (pilot track)
-4. Release packaging polish for distribution channels
-5. PRD acceptance audit final memo publication
-6. CI pipeline promotion wiring for `test:g7`
-7. Ops telemetry dashboard mapping for webhook events
-8. Docs drift guard checks in CI
-9. Backlog triage for post-v1.1 priorities
-10. Optional ITSM edition discovery planning
+1. R1/D5 — Deliver full validation addendum tool family (`sn.validate.*`) and rule category expansion
+2. R2 — Close Dev Edition missing tool clusters (metadata/diagnostics/tool parity)
+3. R3 — Implement ATF suite + `sn.atf.coverage_signals` evidence contract
+4. R4 — Add `sn.rollback.snapshot.create` and complete rollback trio cohesion
+5. R2 — Add remaining changeset/record/property parity tools from v2 Dev catalog
+6. R5 — Begin ITSM/Admin Edition track (strictly separated by edition policy)
+7. R6 — Add docs/runtime drift guards and catalog-claim CI checks
+8. Catalog reconciliation cadence — sync `smoke:summary` with 101 matrix before release claims
+9. Companion pilot hardening closure (optional/deprioritized track only)
+10. Release packaging + final v2 catalog proof artifacts

@@ -1,19 +1,56 @@
 # ServiceNow MCP Server v2 — Detailed Build Plan & Timeline
 
-**Purpose:** A detailed, implementation-ready plan with phases, epics, tasks, dependencies, acceptance criteria, and delivery gates.  
-**Assumptions:** Single team or small squad (1–3 engineers) + ServiceNow developer for Companion App.  
+**Purpose:** Implementation-ready phased plan aligned to revised v2 architecture + validation addendum.  
+**Assumptions:** Single team or small squad (1–3 engineers); companion path is optional/deprioritized.  
 **Timeline Format:** Weeks are indicative. If you execute faster, compress. If enterprise governance is heavy, expand.
+
+> This timeline is now anchored to a strict non-overclaim delivery contract:
+>
+> - discovery-first ACL baseline,
+> - confidence-tier dependency outputs,
+> - no rollback guarantees,
+> - validation-engine-first rollout.
 
 ---
 
 ## 0) Delivery Strategy (How we will ship)
 
+### 101-Tool Program Governance (new mandatory overlay)
+
+- Canonical tool-count and per-tool status tracker: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+- Runtime verification command for implemented tools: `npm run smoke:summary`
+- Current baseline: **25 implemented / 101 target / 76 remaining**
+
+Before any 100+ tool readiness claim, reconcile:
+
+1. Runtime registered tools
+2. 101 matrix implemented count
+3. Story/gate/risk status language in epics docs
+
 ### Release Tracks
 
-- **MVP (Dev Edition):** Read + Validate + Safe Guardrails + Companion baseline
-- **v1 (Dev Edition complete):** Full validation coverage + changeset operations maturity + commit/rollback plan
-- **v1.1 (Enterprise hardening):** SIEM integration, config UI, policy templates, rulepack governance
-- **ITSM Edition (Optional Track):** Operational tools under separate threat model
+- **MVP (Dev Edition):** Read + Validate + Safe guardrails + discovery-first ACL tracing
+- **v1 (Dev Edition complete):** expanded validation coverage + changeset maturity + controlled commit/rollback planning
+- **v1.1 (Enterprise hardening):** SIEM integration, deploy profiles, policy templates, rulepack governance
+- **ITSM Edition (Optional Track):** operational tools under separate threat model
+
+### Post-G7 Catalog Completion Milestones (R0..R6)
+
+- **R0 (Done):** 101-tool matrix lock artifact created and linked across docs
+- **R1 (Next):** D5 validation addendum completion (`sn.validate.*` family)
+- **R2:** Dev parity clusters (metadata/diagnostics + script/flow/workflow/changeset parity)
+- **R3:** ATF tooling and `sn.atf.coverage_signals`
+- **R4:** rollback snapshot maturity (`sn.rollback.snapshot.create` + related surfaces)
+- **R5:** ITSM/Admin edition track under strict edition boundaries
+- **R6:** docs/runtime drift guards + release-proof catalog claim checks
+
+### Revised High-Risk Contract Track (must be explicit in docs and implementation)
+
+1. `sn.acl.trace`: discovery (default) + optional authoritative mode, with explicit limitations
+2. `sn.changeset.gaps`: hard/soft/heuristic confidence tiers + evidence schema
+3. `sn.changeset.commit`: controlled T3 commit contract, no rollback promise
+4. `sn.rollback.*`: snapshot + rollback plan with non-restorable declarations
+5. `sn.atf.coverage_signals`: evidence linkage semantics, not code coverage
 
 ### Engineering Principles
 
@@ -32,8 +69,8 @@
 
 A. **Core MCP Server Framework** (tool registry, tier enforcement, config, logging)  
 B. **ServiceNow Client + Data Access** (REST client, pagination, table adapters)  
-C. **Optional Companion Authority Pilot** (authoritative endpoints + versioning)  
-D. **Validation Engine + Rulepacks** (in-process rules, reporting, gating)  
+C. **Optional Companion Authority Pilot** (authoritative endpoints + versioning; non-baseline)  
+D. **Validation Engine + Rulepacks** (in-process rules, reporting, gating; expanded artifact coverage)  
 E. **Developer Tools** (scripts, flows, workflows navigation)  
 F. **Update Set Tools** (inspect, gaps, capture verify, preview, commit, rollback plan)  
 G. **Quality & Testing** (unit tests, integration tests, golden fixtures)  
@@ -51,32 +88,33 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 
 ### Phase 2 (Weeks 3–5): Validation Engine MVP + Script Tooling
 
-- Validation engine framework + rulepack v1
+- Validation engine framework + script rulepack v1
 - Script search/refs/deps
 - Write gating for scripts (T1/T2) with CRITICAL/HIGH logic
 
-### Phase 3 (Weeks 6–8): Optional Companion Authority Pilot + ACL Trace Authoritative Mode
+### Phase 3 (Weeks 6–8): Optional Companion Authority Pilot + ACL Trace Contract Hardening
 
 - Companion packaging (optional pilot), version contract
-- Scripted REST endpoints for ACL evaluation + scope checks
-- `sn.acl.trace` dual-mode outputs
+- Scripted REST endpoints for ACL evaluation + scope checks (pilot only)
+- `sn.acl.trace` revised dual-mode output contract and explicit degraded reason codes
 
 ### Phase 4 (Weeks 9–12): Update Sets MVP (Read + Gaps + Capture Verify)
 
 - Update set list/get, contents, export
-- Gap detection with confidence tiers (hard + soft first)
+- Gap detection with confidence tiers (hard + soft + heuristic with evidence)
 - Capture verification tool and failure mode reasons
 
 ### Phase 5 (Weeks 13–16): Commit Preview + Controlled Commit + Rollback Planning
 
 - Commit preview dry-run, conflict output
-- Commit tool (T3) with snapshot-before + rollback plan output
+- Commit tool (T3) with explicit confirm/reason + snapshot-before metadata
 - Non-restorable declarations and manual steps
 
-### Phase 6 (Weeks 17–20): Flows + Workflows Full Coverage
+### Phase 6 (Weeks 17–20): Flows + Workflows + Validation Coverage Expansion
 
 - Flow fetch/list/validate + richer rules
 - Workflow fetch/list/validate
+- Expanded validation family contracts (`sn.validate.*`) and cross-cutting security checks
 - Cross-artifact references and dependency improvements
 
 ### Phase 7 (Weeks 21–24): Enterprise Hardening + Release Readiness
@@ -85,6 +123,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 - Tool bundle enablement
 - Comprehensive docs + golden tests
 - Security review artifacts
+- Documentation contract audit (implemented vs planned tool catalog, non-overclaim language)
 
 ---
 
@@ -202,7 +241,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 
 **Tasks**
 
-1. Implement 20–40 baseline rules for scripts
+1. Implement baseline script rules aligned to v2 quality/security/performance contracts
 2. Add rule metadata and per-rule suppression config
 3. Add rulepack versioning + change notes
 
@@ -268,7 +307,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 
 ## Phase 3 (Weeks 6–8): Optional Companion Authority Pilot + ACL Trace Authoritative Mode
 
-### Epic C1: Optional Companion Packaging & Version Contract
+### Epic C1: Optional Companion Packaging & Version Contract (Pilot)
 
 **Tasks**
 
@@ -283,7 +322,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 
 ---
 
-### Epic C2: Authoritative ACL Evaluation Endpoint
+### Epic C2: Authoritative ACL Evaluation Endpoint (Pilot)
 
 **Tasks**
 
@@ -368,7 +407,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
    - wrong scope
    - update set not current
    - bypassed tracking (API update)
-3. Optional Companion integration for improved authority
+3. Optional companion integration for improved authority when pilot mode is enabled
 
 **Acceptance Criteria**
 
@@ -406,7 +445,7 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 **Tasks**
 
 1. Implement commit (requires confirm+reason)
-2. Create snapshot before commit where possible
+2. Create snapshot-before metadata where possible
 3. Record snapshot coverage matrix per artifact type
 
 **Acceptance Criteria**
@@ -431,6 +470,34 @@ H. **Enterprise Hardening** (security, SIEM, packaging, docs)
 
 - Plan clearly calls out non-restorable items
 - Never outputs “guaranteed rollback” language
+
+---
+
+## 3.1 Validation Engine Expansion Track (Addendum Alignment)
+
+Target tool contracts to add/expand:
+
+- `sn.validate.script_include`
+- `sn.validate.business_rule`
+- `sn.validate.client_script`
+- `sn.validate.ui_script`
+- `sn.validate.flow`
+- `sn.validate.workflow`
+- `sn.validate.catalog_policy`
+- `sn.validate.fix`
+
+Target rule coverage categories:
+
+- Performance (`PERF-*`)
+- Security (`SEC-*`)
+- Best Practice (`BP-*`)
+- Flow-specific (`FLOW-*`)
+
+Write-gate contract remains:
+
+- CRITICAL → reject
+- HIGH → requires `acknowledged_findings[]`
+- MEDIUM/LOW → advisory
 
 **Exit Gate (Phase 5)**
 

@@ -1,13 +1,25 @@
-# ServiceNow MCP Server v2
+# ServiceNow MCP Server v2 (Developer Edition)
 
-A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that enables LLM tooling to **read, validate, and (when allowed) change** ServiceNow artifacts with enterprise guardrails.
+A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that enables LLM tooling to read, validate, and (when allowed) change ServiceNow artifacts with enterprise guardrails.
 
-This repository delivers:
+This repository follows the revised v2 architecture principles:
 
-- **MCP Server (JavaScript runtime, TS-aligned architecture)**: tool registry, tier enforcement, policy engine, validation engine, audit logs
-- **Discovery-first ACL tracing (default)**: companion-optional baseline that works without companion deployment
-- **Optional Companion integration**: scoped or global pilot mode for authoritative ACL evaluation when explicitly enabled
-- **Rulepacks**: versioned best-practice and governance validations
+- **No over-claims** (ACL evaluation limits, dependency completeness limits, rollback limits)
+- **Validation-first** behavior (findings on read, gated writes)
+- **Tier + policy enforcement before network calls**
+- **Discovery-first baseline** with companion-independent operation
+
+> Current product direction in this repo: baseline delivery is discovery-first. Companion authority is treated as optional/deprioritized and is not required for core operation.
+
+---
+
+## Architecture Snapshot (What matters most)
+
+- **Runtime:** JavaScript implementation, TS-aligned architecture (`src/server`, `src/servicenow`, `src/validation`)
+- **Transport:** HTTP/SSE by default, stdio fallback
+- **Safety controls:** tiering (`T0`–`T3`), policy engine, audit envelopes
+- **Validation:** in-process rulepacks with severity gating
+- **Deployment intelligence:** update set inspect/gaps/capture verify/preview/commit/rollback-plan surfaces
 
 ---
 
@@ -15,29 +27,21 @@ This repository delivers:
 
 This server supports two MCP transports:
 
-- **HTTP/SSE (default)** — URL-first integration for LLM clients
-  - Default endpoint: `http://localhost:3001/mcp`
+- **HTTP/SSE (default)**
+  - MCP endpoint: `http://localhost:3001/mcp`
   - SSE stream: `http://localhost:3001/mcp/sse`
-- **stdio (optional fallback)** — command-based local process transport
+- **stdio (fallback)**
 
-By default, this project starts in **HTTP/SSE mode** so it works with URL-based MCP client integrations out of the box.
+By default, startup is HTTP/SSE for URL-first MCP integrations.
 
 ---
 
-## Why this exists
+## Honesty Contract (v2-aligned)
 
-ServiceNow is not a generic CRUD system. External tooling cannot safely “guess”:
-
-- ACL outcomes (scripted ACLs, impersonation, domain separation context)
-- update set completeness (implicit dependencies and embedded references)
-- rollback reversibility from commits
-
-This project is designed to be **honest and safe**:
-
-- Baseline operation does **not** require Companion deployment.
-- Authoritative ACL evaluation is **optional** and only active when companion mode is explicitly enabled.
-- Dependency tools return **confidence tiers**.
-- Commit and rollback are implemented as **preview + plan**, not false promises.
+1. **ACL trace**: discovery output is diagnostic, not platform-authoritative.
+2. **Changeset gaps**: confidence-tier evidence; no completeness claim.
+3. **Commit/rollback**: controlled commit + rollback planning; no guaranteed reversibility claims.
+4. **ATF linkage**: treated as evidence signals, not code coverage.
 
 ---
 
@@ -90,11 +94,11 @@ MCP_ENFORCE_CHANGESET_SCOPE=true
 VALIDATION_RULEPACK_VERSION=1.0.0
 VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 
-# Companion integration (optional)
-# Phase A default (recommended): discovery-only ACL mode
+# Companion integration (deprioritized/optional)
+# Default baseline: discovery-only ACL mode
 SN_COMPANION_ENABLED=false
 SN_COMPANION_MODE=none
-# Optional Phase B pilot: scoped or global companion authority
+# Optional pilot (not baseline): scoped or global companion authority
 # SN_COMPANION_ENABLED=true
 # SN_COMPANION_MODE=scoped
 # SN_COMPANION_MODE=global
@@ -139,6 +143,88 @@ Expected behavior:
 - All artifact reads include a `validation_summary` block.
 - Writes are blocked on CRITICAL validation findings.
 - HIGH-severity findings require explicit `acknowledged_findings[]` in write calls.
+
+---
+
+## MCP Tool Catalog
+
+This section includes the list of tools currently available in this server runtime, plus planned v2 tool families.
+
+Canonical catalog governance for 100+ enablement:
+
+- Authoritative 101-tool program matrix: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+- Runtime implementation truth command: `npm run smoke:summary`
+- Current baseline: **25 implemented / 101 target**
+
+When any count differs across docs, use this precedence:
+
+1. runtime registered tools (`smoke:summary`)
+2. `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+3. summary docs (README/PRD/epics)
+
+### A) Currently implemented tools (runtime-registered)
+
+Use `npm run smoke:summary` to verify the live registered tool list.
+
+#### Core / platform (T0)
+
+- `sn.instance.info`
+- `sn.table.list`
+- `sn.acl.trace`
+
+#### Script developer tooling
+
+- `sn.script.get` (T0)
+- `sn.script.list` (T0)
+- `sn.script.search` (T0)
+- `sn.script.refs` (T0)
+- `sn.script.deps` (T0)
+- `sn.script.create` (T2)
+- `sn.script.update` (T2)
+
+#### Changeset / update set tooling
+
+- `sn.changeset.list` (T0)
+- `sn.changeset.get` (T0)
+- `sn.changeset.contents` (T0)
+- `sn.changeset.export` (T0)
+- `sn.changeset.gaps` (T0)
+- `sn.updateset.capture.verify` (T0)
+- `sn.changeset.commit.preview` (T0)
+- `sn.changeset.commit` (T3)
+- `sn.rollback.plan.generate` (T0)
+
+#### Flow / workflow tooling
+
+- `sn.flow.list` (T0)
+- `sn.flow.get` (T0)
+- `sn.flow.validate` (T0)
+- `sn.workflow.list` (T0)
+- `sn.workflow.get` (T0)
+- `sn.workflow.validate` (T0)
+
+### B) Planned v2 expansion (documentation target)
+
+- Validation tool family: `sn.validate.*` per artifact type
+- `sn.rollback.snapshot.create`
+- `sn.atf.coverage_signals`
+- broader dev and ITSM catalogs from the architecture plan
+
+Roadmap alignment for full 101-tool enablement:
+
+- `R0`: catalog lock + matrix governance
+- `R1 (D5)`: `sn.validate.*` completion
+- `R2`: dev parity clusters (metadata/diagnostics/script/flow/workflow/changeset)
+- `R3`: ATF + `sn.atf.coverage_signals`
+- `R4`: rollback snapshot maturity (`sn.rollback.snapshot.create` and related surfaces)
+- `R5`: ITSM/Admin edition pack under strict edition boundaries
+- `R6`: docs/runtime drift guards and release-proof claim checks
+
+> Planned tools are not implied as currently implemented. Runtime truth is the registered list returned by MCP `tools/list` and `npm run smoke:summary`.
+
+> For full tool-by-tool status, owner mapping, and enablement track, use `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
+
+---
 
 Run unit tests for validation/runtime and script tooling:
 
@@ -403,26 +489,25 @@ Companion activation is controlled by:
 
 With `SN_COMPANION_MODE=none` (default), companion is intentionally disabled.
 
-## Optional Companion App (Scoped/Global)
+## Optional Companion App (Scoped/Global, deprioritized)
 
-Some platform truths cannot be reproduced externally.
-The Companion App provides:
+Some platform truths cannot be reproduced externally. If companion pilot mode is intentionally enabled, the companion app may provide:
 
 - **Authoritative ACL evaluation** via Scripted REST calling platform evaluation logic
 - **Scope guard checks** for cross-scope write protection
 - **Version contract** to ensure MCP server behavior is predictable
 
-If the Companion App is missing or outdated:
+If the companion app is missing/outdated/unavailable:
 
 - tools degrade safely or refuse “authoritative” operations
 - outputs explicitly declare what is and is not reliable
 
 Zurich note: some instances auto-generate Scripted REST `base_uri` from namespace (for example `/api/240215/v1`) even when scoped artifacts are named `x_mcp_companion`. Runtime and live verification now auto-discover effective base path from `sys_ws_definition(name=x_mcp_companion)` and fall back to `SN_COMPANION_BASE_PATH`.
 
-### `sn.acl.trace` dual-mode behavior
+### `sn.acl.trace` behavior
 
-- **Authoritative mode** (`mode=authoritative`): used when Companion is enabled, reachable, and version-compatible.
-- **Discovery mode** (`mode=discovery`): automatic fallback with explicit `limitations[]` and deterministic `degraded_reason_code` when authoritative path is unavailable.
+- **Default baseline:** `mode=discovery`
+- **Optional pilot:** `mode=authoritative` only when explicitly enabled and compatible
 
 Degraded reason codes currently include:
 
@@ -447,7 +532,7 @@ Severities:
 - **HIGH**: requires acknowledgment (`acknowledged_findings[]`)
 - **MEDIUM/LOW**: advisory
 
-Rulepacks are versioned and can be tailored by enterprise policy.
+Rulepacks are versioned and intended to expand to full artifact-specific + cross-cutting rule coverage as defined in the v2 validation addendum.
 
 ---
 

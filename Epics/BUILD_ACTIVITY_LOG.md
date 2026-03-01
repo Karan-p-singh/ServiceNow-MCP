@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 04:23 PST
+Last Updated: 2026-03-01 05:22 PST
 
 ---
 
@@ -733,3 +733,48 @@ When work executes, append entries for:
 - **Reason:** Synchronized governance trackers to reflect Gate G7 pass and EPIC-G/EPIC-H completion status.
 - **Evidence:** `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_ACTIVITY_LOG.md`, `Epics/RISKS_AND_DECISIONS.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
 - **Next step:** Publish final handoff summary with verification command for reproducible validation.
+
+### 2026-03-01 04:49 PST
+
+- **Item:** H5
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Completed documentation integrity pass to align all major Markdown contracts with Architecture v2 + Validation Addendum: non-overclaim language, implemented-vs-planned tool boundaries, companion-as-optional pilot framing, and expanded governance/security/runbook guidance.
+- **Evidence:** `README.md`, `Project PRD/PRD_ServiceNow_MCP_Server.md`, `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md`, `Epics/BUILD_ACTIVITY_LOG.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`, `docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/ADMIN_RUNBOOK.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`, `companion-app/README.md`
+- **Next step:** Implement D5 (`sn.validate.*` expansion and addendum-grade rule coverage) while preserving documentation/runtime truth alignment.
+
+### 2026-03-01 04:54 PST
+
+- **Item:** H5-SYNC-2
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Completed follow-on tracker and operations-doc synchronization for H5 completion: status board/story queue cleanup, risk/decision register updates, runbook/release checklist hardening, and companion README optional-pilot clarifications.
+- **Evidence:** `Epics/BUILD_STATUS_BOARD.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `Epics/RISKS_AND_DECISIONS.md`, `docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/ADMIN_RUNBOOK.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`, `companion-app/README.md`
+- **Next step:** Move execution focus to D5 implementation and validate new contracts against runtime/tool registry.
+
+### 2026-03-01 05:03 PST
+
+- **Item:** ROADMAP-REFRESH-101-TOOLS-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Planning/Engineering
+- **Reason:** Completed architecture-v2 + validation-addendum comparison against epic markdowns and refreshed roadmap to explicitly target 101-tool completion with phased R0–R6 execution and companion work marked optional/deprioritized.
+- **Evidence:** `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `Epics/BUILD_STATUS_BOARD.md`, `README.md`, `src/index.js`, architecture PDFs
+- **Next step:** Execute R0 by producing a checked-in 101-tool matrix and binding each missing cluster to implementation stories/tests.
+
+### 2026-03-01 05:18 PST
+
+- **Item:** R0-CATALOG-LOCK-IMPLEMENTATION-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Completed authoritative 101-tool documentation lock with runtime baseline reconciliation and cross-doc governance alignment for 100+ tool enablement claims.
+- **Evidence:** `docs/MCP_TOOL_CATALOG_101_MATRIX.md`, `README.md`, `PROJECT_CONTEXT_INDEX.md`, `Project PRD/PRD_ServiceNow_MCP_Server.md`, `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`
+- **Next step:** Continue R1/D5 and R2 execution while updating matrix status as tools move from planned to implemented.
+
+### 2026-03-01 05:22 PST
+
+- **Item:** G8-CATALOG-CLAIM-INTEGRITY-SYNC-1
+- **Change:** `In Progress -> Done (docs sync pass)`
+- **Owner:** Engineering
+- **Reason:** Completed post-R0 documentation synchronization for operational/security/readiness and companion boundaries so 101-tool claims consistently follow runtime-first evidence and implemented-vs-planned language.
+- **Evidence:** `docs/ADMIN_RUNBOOK.md`, `docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`, `companion-app/README.md`, `docs/MCP_TOOL_CATALOG_101_MATRIX.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`
+- **Next step:** Execute release-candidate cadence (`smoke:summary`, `test:g4:ci`, `test:g7`) and move R1/D5 planned tools toward implemented evidence.

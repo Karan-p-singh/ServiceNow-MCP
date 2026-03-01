@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-03-01 04:25 PST
+Last Updated: 2026-03-01 05:16 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -17,7 +17,13 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 - EPIC-G is complete through G4 with integration/fixtures/CI gate automation (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`)
 - EPIC-H is complete through H4 with audit webhook export, deploy-profile/tool-bundle policy controls, and enterprise docs pack
 - Gate G5, Gate G6, and Gate G7 are passed with evidence artifacts (`artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`, `artifacts/g7-readiness-summary.json`)
-- Next queued cross-epic focus: `C3`, `D4`, and optional companion scoped-ownership pilot hardening closure
+- Runtime catalog currently implements **25 tools** versus v2 architecture target of **101** (gap: **76 tools**)
+- Canonical per-tool status now lives in `docs/MCP_TOOL_CATALOG_101_MATRIX.md` (R0 lock artifact)
+- Next queued cross-epic focus: catalog completion roadmap (`R0`–`R6`) with validation-addendum expansion (`D5`) as first critical track
+
+- Documentation contract parity hardening (`H5`) is completed and now tracked in governance/status artifacts
+
+- Companion-related work remains explicitly optional/deprioritized for baseline delivery; no baseline phase is blocked by companion readiness.
 
 ---
 
@@ -49,6 +55,26 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 | Phase 5 | 13–16 | Commit preview + controlled commit + rollback planning | EPIC-F                 |
 | Phase 6 | 17–20 | Flow/workflow parity                                   | EPIC-E, EPIC-D         |
 | Phase 7 | 21–24 | Enterprise hardening + release readiness               | EPIC-G, EPIC-H         |
+
+### Post-G7 Catalog Completion Roadmap (v2 101-Tool Alignment)
+
+| Roadmap Phase | Focus                                                                                 | Priority | Companion Position                                |
+| ------------- | ------------------------------------------------------------------------------------- | -------- | ------------------------------------------------- |
+| R0            | Tool-catalog lock: authoritative 101-tool matrix (implemented vs missing vs deferred) | P0       | Optional track only                               |
+| R1            | Validation Addendum completion: full `sn.validate.*` family + category expansion      | P0       | Not required                                      |
+| R2            | Dev Edition missing clusters (metadata, diagnostics, script/flow/workflow parity)     | P0/P1    | Not required                                      |
+| R3            | ATF tooling + `sn.atf.coverage_signals` evidence contract                             | P1       | Not required                                      |
+| R4            | Rollback maturity: `sn.rollback.snapshot.create` + cohesive rollback trio             | P1       | Not required                                      |
+| R5            | ITSM/Admin Edition toolpack under strict edition separation                           | P2       | Not required                                      |
+| R6            | Hardening, CI drift guards, and release-proof evidence for full-catalog claims        | P0       | Optional companion checks only for pilot adopters |
+
+#### R0 Exit Criteria (mandatory before claiming full v2 alignment)
+
+1. A checked-in 101-tool matrix exists in epics/docs artifacts.
+2. Each tool is mapped to: edition, tier, status, tests, docs owner.
+3. Implemented-vs-planned wording is synchronized across README/PRD/epics.
+4. Companion-dependent capabilities are flagged optional/deprioritized unless explicitly enabled by tenant policy.
+5. Runtime verification (`npm run smoke:summary`) and matrix counts are reconciled before any 100+ tool claim.
 
 ---
 
@@ -214,6 +240,19 @@ Goal: Deterministic, low-latency validation and strict write gating.
 - **Priority:** P1 | **Effort:** M | **Depends on:** D2
 - **Acceptance:** per-rule suppression config + change notes + governance record
 
+### Story D5 — Validation Addendum expansion (artifact-complete)
+
+- **Priority:** P0 | **Effort:** XL | **Depends on:** D1, D2, D3
+- **User Story:** As a ServiceNow developer, I need artifact-specific validation contracts and rule categories so findings are meaningful, defensible, and consistent across scripts, BRs, client scripts, flows, workflows, and catalog policy artifacts.
+- **Tasks:**
+  - D5-T1 Add `sn.validate.*` tool family contracts (`script_include`, `business_rule`, `client_script`, `ui_script`, `flow`, `workflow`, `catalog_policy`, `fix`)
+  - D5-T2 Expand rulepacks to include PERF/SEC/BP/FLOW categories with deterministic output shapes
+  - D5-T3 Preserve write-gate behavior (`CRITICAL` block, `HIGH` acknowledge, `MEDIUM/LOW` advisory)
+- **Acceptance Criteria:**
+  - All target artifact types return structured findings and summaries
+  - Rulepack metadata/version is attached consistently
+  - Write-gate behavior is uniform across write-capable tools
+
 ---
 
 ## EPIC-E — Developer Artifact Tooling (Scripts, Flows, Workflows)
@@ -325,6 +364,19 @@ Goal: Security/governance readiness for enterprise adoption.
 
 - **Priority:** P1 | **Effort:** M | **Depends on:** all major epics
 
+### Story H5 — Documentation contract integrity (non-overclaim governance)
+
+- **Priority:** P0 | **Effort:** M | **Depends on:** D5, F6, H3
+- **User Story:** As a product/architecture owner, I need all markdown sources to reflect implemented-vs-planned contracts so docs do not over-claim capability.
+- **Tasks:**
+  - H5-T1 Add implemented-vs-planned tool catalog in README
+  - H5-T2 Align PRD/timeline/gates/risk language with revised v2 contracts
+  - H5-T3 Add periodic documentation parity checks to release readiness workflow
+- **Acceptance Criteria:**
+  - No doc claims guaranteed ACL parity, completeness, or rollback guarantees
+  - All high-risk tool contracts are described with revised constraints
+  - Documentation parity is explicitly tracked in governance docs
+
 ---
 
 ## 4) Initial Sequenced Story Queue (Execution Order)
@@ -339,7 +391,7 @@ Goal: Security/governance readiness for enterprise adoption.
 8. F4 → F5 → F6
 9. E4 → E5
 10. G1 → G2 → G3 → G4
-11. H1 → H2 → H3 → H4
+11. H1 → H2 → H3 → H4 → H5
 
 ---
 

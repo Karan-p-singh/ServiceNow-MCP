@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 04:25 PST
+Last Updated: 2026-03-01 05:15 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -52,8 +52,14 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ### `README.md`
 
-- Use for: architecture overview, safety model summary, expected project layout.
+- Use for: architecture overview, safety model summary, expected project layout, and MCP tool catalog (implemented vs planned).
 - Best when: onboarding or aligning implementation details to intended structure.
+
+### `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+
+- Use for: authoritative 101-tool catalog tracking (implemented vs planned vs enablement track).
+- Best when: validating any claim about 100+ tool readiness, ownership, tier mapping, and roadmap sequencing.
+- Truth precedence: runtime `npm run smoke:summary` → 101 matrix → summary docs.
 
 ### `src/` (implementation)
 
@@ -63,7 +69,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `src/server/mcp.js` → server lifecycle + invocation orchestration
 - `src/server/http-sse.js` → HTTP/SSE transport host + JSON-RPC bridge (`/mcp`, `/mcp/sse`)
 - `src/servicenow/client.js` → ServiceNow REST adapter (auth, retries, normalization, capability discovery)
-- `src/servicenow/companion-client.js` → Companion mode resolver (`none|scoped|global`) + optional authoritative ACL integration client
+- `src/servicenow/companion-client.js` → Optional companion mode resolver (`none|scoped|global`) + authoritative ACL integration client for pilot mode only
 - `src/config.js` → environment parsing + local `.env` loading and merged config resolution
 
 ### `scripts/` (diagnostics + verification)
@@ -80,6 +86,15 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `scripts/test-g4-ci-quality-gates.js` → CI quality aggregation harness for Gates G2–G6 + unit checks
 - `scripts/test-g7-readiness.js` → Gate G7 enterprise readiness aggregator (CI + docs-pack checks)
 - `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`, `npm run test:g4:live`, `npm run test:g5`, `npm run test:g6`, `npm run test:g2:integration`, `npm run test:g3:fixtures`, `npm run test:g4:ci`, `npm run test:g7`
+
+### Key Documentation Contract Files (v2 alignment)
+
+- `docs/MCP_TOOL_CATALOG_101_MATRIX.md` → authoritative tool-count and per-tool status contract for 101-tool enablement program.
+- `Project PRD/PRD_ServiceNow_MCP_Server.md` → authoritative product contract language, including revised high-risk tools and validation expansion targets.
+- `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md` → phased delivery sequencing aligned to non-overclaim contracts.
+- `docs/SECURITY_MODEL_AND_GOVERNANCE.md` → governance controls, tier/policy behavior, discovery-first security posture.
+- `docs/ADMIN_RUNBOOK.md` → operational runbooks and diagnostics flows.
+- `docs/RELEASE_READINESS_G7_CHECKLIST.md` → release evidence checklist for enterprise readiness.
 
 ---
 
@@ -98,6 +113,8 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 ## 5) Status Snapshot (Current)
 
 - Phase 1 through Phase 7 are complete with **G1–G7 passed**.
+- Runtime currently registers **25 tools**; program target remains **101 tools**.
+- Canonical catalog governance now lives in `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
 - Phase 3 companion authority is now treated as **optional pilot capability** rather than baseline dependency.
 - **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
 - **EPIC-C baseline** (`C1/C2/C4`) is complete with dual-mode `sn.acl.trace` and deterministic degraded reason codes.
@@ -105,11 +122,13 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
 - Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
 - **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
+- Documentation now follows an explicit **implemented vs planned** contract model to avoid over-claiming runtime coverage.
+- README includes an MCP tool catalog section with runtime-registered tool inventory and planned v2 expansions.
 - EPIC-F is complete through **F6** and EPIC-E is complete through **E5**.
 - EPIC-G and EPIC-H are complete with enterprise hardening controls and docs-pack deliverables.
 - Gates **G4**, **G5**, **G6**, and **G7** are **Passed** with validation artifacts in `artifacts/g4-*.json`, `artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`, `artifacts/g4-ci-quality-summary.json`, and `artifacts/g7-readiness-summary.json`.
 - `sn.changeset.commit` now exposes the controlled T3 commit contract (confirm/reason + snapshot coverage + high-risk audit trace), and `sn.rollback.plan.generate` provides rollback planning with restorable/non-restorable declarations.
 - Flow/workflow parity tooling is available via `sn.flow.*` and `sn.workflow.*`, each with deterministic rulepack-backed validation summaries.
 - Enterprise controls now include optional audit webhook export and deploy-profile/tool-bundle gating (`TOOL_DISABLED_BY_BUNDLE`) for runtime policy enforcement.
-- Next queued stories are **C3** and **D4** plus optional companion scoped-ownership hardening closure.
+- Next queued catalog-enablement focus is **R1/D5**, **R2**, **R3**, **R4**, **R5**, and **R6** after R0 matrix lock.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

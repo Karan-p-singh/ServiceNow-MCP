@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-03-01 04:22 PST
+Last Updated: 2026-03-01 05:22 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -113,6 +113,28 @@ Status: `Passed`
 - [x] H4 admin/runbook docs complete
 - [x] Release package reviewed against PRD acceptance criteria
 
+## Gate G8 — Catalog Claim Integrity (Post-G7, 101-Tool Program)
+
+Status: `In Progress`
+
+- [x] R0 artifact exists: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+- [x] Runtime implemented baseline documented (`25` tools)
+- [ ] Runtime and matrix counts reconciled on every release-candidate cut
+- [ ] R1/D5 `sn.validate.*` family moved from planned to implemented with runtime evidence
+- [ ] R2 parity clusters completed with runtime registration evidence
+- [ ] R3 `sn.atf.coverage_signals` implemented with non-overclaim contract language
+- [ ] R4 rollback snapshot family implemented (`sn.rollback.snapshot.create` and related tools)
+- [ ] R5 ITSM/Admin edition separation validated for catalog claims
+- [ ] R6 docs/runtime drift checks integrated into release gate automation
+
+Exit Rule: G8 passes only when any public/internal “100+ tools enabled” claim is backed by runtime registration output and synchronized matrix + governance trackers.
+
+Operational cadence for release-claim integrity:
+
+1. Run `npm run smoke:summary`, `npm run test:g4:ci`, `npm run test:g7` at each release-candidate cut.
+2. Reconcile runtime implemented count with `docs/MCP_TOOL_CATALOG_101_MATRIX.md` before claim publication.
+3. Synchronize README, status board, runbook, and release checklist atomically.
+
 ---
 
 ## 3) Gate Decision Log
@@ -146,3 +168,4 @@ Status: `Passed`
 | 2026-03-01 | G5   | Passed      | Completed F5/F6 with `sn.changeset.commit` controlled contract (T3 confirm/reason + snapshot matrix + high-risk audit trace) and `sn.rollback.plan.generate`; validation evidence captured via `npm run test:g5` and `artifacts/g5-validation-summary.json`.                                                                                                                     |
 | 2026-03-01 | G6   | Passed      | Delivered flow/workflow parity (`sn.flow.*`, `sn.workflow.*`) plus rulepack-backed validation coverage (`flows-v1`, `workflows-v1`); evidence captured via `npm run test:g6` and `artifacts/g6-validation-summary.json`.                                                                                                                                                         |
 | 2026-03-01 | G7   | Passed      | Completed enterprise readiness scope: EPIC-G quality harnesses (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`) + EPIC-H hardening (`audit webhook`, `tool bundles/profiles`) + docs pack (`SECURITY_MODEL_AND_GOVERNANCE`, `ADMIN_RUNBOOK`, `RELEASE_READINESS_G7_CHECKLIST`); gate evidence captured via `npm run test:g7` and `artifacts/g7-readiness-summary.json`. |
+| 2026-03-01 | G7   | Passed      | Documentation integrity pass completed (H5): governance and operations Markdown now consistently enforce non-overclaim contract language, implemented-vs-planned tool boundaries, and companion-as-optional pilot positioning aligned with Architecture v2 + Validation Addendum.                                                                                                |

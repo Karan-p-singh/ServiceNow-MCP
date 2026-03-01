@@ -1,10 +1,33 @@
 # ServiceNow MCP Server v2 — Product Requirements Document (PRD)
 
-**Product:** ServiceNow MCP Server (v2) with Optional ServiceNow Companion Authority  
+**Product:** ServiceNow MCP Server (v2) — Developer Edition First  
 **Edition:** Developer Edition (baseline) with optional ITSM/Admin Edition add-on  
-**Status:** Draft (Build-Ready)  
-**Owners:** Product (You), Engineering (MCP Server), Platform (ServiceNow Companion)  
-**Last updated:** 2026-02-28
+**Status:** Active Build Contract (documentation-aligned)  
+**Owners:** Product (You), Engineering (MCP Server)  
+**Last updated:** 2026-03-01
+
+---
+
+## 0. Document Intent and Truth Policy
+
+This PRD is aligned to the revised architecture/validation plan and follows a strict non-overclaim policy:
+
+- ACL discovery is diagnostic and confidence-scored, not platform-authoritative.
+- Dependency analysis is tiered evidence, not completeness proof.
+- Commit/rollback is planning + risk declaration, not guaranteed reversal.
+- ATF linkage is documented as **coverage signals**, not code coverage.
+
+This PRD intentionally distinguishes:
+
+1. **Implemented runtime contracts** (current repo behavior)
+2. **Target v2 contracts** (planned alignment scope)
+
+Canonical catalog governance for 100+ enablement is maintained in:
+
+- `docs/MCP_TOOL_CATALOG_101_MATRIX.md` (program source of truth)
+- runtime verification command: `npm run smoke:summary`
+
+Current baseline: **25 implemented / 101 target**.
 
 ---
 
@@ -12,7 +35,7 @@
 
 This product delivers a **safe-by-default, enterprise-ready MCP (Model Context Protocol) server** that enables LLM tools to **read, analyze, validate, and (when permitted) change** ServiceNow artifacts with **guardrails**.
 
-The core differentiator is an **always-on Validation Engine** that attaches findings on read and blocks/warns on write, with an **optional Companion authority mode** that provides **authoritative platform-native checks** when explicitly enabled (notably **ACL evaluation** and certain scope/commit validations).
+The core differentiator is an **always-on Validation Engine** that attaches findings on read and blocks/warns on write, with a discovery-first safety posture and optional (deprioritized) companion authority path.
 
 The design is intentionally “honest”:
 
@@ -36,7 +59,7 @@ This MCP server must provide:
 1. **Fast, accurate read navigation** and structured artifact retrieval.
 2. **Validation before action** (prevent “footguns”).
 3. **Controlled write capabilities** via tiering + scope policies + logging.
-4. **Optional Companion authority** for platform-native evaluations when needed.
+4. **Optional companion pilot support** only when explicitly enabled and operationally justified.
 
 ---
 
@@ -145,12 +168,12 @@ This MCP server must provide:
 - Validation engine + rulepacks
 - Auditing and structured outputs
 
-2. **Optional ServiceNow Companion Authority (Scoped/Global pilot)**
+2. **Optional ServiceNow Companion Authority (Scoped/Global pilot, non-baseline)**
 
-- Scripted REST endpoints for platform-native evaluation
-- Authoritative ACL/security evaluation endpoint
-- Scope guard checks and commit/capture helpers
-- Versioned, installable artifact
+- Scripted REST endpoints for platform-native evaluation (pilot only)
+- Authoritative ACL/security evaluation endpoint (pilot only)
+- Scope/capture helper endpoints (pilot only)
+- Versioned artifact with explicit compatibility checks
 
 ---
 
@@ -190,11 +213,11 @@ This MCP server must provide:
 
 ---
 
-### 8.3 Optional Companion Authority (ServiceNow-side)
+### 8.3 Optional Companion Authority (ServiceNow-side, deprioritized)
 
 **Requirements**
 
-- Optional companion deliverable with versioning.
+- Optional companion deliverable with versioning for pilot programs.
 - Scripted REST endpoints for:
   - Authoritative ACL/security evaluation
   - Scope guard checks
@@ -203,22 +226,24 @@ This MCP server must provide:
 **Acceptance Criteria**
 
 - MCP Server detects companion presence and version when companion mode is enabled.
+- Baseline operation does not depend on companion deployment.
 - If companion is disabled/missing/outdated, ACL tracing remains available in discovery mode with explicit limitations.
 
 ---
 
-### 8.4 ACL Trace (Dual Mode)
+### 8.4 ACL Trace (Dual Mode, revised contract)
 
 **Requirements**
 
 - `sn.acl.trace` supports:
-  - Discovery mode: best-effort based on sys_security_acl tables and roles
-  - Authoritative mode: calls Companion endpoint to evaluate using platform engine
+  - Discovery mode (default): candidate ACL discovery + best-effort evidence
+  - Authoritative mode (optional): companion endpoint for platform-native evaluation
 
 **Acceptance Criteria**
 
 - Output includes `mode`, `decision`, `confidence`, and `limitations` (mandatory in discovery).
-- Authoritative mode returns platform-native outcome with context used.
+- Discovery mode never claims scripted ACL/runtime parity.
+- Authoritative mode returns platform-native outcome with context used when available.
 
 ---
 
@@ -238,7 +263,7 @@ This MCP server must provide:
 
 ---
 
-### 8.6 Update Set Operations
+### 8.6 Update Set Operations (revised high-risk contracts)
 
 **Requirements**
 
@@ -254,11 +279,20 @@ This MCP server must provide:
 
 - Gaps output never claims completeness.
 - Capture verify returns deterministic reasons for common failure modes.
-- Commit supports dry-run preview and conflict reporting (tier gated).
+- Commit supports dry-run preview and controlled T3 contract (tier gated).
+- Rollback scope is documented as snapshot + plan generation, with non-restorable declarations.
+
+#### Required v2 contract refinements
+
+- `sn.changeset.gaps`: hard/soft/heuristic tiers with evidence schema and confidence.
+- `sn.changeset.commit`: explicit dry_run/confirm flow and no rollback guarantee language.
+- `sn.rollback.snapshot.create`: before-state snapshot coverage report.
+- `sn.rollback.plan.generate`: restorable vs not-restorable with manual steps.
+- `sn.updateset.capture.verify`: deterministic reason model for capture misses.
 
 ---
 
-### 8.7 Validation Engine (Core)
+### 8.7 Validation Engine (Core, expanded)
 
 **Requirements**
 
@@ -267,13 +301,24 @@ This MCP server must provide:
   - CRITICAL: block write
   - HIGH: require acknowledgment token
   - MEDIUM/LOW: advisory
-- “On read” returns a concise summary; “validate” tools return full report.
+- “On read” returns a concise summary; `sn.validate.*` tools return full reports.
 
 **Acceptance Criteria**
 
 - Validation is deterministic for the same input + config.
-- Validation execution time typically under 50ms for common artifacts (rulepack optimized).
+- Validation execution time is expected to remain low-latency through in-process rule evaluation.
 - Write tools require `acknowledged_findings[]` for HIGH severity.
+
+Target artifact coverage (v2 addendum):
+
+- Script Includes
+- Business Rules
+- Client Scripts
+- UI Scripts
+- Flow Designer Flows
+- Classic Workflows
+- Catalog UI Policies/Scripts
+- Cross-cutting security rules
 
 ---
 
@@ -349,6 +394,11 @@ This MCP server must provide:
 - Some artifacts are not restorable.
 - Mitigation: snapshot coverage matrix + “not restorable” declared outputs.
 
+6. **Documentation-to-runtime contract drift**
+
+- MCP docs can overstate implementation progress or certainty.
+- Mitigation: maintain implemented-vs-planned catalog and regular contract review updates.
+
 ---
 
 ## 12. Release Criteria
@@ -360,7 +410,7 @@ This MCP server must provide:
 - Validation engine with blocking/warn/ack flow on writes (at least for scripts)
 - Update set inspection + gap detection (hard + soft)
 - Discovery-mode ACL baseline without companion dependency
-- Optional companion authority path for authoritative ACL evaluation endpoint
+- Optional companion authority path for authoritative ACL evaluation endpoint (pilot only)
 - Structured audit logs
 
 ### v1 Exit
@@ -369,6 +419,22 @@ This MCP server must provide:
 - Capture verify robust across common failure modes
 - Commit preview and controlled commit path with rollback planning
 - Tool bundles and governance controls for enterprise certification
+
+### v2 Contract Alignment Exit (Documentation + Runtime)
+
+- Revised high-risk tool contracts reflected in runtime and docs
+- Validation family and rulepack coverage explicitly mapped by artifact type
+- README tool catalog distinguishes implemented vs planned
+- Companion path documented as optional/deprioritized, not baseline
+
+### 101-Tool Enablement Claim Exit (Program-level)
+
+No “100+ MCP tools enabled” claim is valid unless all are true:
+
+1. `docs/MCP_TOOL_CATALOG_101_MATRIX.md` is updated and reconciled with runtime.
+2. Runtime verification (`npm run smoke:summary`) and matrix implemented counts match.
+3. Story/gate/risk docs are synchronized with the same implemented-vs-planned boundaries.
+4. Planned tools (including `sn.validate.*`, `sn.rollback.snapshot.create`, and `sn.atf.coverage_signals`) are not presented as implemented until registered in runtime.
 
 ---
 
