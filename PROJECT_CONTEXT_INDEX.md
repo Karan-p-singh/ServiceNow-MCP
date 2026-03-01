@@ -1,11 +1,31 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 05:48 PST
+Last Updated: 2026-03-01 05:59 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
 
 ## 1) Core Product Context
+
+### `LLM_START_HERE.md` (Root-first context entry)
+
+- Use for: default low-token load order from repository root.
+- Best when: starting any LLM session and minimizing context-window usage.
+
+### `docs/LLM_CONTEXT_PACK.md` (Start Here for LLM sessions)
+
+- Use for: token-optimized context loading order, current truth snapshot, claim guardrails, and minimum verification commands.
+- Best when: you need to minimize context-window usage before reading long governance/history files.
+
+### `Epics/EPICS_CONTEXT_COMPACT.md`
+
+- Use for: condensed operational state of all epic trackers and execution queue orientation.
+- Best when: you need epic/governance status without loading full historical logs.
+
+### `docs/DOCS_CONTEXT_COMPACT.md`
+
+- Use for: condensed governance/runbook/catalog guidance and LLM-safe claims.
+- Best when: you need docs-layer policy/claim truth in minimal tokens.
 
 ### `Project PRD/PRD_ServiceNow_MCP_Server.md`
 

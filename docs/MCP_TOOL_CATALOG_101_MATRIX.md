@@ -1,6 +1,6 @@
 # MCP Tool Catalog — 101 Matrix (Authoritative Program Tracker)
 
-Last Updated: 2026-03-01 05:41 PST  
+Last Updated: 2026-03-01 06:21 PST  
 Owner: Engineering + Product Architecture  
 Status: Active (R0 catalog lock complete; G8 integrity execution in progress)
 
@@ -22,14 +22,14 @@ No document should claim 100+ tool availability unless this matrix and runtime e
 
 ## 2) Baseline Counts (Current)
 
-- Runtime-registered tools (implemented): **33**
+- Runtime-registered tools (implemented): **43**
 - v2 catalog target: **101**
-- Remaining to reach full catalog: **68**
+- Remaining to reach full catalog: **58**
 
 Family status snapshot:
 
-- Core/platform + governance: 3 implemented / 18 planned
-- Script tooling: 7 implemented / 14 planned
+- Core/platform + governance: 11 implemented / 10 planned
+- Script tooling: 9 implemented / 12 planned
 - Validation addendum family (`sn.validate.*`): 8 implemented / 0 planned
 - Changeset/updateset/rollback: 9 implemented / 15 planned
 - Flow/workflow: 6 implemented / 10 planned
@@ -73,18 +73,18 @@ Legend:
 |  23 | `sn.workflow.list`                | dev     | T0   | Implemented | R0 locked        | `src/index.js`, G6 evidence                | Eng      |
 |  24 | `sn.workflow.get`                 | dev     | T0   | Implemented | R0 locked        | `src/index.js`, G6 evidence                | Eng      |
 |  25 | `sn.workflow.validate`            | dev     | T0   | Implemented | R0 locked        | `src/index.js`, G6 evidence                | Eng      |
-|  26 | `sn.health.check`                 | dev     | T0   | Planned     | R2               | Core diagnostics cluster                   | Eng      |
-|  27 | `sn.config.get`                   | dev     | T0   | Planned     | R2               | Core governance cluster                    | Eng      |
-|  28 | `sn.policy.test`                  | dev     | T0   | Planned     | R2               | Policy diagnostics cluster                 | Eng      |
-|  29 | `sn.audit.ping`                   | dev     | T0   | Planned     | R2               | Audit observability cluster                | Eng      |
+|  26 | `sn.health.check`                 | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  27 | `sn.config.get`                   | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  28 | `sn.policy.test`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  29 | `sn.audit.ping`                   | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  30 | `sn.tool.catalog`                 | dev     | T0   | Planned     | R6               | Docs/runtime drift guard                   | Eng/QA   |
 |  31 | `sn.tool.describe`                | dev     | T0   | Planned     | R6               | Catalog contract introspection             | Eng      |
-|  32 | `sn.instance.capabilities.get`    | dev     | T0   | Planned     | R2               | Capability parity track                    | Eng      |
-|  33 | `sn.instance.plugins.list`        | dev     | T0   | Planned     | R2               | Plugin visibility track                    | Eng      |
-|  34 | `sn.table.get`                    | dev     | T0   | Planned     | R2               | Metadata/read parity                       | Eng      |
+|  32 | `sn.instance.capabilities.get`    | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  33 | `sn.instance.plugins.list`        | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  34 | `sn.table.get`                    | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  35 | `sn.table.schema.get`             | dev     | T0   | Planned     | R2               | Metadata/read parity                       | Eng      |
 |  36 | `sn.table.dictionary.list`        | dev     | T0   | Planned     | R2               | Metadata/read parity                       | Eng      |
-|  37 | `sn.table.count`                  | dev     | T0   | Planned     | R2               | Diagnostics/read parity                    | Eng      |
+|  37 | `sn.table.count`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  38 | `sn.user.role.check`              | dev     | T0   | Planned     | R2               | Security diagnostics track                 | Eng/Sec  |
 |  39 | `sn.scope.inspect`                | dev     | T0   | Planned     | R2               | Scope governance parity                    | Eng      |
 |  40 | `sn.scope.guard.check`            | dev     | T0   | Planned     | R2               | Scope/policy diagnostics                   | Eng      |
@@ -99,8 +99,8 @@ Legend:
 |  49 | `sn.validate.workflow`            | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  50 | `sn.validate.catalog_policy`      | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  51 | `sn.validate.fix`                 | dev     | T1   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
-|  52 | `sn.script.diff`                  | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
-|  53 | `sn.script.history`               | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
+|  52 | `sn.script.diff`                  | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  53 | `sn.script.history`               | dev     | T0   | Implemented | R2               | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  54 | `sn.script.compare`               | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
 |  55 | `sn.script.delete`                | dev     | T3   | Planned     | R2               | High-risk script operation                 | Eng/Sec  |
 |  56 | `sn.script.clone`                 | dev     | T2   | Planned     | R2               | Script productivity                        | Eng      |

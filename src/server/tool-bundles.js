@@ -6,11 +6,21 @@ const PROFILE_BUNDLES = {
 };
 
 const TOOL_TO_BUNDLE = [
+  { exact: "sn.health.check", bundle: "dev_core" },
+  { exact: "sn.config.get", bundle: "dev_core" },
+  { exact: "sn.policy.test", bundle: "dev_core" },
+  { exact: "sn.audit.ping", bundle: "dev_core" },
   { exact: "sn.changeset.commit", bundle: "dev_commit" },
   { exact: "sn.rollback.plan.generate", bundle: "dev_changesets" },
   { exact: "sn.instance.info", bundle: "dev_core" },
+  { exact: "sn.instance.capabilities.get", bundle: "dev_core" },
+  { exact: "sn.instance.plugins.list", bundle: "dev_core" },
   { exact: "sn.table.list", bundle: "dev_core" },
+  { exact: "sn.table.get", bundle: "dev_core" },
+  { exact: "sn.table.count", bundle: "dev_core" },
   { exact: "sn.acl.trace", bundle: "dev_core" },
+  { exact: "sn.script.history", bundle: "dev_validation" },
+  { exact: "sn.script.diff", bundle: "dev_validation" },
   { prefix: "sn.validate.", bundle: "dev_validation" },
   { prefix: "sn.script.", bundle: "dev_validation" },
   { prefix: "sn.flow.", bundle: "dev_validation" },

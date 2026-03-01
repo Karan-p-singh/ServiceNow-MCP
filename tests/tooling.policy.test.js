@@ -8,8 +8,18 @@ import {
 } from "../src/server/tool-bundles.js";
 
 test("inferBundleForTool maps known tools to expected bundles", () => {
+  assert.equal(inferBundleForTool("sn.health.check"), "dev_core");
+  assert.equal(inferBundleForTool("sn.config.get"), "dev_core");
+  assert.equal(inferBundleForTool("sn.policy.test"), "dev_core");
+  assert.equal(inferBundleForTool("sn.audit.ping"), "dev_core");
   assert.equal(inferBundleForTool("sn.instance.info"), "dev_core");
+  assert.equal(inferBundleForTool("sn.instance.capabilities.get"), "dev_core");
+  assert.equal(inferBundleForTool("sn.instance.plugins.list"), "dev_core");
+  assert.equal(inferBundleForTool("sn.table.get"), "dev_core");
+  assert.equal(inferBundleForTool("sn.table.count"), "dev_core");
   assert.equal(inferBundleForTool("sn.script.update"), "dev_validation");
+  assert.equal(inferBundleForTool("sn.script.history"), "dev_validation");
+  assert.equal(inferBundleForTool("sn.script.diff"), "dev_validation");
   assert.equal(inferBundleForTool("sn.validate.script_include"), "dev_validation");
   assert.equal(inferBundleForTool("sn.changeset.list"), "dev_changesets");
   assert.equal(inferBundleForTool("sn.changeset.commit"), "dev_commit");

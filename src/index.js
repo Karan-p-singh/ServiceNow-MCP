@@ -90,6 +90,74 @@ async function fetchSingleTableRecord({ client, table, input }) {
   };
 }
 
+function redactConfigForTool(value) {
+  const sensitiveKeys = ["password", "secret", "token", "authorization", "clientsecret"];
+  if (Array.isArray(value)) {
+    return value.map((entry) => redactConfigForTool(entry));
+  }
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  const copy = {};
+  for (const [key, entry] of Object.entries(value)) {
+    const isSensitive = sensitiveKeys.some((sensitive) => key.toLowerCase().includes(sensitive));
+    copy[key] = isSensitive ? "[REDACTED]" : redactConfigForTool(entry);
+  }
+  return copy;
+}
+
+function evaluatePolicyPreview({ input, config }) {
+  const scope = String(input?.scope || "global");
+  const toolTier = String(input?.tool_tier || "T0").toUpperCase();
+  const tierOrder = { T0: 0, T1: 1, T2: 2, T3: 3 };
+  const tierMax = String(config?.tierMax || "T0").toUpperCase();
+  const allowlisted = (config?.exceptionAllowlist || []).includes(String(input?.tool_name || ""));
+  const writeLike = toolTier !== "T0";
+
+  const checks = [];
+
+  if (writeLike) {
+    const tierAllowed = (tierOrder[toolTier] ?? 0) <= (tierOrder[tierMax] ?? 0);
+    checks.push({ check: "tier_max", passed: tierAllowed, details: { tool_tier: toolTier, tier_max: tierMax } });
+
+    if (Array.isArray(config?.allowedScopes) && config.allowedScopes.length > 0) {
+      checks.push({
+        check: "allowed_scopes",
+        passed: config.allowedScopes.includes(scope) || allowlisted,
+        details: { scope, allowed_scopes: config.allowedScopes, exception_allowlisted: allowlisted },
+      });
+    }
+
+    if (config?.denyGlobalWrites) {
+      checks.push({
+        check: "deny_global_writes",
+        passed: scope !== "global" || allowlisted,
+        details: { scope, exception_allowlisted: allowlisted },
+      });
+    }
+
+    if (config?.enforceChangesetScope && config?.changesetScope) {
+      checks.push({
+        check: "enforce_changeset_scope",
+        passed: scope === config.changesetScope || allowlisted,
+        details: {
+          scope,
+          changeset_scope: config.changesetScope,
+          exception_allowlisted: allowlisted,
+        },
+      });
+    }
+  }
+
+  return {
+    evaluated: true,
+    write_like: writeLike,
+    checks,
+    allowed: checks.every((entry) => entry.passed !== false),
+  };
+}
+
 async function buildDiscoveryAclTrace({ client, input, degradedReasonCode }) {
   const table = String(input?.table || "task").trim() || "task";
   const operation = String(input?.operation || "read").trim().toLowerCase() || "read";
@@ -148,6 +216,87 @@ async function buildDiscoveryAclTrace({ client, input, degradedReasonCode }) {
 }
 
 function registerBaselineTools(server) {
+  server.registerTool({
+    name: "sn.health.check",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const probe = await client.getInstanceInfo({ instanceKey: input?.instance_key });
+      return {
+        data: {
+          status: "ok",
+          transport: context.config.transport,
+          endpoint_path: context.config.server?.path || "/mcp",
+          instance: probe?.instance || null,
+          connectivity: probe?.connectivity || null,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.config.get",
+    tier: "T0",
+    handler: async (_, context) => {
+      return {
+        data: {
+          config: redactConfigForTool(context.config || {}),
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.policy.test",
+    tier: "T0",
+    handler: async (input, context) => {
+      return {
+        data: {
+          tool_name: input?.tool_name || null,
+          tool_tier: input?.tool_tier || "T0",
+          scope: input?.scope || "global",
+          policy_preview: evaluatePolicyPreview({ input, config: context.config }),
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.audit.ping",
+    tier: "T0",
+    handler: async (input, context) => {
+      const dryRun = input?.dry_run !== false;
+      const sink = context.services?.auditWebhook;
+      if (dryRun) {
+        return {
+          data: {
+            dry_run: true,
+            webhook_enabled: Boolean(sink?.isEnabled?.()),
+          },
+        };
+      }
+
+      const result = await sink.send({
+        event_type: "mcp.audit.ping",
+        stage: "diagnostic_ping",
+        tier: "T0",
+        write_operation: false,
+        validation_summary: {
+          findings_count_by_severity: { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 },
+          blocked: false,
+        },
+      });
+
+      return {
+        data: {
+          dry_run: false,
+          webhook_enabled: Boolean(sink?.isEnabled?.()),
+          send_result: result,
+        },
+      };
+    },
+  });
+
   server.registerTool({
     name: "sn.script.get",
     tier: "T0",
@@ -331,6 +480,47 @@ function registerBaselineTools(server) {
   });
 
   server.registerTool({
+    name: "sn.instance.capabilities.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const details = await client.getInstanceInfo({
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          instance: details.instance,
+          capabilities: details.capabilities,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.instance.plugins.list",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(200, Math.max(1, Number(input?.limit || 50)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+      const page = await client.listInstancePlugins({
+        limit,
+        offset,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          source_table: page.table,
+          records: page.records,
+          page: page.page,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.acl.trace",
     tier: "T0",
     handler: async (input, context) => {
@@ -403,6 +593,105 @@ function registerBaselineTools(server) {
           table: input?.table || "sys_plugins",
           records: result.records,
           page: result.page,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.table.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const table = String(input?.table || "").trim();
+      const result = await client.getTableRecord({
+        table,
+        sysId: input?.sys_id,
+        query: input?.query || "",
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.table.count",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.countTable({
+        table: String(input?.table || "").trim(),
+        query: String(input?.query || ""),
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.history",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const script = await client.getScriptInclude({
+        sysId: input?.sys_id,
+        name: input?.name,
+        instanceKey: input?.instance_key,
+      });
+      const scriptSysId = script?.script?.sys_id || input?.sys_id;
+      const history = await client.listScriptIncludeHistory({
+        sysId: scriptSysId,
+        limit: Math.min(100, Math.max(1, Number(input?.limit || 20))),
+        offset: Math.max(0, Number(input?.offset || 0)),
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          found: Boolean(script?.script),
+          script_identity: {
+            sys_id: script?.script?.sys_id || null,
+            name: script?.script?.name || input?.name || null,
+          },
+          history: history.records,
+          page: history.page,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.diff",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const script = await client.getScriptInclude({
+        sysId: input?.sys_id,
+        name: input?.name,
+        instanceKey: input?.instance_key,
+      });
+      const scriptSysId = script?.script?.sys_id || input?.sys_id;
+      const diff = await client.diffScriptInclude({
+        sysId: scriptSysId,
+        baseVersion: input?.base_version,
+        targetVersion: input?.target_version,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          found: Boolean(script?.script),
+          script_identity: {
+            sys_id: script?.script?.sys_id || null,
+            name: script?.script?.name || input?.name || null,
+          },
+          diff,
         },
       };
     },
@@ -1211,11 +1500,33 @@ async function main() {
   process.on("SIGTERM", shutdown);
 
   if (isSmokeMode) {
+    const healthCheckResult = await server.invoke("sn.health.check", {});
+    const configGetResult = await server.invoke("sn.config.get", {});
+    const policyTestResult = await server.invoke("sn.policy.test", {
+      tool_name: "sn.script.update",
+      tool_tier: "T2",
+      scope: "global",
+    });
+    const auditPingResult = await server.invoke("sn.audit.ping", {
+      dry_run: true,
+    });
     const result = await server.invoke("sn.instance.info", {});
+    const instanceCapabilitiesResult = await server.invoke("sn.instance.capabilities.get", {});
+    const instancePluginsResult = await server.invoke("sn.instance.plugins.list", {
+      limit: 2,
+      offset: 0,
+    });
     const paged = await server.invoke("sn.table.list", {
       table: "sys_plugins",
       limit: 2,
       offset: 0,
+    });
+    const tableGetResult = await server.invoke("sn.table.get", {
+      table: "sys_db_object",
+      query: "name=sys_script_include",
+    });
+    const tableCountResult = await server.invoke("sn.table.count", {
+      table: "sys_script_include",
     });
     const scriptGetResult = await server.invoke("sn.script.get", {
       name: "x_demo_utility",
@@ -1233,6 +1544,14 @@ async function main() {
       name: "x_demo_utility",
     });
     const scriptDepsResult = await server.invoke("sn.script.deps", {
+      name: "x_demo_utility",
+    });
+    const scriptHistoryResult = await server.invoke("sn.script.history", {
+      name: "x_demo_utility",
+      limit: 2,
+      offset: 0,
+    });
+    const scriptDiffResult = await server.invoke("sn.script.diff", {
       name: "x_demo_utility",
     });
     const changesetListResult = await server.invoke("sn.changeset.list", {
@@ -1380,6 +1699,19 @@ async function main() {
       e2_refs_deps_evidence_available:
         Array.isArray(scriptRefsResult?.data?.references) &&
         Array.isArray(scriptDepsResult?.data?.dependencies),
+      r2_diagnostics_tools_available:
+        healthCheckResult?.tool === "sn.health.check" &&
+        configGetResult?.tool === "sn.config.get" &&
+        policyTestResult?.tool === "sn.policy.test" &&
+        auditPingResult?.tool === "sn.audit.ping",
+      r2_instance_metadata_tools_available:
+        instanceCapabilitiesResult?.tool === "sn.instance.capabilities.get" &&
+        instancePluginsResult?.tool === "sn.instance.plugins.list" &&
+        tableGetResult?.tool === "sn.table.get" &&
+        tableCountResult?.tool === "sn.table.count",
+      r2_script_parity_tools_available:
+        scriptHistoryResult?.tool === "sn.script.history" &&
+        scriptDiffResult?.tool === "sn.script.diff",
       e3_create_update_auditable:
         Boolean(scriptCreateAllowed?.data?.audit?.action) &&
         Boolean(scriptUpdateAllowed?.data?.audit?.action),
@@ -1437,14 +1769,24 @@ async function main() {
 
     const smokePayload = {
       tools: server.listTools(),
+      health_check_result: healthCheckResult,
+      config_get_result: configGetResult,
+      policy_test_result: policyTestResult,
+      audit_ping_result: auditPingResult,
       smoke_summary: smokeSummary,
       smoke_result: result,
+      instance_capabilities_result: instanceCapabilitiesResult,
+      instance_plugins_result: instancePluginsResult,
       table_list_result: paged,
+      table_get_result: tableGetResult,
+      table_count_result: tableCountResult,
       script_get_result: scriptGetResult,
       script_list_result: scriptListResult,
       script_search_result: scriptSearchResult,
       script_refs_result: scriptRefsResult,
       script_deps_result: scriptDepsResult,
+      script_history_result: scriptHistoryResult,
+      script_diff_result: scriptDiffResult,
       changeset_list_result: changesetListResult,
       changeset_get_result: changesetGetResult,
       changeset_contents_result: changesetContentsResult,

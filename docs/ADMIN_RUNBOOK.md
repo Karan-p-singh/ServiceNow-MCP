@@ -1,6 +1,6 @@
 # ServiceNow MCP Server — Admin Runbook (Gate G7)
 
-Last Updated: 2026-03-01 (Catalog Claim Integrity Sync)
+Last Updated: 2026-03-01 (R2 docs sync)
 
 ## 0) Operating Contract (Read First)
 
@@ -13,7 +13,7 @@ This runbook follows the v2 documentation truth policy:
 
 Catalog claim integrity contract (101-tool program):
 
-- Current documented baseline: **33 implemented / 101 target / 68 remaining**.
+- Current documented baseline: **43 implemented / 101 target / 58 remaining**.
 - Never present planned tools as implemented tools.
 - For any release-candidate or stakeholder claim, reconcile evidence in this order:
   1. `npm run smoke:summary` (runtime registered tools)

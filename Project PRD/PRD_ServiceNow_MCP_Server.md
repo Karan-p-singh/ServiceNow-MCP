@@ -27,7 +27,7 @@ Canonical catalog governance for 100+ enablement is maintained in:
 - `docs/MCP_TOOL_CATALOG_101_MATRIX.md` (program source of truth)
 - runtime verification command: `npm run smoke:summary`
 
-Current baseline: **33 implemented / 101 target**.
+Current baseline: **43 implemented / 101 target**.
 
 ---
 

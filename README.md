@@ -2,6 +2,20 @@
 
 A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that enables LLM tooling to read, validate, and (when allowed) change ServiceNow artifacts with enterprise guardrails.
 
+## LLM Context Start (Root-First)
+
+For token-efficient context loading, start at the repository root with:
+
+- `LLM_START_HERE.md`
+
+Then follow the ordered compact pack:
+
+1. `docs/LLM_CONTEXT_PACK.md`
+2. `Epics/EPICS_CONTEXT_COMPACT.md`
+3. `docs/DOCS_CONTEXT_COMPACT.md`
+
+Only load heavy historical docs (for example `Epics/BUILD_ACTIVITY_LOG.md` or full matrix row scans) when audit depth is actually needed.
+
 This repository follows the revised v2 architecture principles:
 
 - **No over-claims** (ACL evaluation limits, dependency completeness limits, rollback limits)
@@ -154,7 +168,7 @@ Canonical catalog governance for 100+ enablement:
 
 - Authoritative 101-tool program matrix: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 - Runtime implementation truth command: `npm run smoke:summary`
-- Current baseline: **33 implemented / 101 target**
+- Current baseline: **43 implemented / 101 target**
 
 When any count differs across docs, use this precedence:
 
@@ -168,8 +182,16 @@ Use `npm run smoke:summary` to verify the live registered tool list.
 
 #### Core / platform (T0)
 
+- `sn.health.check`
+- `sn.config.get`
+- `sn.policy.test`
+- `sn.audit.ping`
 - `sn.instance.info`
+- `sn.instance.capabilities.get`
+- `sn.instance.plugins.list`
 - `sn.table.list`
+- `sn.table.get`
+- `sn.table.count`
 - `sn.acl.trace`
 
 #### Script developer tooling
@@ -179,6 +201,8 @@ Use `npm run smoke:summary` to verify the live registered tool list.
 - `sn.script.search` (T0)
 - `sn.script.refs` (T0)
 - `sn.script.deps` (T0)
+- `sn.script.history` (T0)
+- `sn.script.diff` (T0)
 - `sn.script.create` (T2)
 - `sn.script.update` (T2)
 

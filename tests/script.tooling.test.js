@@ -256,3 +256,49 @@ test("workflow tooling list/get returns structured records", async () => {
   assert.equal(workflow.found, true);
   assert.equal(workflow.record.name, "x_demo_workflow");
 });
+
+test("R2 core metadata helpers return deterministic mock payloads", async () => {
+  const client = createMockClient();
+
+  const tableRecord = await client.getTableRecord({
+    table: "sys_db_object",
+    query: "name=sys_script_include",
+  });
+  assert.equal(tableRecord.found, true);
+  assert.equal(tableRecord.record.name, "sys_script_include");
+
+  const countResult = await client.countTable({
+    table: "sys_script_include",
+  });
+  assert.equal(countResult.table, "sys_script_include");
+  assert.equal(typeof countResult.count, "number");
+  assert.equal(countResult.source, "mock");
+
+  const plugins = await client.listInstancePlugins({ limit: 2, offset: 0 });
+  assert.equal(["v_plugin", "sys_plugins"].includes(plugins.table), true);
+  assert.equal(Array.isArray(plugins.records), true);
+});
+
+test("R2 script history and diff helpers return stable outputs", async () => {
+  const client = createMockClient();
+
+  const history = await client.listScriptIncludeHistory({
+    sysId: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+    limit: 5,
+    offset: 0,
+  });
+
+  assert.equal(history.script_sys_id, "9f2b2d3fdb001010a1b2c3d4e5f6a7b8");
+  assert.equal(Array.isArray(history.records), true);
+  assert.equal(history.records.length >= 1, true);
+
+  const diff = await client.diffScriptInclude({
+    sysId: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+  });
+
+  assert.equal(diff.script_sys_id, "9f2b2d3fdb001010a1b2c3d4e5f6a7b8");
+  assert.equal(typeof diff.changed_line_count, "number");
+  assert.equal(typeof diff.summary.has_changes, "boolean");
+  assert.equal(typeof diff.base_excerpt, "string");
+  assert.equal(typeof diff.target_excerpt, "string");
+});

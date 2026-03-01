@@ -243,6 +243,102 @@ export class ServiceNowClient {
     };
   }
 
+  async getTableRecord({ table, sysId, query = "", instanceKey } = {}) {
+    if (sysId) {
+      const response = await this.request({
+        method: "GET",
+        path: `/api/now/table/${table}/${sysId}`,
+        instanceKey,
+      });
+
+      return {
+        found: Boolean(response?.data?.result),
+        record: response?.data?.result || null,
+        query: {
+          table,
+          sys_id: sysId,
+          sysparm_query: query || "",
+        },
+      };
+    }
+
+    const page = await this.listTable({
+      table,
+      limit: 1,
+      offset: 0,
+      query,
+      instanceKey,
+    });
+
+    const record = page.records?.[0] || null;
+    return {
+      found: Boolean(record),
+      record,
+      query: {
+        table,
+        sys_id: null,
+        sysparm_query: query || "",
+      },
+    };
+  }
+
+  async countTable({ table, query = "", instanceKey } = {}) {
+    const response = await this.request({
+      method: "GET",
+      path: `/api/now/stats/${table}`,
+      query: {
+        sysparm_query: query,
+        sysparm_count: true,
+      },
+      instanceKey,
+    });
+
+    const rawCount =
+      response?.data?.result?.stats?.count ||
+      response?.data?.result?.count ||
+      response?.data?.result?.stats?.COUNT ||
+      0;
+
+    return {
+      table,
+      sysparm_query: query || "",
+      count: Number(rawCount) || 0,
+      source: this.isMockInstance(this.resolveInstance(instanceKey).instanceUrl) ? "mock" : "live",
+    };
+  }
+
+  async listInstancePlugins({ limit = 100, offset = 0, instanceKey } = {}) {
+    for (const table of PLUGIN_PROBE_TABLE_CANDIDATES) {
+      try {
+        const page = await this.listTable({
+          table,
+          limit,
+          offset,
+          instanceKey,
+        });
+        return {
+          table,
+          records: page.records,
+          page: page.page,
+        };
+      } catch {
+        // continue probe fallback
+      }
+    }
+
+    return {
+      table: PLUGIN_PROBE_TABLE_CANDIDATES[0],
+      records: [],
+      page: {
+        limit,
+        offset,
+        returned: 0,
+        has_more: false,
+        next_offset: null,
+      },
+    };
+  }
+
   async getInstanceInfo({ instanceKey } = {}) {
     const instance = this.resolveInstance(instanceKey);
     const descriptor = buildInstanceDescriptor(instance);
@@ -421,6 +517,86 @@ export class ServiceNowClient {
     return {
       updated: true,
       record: response?.data?.result || null,
+    };
+  }
+
+  async listScriptIncludeHistory({ sysId, limit = 20, offset = 0, instanceKey } = {}) {
+    const resolvedSysId = String(sysId || "").trim();
+    if (!resolvedSysId) {
+      return {
+        script_sys_id: null,
+        records: [],
+        page: {
+          limit,
+          offset,
+          returned: 0,
+          has_more: false,
+          next_offset: null,
+        },
+      };
+    }
+
+    const page = await this.listTable({
+      table: "sys_audit",
+      limit,
+      offset,
+      query: `tablename=sys_script_include^documentkey=${resolvedSysId}^fieldname=script^ORDERBYDESCsys_created_on`,
+      instanceKey,
+    });
+
+    return {
+      script_sys_id: resolvedSysId,
+      records: page.records,
+      page: page.page,
+    };
+  }
+
+  async diffScriptInclude({ sysId, baseVersion, targetVersion, instanceKey } = {}) {
+    const history = await this.listScriptIncludeHistory({
+      sysId,
+      limit: 50,
+      offset: 0,
+      instanceKey,
+    });
+
+    const records = history.records || [];
+    const base =
+      records.find((entry) => String(entry?.sys_id || "") === String(baseVersion || "")) ||
+      records[1] ||
+      null;
+    const target =
+      records.find((entry) => String(entry?.sys_id || "") === String(targetVersion || "")) ||
+      records[0] ||
+      null;
+
+    const baseScript = String(base?.oldvalue || base?.newvalue || "");
+    const targetScript = String(target?.newvalue || target?.oldvalue || "");
+
+    const beforeLines = baseScript.split("\n");
+    const afterLines = targetScript.split("\n");
+    let changedLineCount = 0;
+    const lineCount = Math.max(beforeLines.length, afterLines.length);
+    for (let i = 0; i < lineCount; i += 1) {
+      if ((beforeLines[i] || "") !== (afterLines[i] || "")) {
+        changedLineCount += 1;
+      }
+    }
+
+    return {
+      script_sys_id: String(sysId || "") || null,
+      base_version: base?.sys_id || null,
+      target_version: target?.sys_id || null,
+      changed_line_count: changedLineCount,
+      summary: {
+        has_changes: changedLineCount > 0,
+        base_chars: baseScript.length,
+        target_chars: targetScript.length,
+      },
+      base_excerpt: baseScript.slice(0, 4000),
+      target_excerpt: targetScript.slice(0, 4000),
+      limitations: [
+        "Diff output is summary-oriented and does not claim full semantic equivalence.",
+      ],
     };
   }
 
@@ -1106,6 +1282,132 @@ export class ServiceNowClient {
             { name: "com.glide.update_set" },
             { name: "com.glide.script.fencing" },
           ],
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/api/now/stats/")) {
+      const table = path.split("/api/now/stats/")[1] || "unknown";
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: {
+            stats: {
+              count: table === "sys_script_include" ? 2 : 3,
+            },
+          },
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_db_object")) {
+      const sampleTables = [
+        {
+          sys_id: "d1111111d2222222d3333333d4444444",
+          name: "incident",
+          label: "Incident",
+          super_class: "task",
+        },
+        {
+          sys_id: "d5555555d6666666d7777777d8888888",
+          name: "sys_script_include",
+          label: "Script Include",
+          super_class: "sys_metadata",
+        },
+      ];
+
+      const upperMethod = String(method).toUpperCase();
+      if (upperMethod === "GET" && /\/sys_db_object\/[a-z0-9]+$/i.test(path)) {
+        const sysId = path.split("/").pop();
+        const record = sampleTables.find((entry) => entry.sys_id === sysId);
+        if (!record) {
+          return Promise.reject({
+            code: "SN_RESOURCE_NOT_FOUND",
+            message: "No Record found",
+            status: 404,
+            status_text: "Not Found",
+            retriable: false,
+            details: {
+              instance: instance.instanceUrl,
+              path,
+              attempt: 1,
+            },
+          });
+        }
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: record,
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleTables;
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleTables.filter((entry) => entry.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_audit")) {
+      const sampleAudit = [
+        {
+          sys_id: "h1111111h2222222h3333333h4444444",
+          tablename: "sys_script_include",
+          documentkey: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          fieldname: "script",
+          oldvalue: "gs.info('v1');",
+          newvalue: "gs.info('v2');",
+          sys_created_on: "2026-03-01 01:00:00",
+          user: "admin",
+        },
+        {
+          sys_id: "h5555555h6666666h7777777h8888888",
+          tablename: "sys_script_include",
+          documentkey: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          fieldname: "script",
+          oldvalue: "gs.info('v0');",
+          newvalue: "gs.info('v1');",
+          sys_created_on: "2026-02-28 23:00:00",
+          user: "admin",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleAudit;
+      const documentMatch = sysparmQuery.match(/documentkey=([a-f0-9]{32})/i);
+      if (documentMatch) {
+        filtered = filtered.filter((entry) => entry.documentkey === documentMatch[1]);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
         },
         headers: {},
         attempt: 1,
