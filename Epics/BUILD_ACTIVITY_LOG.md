@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 02:29 PST
+Last Updated: 2026-03-01 02:43 PST
 
 ---
 
@@ -553,3 +553,21 @@ When work executes, append entries for:
 - **Reason:** Implemented deterministic update set capture verification reason codes and added dedicated Gate G4 validation harness.
 - **Evidence:** `src/index.js` (`sn.updateset.capture.verify`), `src/servicenow/client.js` (`verifyChangesetCapture`), `tests/script.tooling.test.js`, `scripts/test-g4-validation.js`, `package.json` (`test:g4`), `artifacts/g4-validation-summary.json`; runs: `npm test`, `npm run test:g4`.
 - **Next step:** Execute non-prod integration tests for end-to-end update set flow to complete Gate G4 exit criteria.
+
+### 2026-03-01 02:43 PST
+
+- **Item:** G4-INTEGRATION-LIVE-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added and executed non-prod live integration validation for update set flows to satisfy final Gate G4 exit criterion.
+- **Evidence:** `scripts/test-g4-integration-live.js`, `package.json` (`test:g4:live`), `artifacts/g4-integration-summary.json`; runs: `npm test`, `npm run test:g4`, `npm run test:g4:live`
+- **Next step:** Mark Gate G4 and Phase 4 as passed and proceed to Phase 5/6 execution queue.
+
+### 2026-03-01 02:43 PST
+
+- **Item:** G4
+- **Change:** `In Progress -> Passed`
+- **Owner:** Engineering
+- **Reason:** All Gate G4 checklist criteria are now complete, including non-prod integration validation for core update set flows.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `artifacts/g4-validation-summary.json`, `artifacts/g4-integration-summary.json`
+- **Next step:** Begin Phase 5 execution (`F4 -> F5 -> F6`) while continuing queued quality/integration work (`G2`).

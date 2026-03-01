@@ -15,6 +15,7 @@
 		"test:companion:live": "node scripts/test-companion-live.js",
 		"test:g2": "node scripts/test-g2-validation.js",
 		"test:g4": "node scripts/test-g4-validation.js",
+		"test:g4:live": "node scripts/test-g4-integration-live.js",
 		"test:live": "node scripts/test-live-connection.js",
 		"test:live:mcp": "node scripts/test-live-mcp-transport.js"
 	},

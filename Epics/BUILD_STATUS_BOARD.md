@@ -1,21 +1,21 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 02:28 PST
+Last Updated: 2026-03-01 02:43 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
 
 ## 1) Phase Progress Snapshot
 
-| Phase | Name                               | Status      | Progress | Notes                                                                                                                           |
-| ----- | ---------------------------------- | ----------- | -------: | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | Foundation + First Vertical Slice  | Done        |     100% | Gate G1 passed: E1 minimal (`sn.script.get` + validation summary) and first vertical-slice demo evidence captured               |
-| 2     | Validation MVP + Script Tooling    | Done        |     100% | Gate G2 passed: validation runtime/rulepack, script tooling E2E, and unit coverage completed                                    |
-| 3     | Optional Companion Authority Pilot | Done        |     100% | Phase B optional capability: companion health/version contract + authoritative ACL path + dual-mode degraded behavior validated |
-| 4     | Update Set MVP                     | In Progress |      70% | F1/F2/F3 complete with unit+smoke+Gate G4 validation evidence; remaining exit item is non-prod integration flow validation      |
-| 5     | Commit + Rollback Planning         | Backlog     |       0% | Dependent on Phase 4 readiness                                                                                                  |
-| 6     | Flows + Workflows Coverage         | Backlog     |       0% | Dependent on core validation maturity                                                                                           |
-| 7     | Enterprise Hardening               | Backlog     |       0% | Final hardening and release prep                                                                                                |
+| Phase | Name                               | Status  | Progress | Notes                                                                                                                           |
+| ----- | ---------------------------------- | ------- | -------: | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Foundation + First Vertical Slice  | Done    |     100% | Gate G1 passed: E1 minimal (`sn.script.get` + validation summary) and first vertical-slice demo evidence captured               |
+| 2     | Validation MVP + Script Tooling    | Done    |     100% | Gate G2 passed: validation runtime/rulepack, script tooling E2E, and unit coverage completed                                    |
+| 3     | Optional Companion Authority Pilot | Done    |     100% | Phase B optional capability: companion health/version contract + authoritative ACL path + dual-mode degraded behavior validated |
+| 4     | Update Set MVP                     | Done    |     100% | Gate G4 passed: F1/F2/F3 complete and non-prod integration validation completed (`npm run test:g4:live`)                        |
+| 5     | Commit + Rollback Planning         | Backlog |       0% | Dependent on Phase 4 readiness                                                                                                  |
+| 6     | Flows + Workflows Coverage         | Backlog |       0% | Dependent on core validation maturity                                                                                           |
+| 7     | Enterprise Hardening               | Backlog |       0% | Final hardening and release prep                                                                                                |
 
 ---
 
@@ -28,7 +28,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | EPIC-C  | Optional Companion Authority        | SN Dev  | Done        | 2026-03-01 | 2026-03-01 |     100% | EPIC-B                    |
 | EPIC-D  | Validation Engine & Rulepacks       | Eng     | Done        | 2026-02-28 | 2026-02-28 |     100% | EPIC-A, EPIC-B            |
 | EPIC-E  | Developer Artifact Tooling          | Eng     | In Progress | 2026-02-28 | TBD        |      55% | EPIC-B, EPIC-D            |
-| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      55% | EPIC-E (baseline), EPIC-C |
+| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      60% | EPIC-E (baseline), EPIC-C |
 | EPIC-G  | Quality Engineering & Test Strategy | Eng/QA  | In Progress | 2026-02-28 | TBD        |      10% | Core feature completeness |
 | EPIC-H  | Enterprise Hardening                | Eng/Sec | Backlog     | TBD        | TBD        |       0% | EPIC-A..G maturity        |
 
@@ -94,6 +94,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - F2 — Gap detection delivered: `sn.changeset.gaps` with confidence-tier outputs (`hard_dependencies`, `soft_dependencies`, `heuristic_candidates`) and evidence-backed reason codes
 - F3 — Capture verification delivered: `sn.updateset.capture.verify` with deterministic reason codes (`CAPTURED_IN_TARGET_SET`, `CAPTURED_IN_DIFFERENT_SET`, `NOT_CAPTURED`)
 - G4 validation harness added: `scripts/test-g4-validation.js` + `npm run test:g4` and `artifacts/g4-validation-summary.json`
+- G4 non-prod integration validation completed: `scripts/test-g4-integration-live.js` + `npm run test:g4:live` and `artifacts/g4-integration-summary.json`
 
 ---
 

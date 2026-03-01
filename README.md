@@ -4,7 +4,7 @@ A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that en
 
 This repository delivers:
 
-- **MCP Server (TypeScript)**: tool registry, tier enforcement, policy engine, validation engine, audit logs
+- **MCP Server (JavaScript runtime, TS-aligned architecture)**: tool registry, tier enforcement, policy engine, validation engine, audit logs
 - **Discovery-first ACL tracing (default)**: companion-optional baseline that works without companion deployment
 - **Optional Companion integration**: scoped or global pilot mode for authoritative ACL evaluation when explicitly enabled
 - **Rulepacks**: versioned best-practice and governance validations
@@ -186,6 +186,16 @@ npm run test:g4
 Machine-readable report is generated at:
 
 - `artifacts/g4-validation-summary.json`
+
+Run the non-prod live integration validation used for final Gate G4 exit evidence:
+
+```bash
+npm run test:g4:live
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g4-integration-summary.json`
 
 ### Connectivity Diagnostics (Gate G1 Evidence)
 

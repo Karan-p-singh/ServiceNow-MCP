@@ -1,0 +1,466 @@
+{
+  "generated_at": "2026-03-01T10:44:19.023Z",
+  "gate": "G4",
+  "validation_type": "non_prod_live_integration",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "G4-LIVE-F1-LIST",
+      "label": "Live changeset listing is reachable",
+      "passed": true
+    },
+    {
+      "id": "G4-LIVE-F1-GET",
+      "label": "Live changeset get by sys_id resolves a record",
+      "passed": true
+    },
+    {
+      "id": "G4-LIVE-F1-CONTENTS",
+      "label": "Live changeset contents endpoint is reachable",
+      "passed": true
+    },
+    {
+      "id": "G4-LIVE-F1-EXPORT",
+      "label": "Live changeset export metadata is generated",
+      "passed": true
+    },
+    {
+      "id": "G4-LIVE-F2",
+      "label": "Live gap detection returns confidence-tier buckets",
+      "passed": true
+    },
+    {
+      "id": "G4-LIVE-F3",
+      "label": "Live capture verification returns deterministic reason code",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "instance_url": "https://dev317439.service-now.com/",
+    "default_instance": "default",
+    "selected_changeset_sys_id": "8c1fa566839f321071f3cbb6feaad382",
+    "contents_returned": 0,
+    "gap_counts": {
+      "hard": 0,
+      "soft": 0,
+      "heuristic": 0
+    },
+    "capture_verify": {
+      "input": {
+        "table": "sys_script_include",
+        "sys_id": "ffffffffffffffffffffffffffffffff",
+        "changeset_sys_id": "8c1fa566839f321071f3cbb6feaad382"
+      },
+      "output": {
+        "table": "sys_script_include",
+        "sys_id": "ffffffffffffffffffffffffffffffff",
+        "changeset_sys_id": "8c1fa566839f321071f3cbb6feaad382",
+        "captured": true,
+        "captured_in_target_set": false,
+        "reason_code": "CAPTURED_IN_DIFFERENT_SET",
+        "evidence": [
+          {
+            "sys_update_xml": "01555307a8e2c2c456ac82b0eb56aafd",
+            "name": "sys_ws_definition_x_mcp_companion",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/4a3f5ac080828e12244eba04602e68e7",
+              "value": "4a3f5ac080828e12244eba04602e68e7"
+            }
+          },
+          {
+            "sys_update_xml": "03a635158362321071f3cbb6feaad3c6",
+            "name": "sys_properties_61a635158362321071f3cbb6feaad393",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "054b1f64834b321071f3cbb6feaad3c2",
+            "name": "sn_cmp_rb_op_impl_step_94c936b3d722220097eb6ccf6e610321",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "054b1f64834b321071f3cbb6feaad3e4",
+            "name": "sn_cmp_rb_op_impl_step_37f9c4ba9f44320048111f80a57fcffc",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "05637ceb8383321071f3cbb6feaad3ca",
+            "name": "sys_ui_section_456330ab8383321071f3cbb6feaad3db",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "05e3f5d18322321071f3cbb6feaad38c",
+            "name": "sys_properties_3ce3b5d18322321071f3cbb6feaad334",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "06c5f9518362321071f3cbb6feaad3fb",
+            "name": "sys_properties_8cf4180d1b67300079a61682bf0713d8",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "07b3fd118322321071f3cbb6feaad32d",
+            "name": "ais_search_profile_b8bc699a67621010b3d782f45685efa5",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "07b3fd118322321071f3cbb6feaad3bf",
+            "name": "ais_search_profile_fd6491cb53171010069addeeff7b123f",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0832d8ee48e572108bb2a3a8cef7974c",
+            "name": "sys_ux_composite_data_template_5a2d4ec6ff4622108df0ffffffffffd8",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "08345ca64861b2108bb2a3a8cef7978c",
+            "name": "sys_properties_b3245ca64861b2108bb2a3a8cef79704",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "094b1f64834b321071f3cbb6feaad3cd",
+            "name": "sn_cmp_rb_op_impl_step_3cd5d5840b3532003969a387b6673a01",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "094b1f64834b321071f3cbb6feaad3fa",
+            "name": "sn_cmp_rb_op_impl_step_8d915858877043008de7483cf6cb0b39",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "094b5f64834b321071f3cbb6feaad31c",
+            "name": "sn_cmp_rb_op_impl_step_7ae6c0ba9f44320048111f80a57fcfaf",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0a22142e48e572108bb2a3a8cef797a5",
+            "name": "sys_security_acl_0527cdceb7522010eeafbc16de11a970",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0bb3fd118322321071f3cbb6feaad332",
+            "name": "ais_search_profile_bd568e85772300102d71af6168106198",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0c23d0a2486d72108bb2a3a8cef79734",
+            "name": "sn_sow_cfg_stg_ed94472343041210907f7ebba7b8f207",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0c321cee48e572108bb2a3a8cef7977b",
+            "name": "sys_ux_composite_data_template_880e464aff4622108df0ffffffffff03",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0c84f5518322321071f3cbb6feaad38c",
+            "name": "pwd_process_c6b0c20667100200a5a0f3b457415ad5",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0dd198ae486572108bb2a3a8cef79745",
+            "name": "sc_cat_item_producer_51b5d9170a0a0b0c00b519afdeb51697",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0e22542e48e572108bb2a3a8cef797c6",
+            "name": "sys_security_acl_fb2ac596c0a8ce0100c1eabe1095f34f",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0ecec57883133a1071f3cbb6feaad3fd",
+            "name": "sys_app_module_f93e053883133a1071f3cbb6feaad315",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0fb3fd118322321071f3cbb6feaad302",
+            "name": "ais_search_profile_aaf568f6c32230100f24c87af040dd16",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "0fb5b5518362321071f3cbb6feaad3a1",
+            "name": "sys_properties_b6b575518362321071f3cbb6feaad38c",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "10019822482172108bb2a3a8cef7972b",
+            "name": "sys_analytics_bucket_18019822482172108bb2a3a8cef79726",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1235f9dd8322321071f3cbb6feaad36a",
+            "name": "sys_properties_8fc888b2d77311004f6a0eca5e6103e6",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "147154ee48e172108bb2a3a8cef797a4",
+            "name": "sys_search_context_config_52d4697943a151103084a921eab8f2d9",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "14df0ce1836a721071f3cbb6feaad387",
+            "name": "sys_properties_48df0ce1836a721071f3cbb6feaad311",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1551582648e172108bb2a3a8cef79778",
+            "name": "iamsync_type_f299a0c4ebb35110bd1e0c73a2522840",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "15df8ce1836a721071f3cbb6feaad377",
+            "name": "sys_properties_cddf8ce1836a721071f3cbb6feaad31b",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "16aeb9118326321071f3cbb6feaad33e",
+            "name": "sys_db_object_7b3e0c2e486d32108bb2a3a8cef79740",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "16d2546a48e972108bb2a3a8cef797a4",
+            "name": "sys_script_980f295247b2e1503fbe9e25126d432f",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "187154ee48e172108bb2a3a8cef797fa",
+            "name": "sys_search_context_config_7296910f53171010069addeeff7b12e7",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "187194ee48e172108bb2a3a8cef79701",
+            "name": "sys_search_context_config_81d0f85673032300c342d5fdbdf6a7b2",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "193539dd8322321071f3cbb6feaad3fa",
+            "name": "sys_properties_13015ea1ff230200c25fffffffffffa1",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1aaeb9118326321071f3cbb6feaad376",
+            "name": "sys_documentation_sn_glider_ide_sync_job_queue_application_en",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1b7471518322321071f3cbb6feaad3c3",
+            "name": "sys_properties_a0a13a03779a1110cd1b756f1b5a9958",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1bc5c0e4837a321071f3cbb6feaad3b2",
+            "name": "sys_upgrade_plan_item_1bc5c0e4837a321071f3cbb6feaad37a",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1c01d822482172108bb2a3a8cef79741",
+            "name": "sys_analytics_bucket_dc01d822482172108bb2a3a8cef7973e",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1c32dcee48e572108bb2a3a8cef7975a",
+            "name": "sys_ux_composite_data_template_2f2a2502ffc222108df0ffffffffffb1",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1c7154ee48e172108bb2a3a8cef79753",
+            "name": "sys_search_context_config_492f958dc30101103f4fcd7b7940dd2a",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1dfb0da583a2b21071f3cbb6feaad3e1",
+            "name": "sys_choice_sam_sw_product_lifecycle_report_current_lifecycle_phase",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1dfb4da583a2b21071f3cbb6feaad31b",
+            "name": "sys_choice_sam_sw_product_lifecycle_report_upcoming_lifecycle_phase",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1e241ca64861b2108bb2a3a8cef79747",
+            "name": "sys_properties_f424d8a64861b2108bb2a3a8cef79772",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "1fb0582e48ed32108bb2a3a8cef79771",
+            "name": "sys_user_role_contains_53b0582e48ed32108bb2a3a8cef7975a",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "20c679158362321071f3cbb6feaad38d",
+            "name": "sysevent_script_action_d03a69980fe53300b717be630b767e18",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "20d471598322321071f3cbb6feaad30f",
+            "name": "sys_properties_f6c431598322321071f3cbb6feaad368",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "218b92dd83a6321071f3cbb6feaad3d4",
+            "name": "sys_documentation_sn_table_builder_positioning_table_scope_id_en",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "22e4f9d98322321071f3cbb6feaad3cf",
+            "name": "sys_properties_9841c7e353003010930dddeeff7b1204",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          },
+          {
+            "sys_update_xml": "22fd97e883cb321071f3cbb6feaad3c6",
+            "name": "sys_security_acl_9a8515743b97da101a62e0d024e45a1b",
+            "update_set": {
+              "link": "https://dev317439.service-now.com/api/now/table/sys_update_set/d755c066486532108bb2a3a8cef79742",
+              "value": "d755c066486532108bb2a3a8cef79742"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

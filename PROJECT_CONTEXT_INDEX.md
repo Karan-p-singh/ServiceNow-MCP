@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 02:19 PST
+Last Updated: 2026-03-01 02:43 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -70,9 +70,10 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 - `scripts/test-live-connection.js` → expanded live instance diagnostics matrix (auth, stats, metadata, script read, failure classification)
 - `scripts/test-live-mcp-transport.js` → MCP transport/runtime verification (`GET /mcp`, JSON-RPC initialize/list/call)
+- `scripts/test-g4-integration-live.js` → non-prod live Gate G4 integration validation for update set flow exit evidence
 - `scripts/deploy-companion-update-set.js` → Optional companion deployment helper with strict scope invariants (not required for baseline runtime)
 - `scripts/test-companion-live.js` → Optional companion live endpoint verification for scoped/global pilot modes
-- `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`
+- `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`, `npm run test:g4:live`
 
 ---
 
@@ -98,6 +99,6 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
 - Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
 - **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
-- EPIC-F has started with **F1 complete** (`sn.changeset.list/get/contents/export`) and Gate G4 now in progress.
-- Next queued stories are **F2, F3, E4**.
+- EPIC-F has **F1/F2/F3 complete** and Gate G4 is now **Passed** with non-prod live integration evidence (`artifacts/g4-integration-summary.json`).
+- Next queued stories are **E4, F4, G2** (with Phase 5 planning active after G4 pass).
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-03-01 02:29 PST
+Last Updated: 2026-03-01 02:42 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -12,7 +12,7 @@ Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 | M1           | Phase 1 Exit — Foundation Slice                  | Week 2        | Passed      | Engineering            |
 | M2           | Phase 2 Exit — Validation MVP + Script E2E       | Week 5        | Passed      | Engineering            |
 | M3           | Phase 3 Exit — Optional Companion ACL Authority  | Week 8        | Passed      | Engineering + SN Dev   |
-| M4           | Phase 4 Exit — Update Set MVP                    | Week 12       | In Progress | Engineering            |
+| M4           | Phase 4 Exit — Update Set MVP                    | Week 12       | Passed      | Engineering            |
 | M5           | Phase 5 Exit — Controlled Commit + Rollback Plan | Week 16       | Not Started | Engineering            |
 | M6           | Phase 6 Exit — Flow/Workflow Coverage            | Week 20       | Not Started | Engineering            |
 | M7           | Phase 7 Exit — Enterprise Readiness              | Week 24       | Not Started | Engineering + Security |
@@ -78,12 +78,12 @@ Status: `Passed`
 
 ## Gate G4 — Update Set MVP (M4)
 
-Status: `In Progress`
+Status: `Passed`
 
 - [x] F1 complete: list/get/contents/export
 - [x] F2 complete: confidence-tier gap detection with evidence
 - [x] F3 complete: capture verification with deterministic reason codes
-- [ ] Integration tests for core update set flows in non-prod instance
+- [x] Integration tests for core update set flows in non-prod instance
 
 ## Gate G5 — Commit/Rollback Planning (M5)
 
@@ -141,3 +141,4 @@ Status: `Not Started`
 | 2026-03-01 | G3   | At Risk     | Deployment automation now enforces scope-bootstrap + scoped-update only (no global artifact create path). Current state is blocked on recreating companion role/includes/REST records in true `x_mcp_companion` scope.                                |
 | 2026-03-01 | G4   | In Progress | F1 changeset read tooling completed (`sn.changeset.list/get/contents/export`) with pagination-aware client support, smoke registration evidence, and unit test coverage; moving to F2/F3 for Gate G4 exit.                                            |
 | 2026-03-01 | G4   | In Progress | F2/F3 delivered: `sn.changeset.gaps` and `sn.updateset.capture.verify` added with deterministic confidence/reason contracts, validated by `npm test`, smoke, and `npm run test:g4`; remaining exit criterion is non-prod integration flow validation. |
+| 2026-03-01 | G4   | Passed      | Added and executed non-prod live integration validation (`npm run test:g4:live`) with passing evidence artifact `artifacts/g4-integration-summary.json`; all Gate G4 checklist criteria now complete.                                                 |
