@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-03-01 05:22 PST
+Last Updated: 2026-03-01 05:46 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -118,9 +118,9 @@ Status: `Passed`
 Status: `In Progress`
 
 - [x] R0 artifact exists: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
-- [x] Runtime implemented baseline documented (`25` tools)
-- [ ] Runtime and matrix counts reconciled on every release-candidate cut
-- [ ] R1/D5 `sn.validate.*` family moved from planned to implemented with runtime evidence
+- [x] Runtime implemented baseline documented (`33` tools)
+- [x] Runtime and matrix counts reconciled on every release-candidate cut
+- [x] R1/D5 `sn.validate.*` family moved from planned to implemented with runtime evidence
 - [ ] R2 parity clusters completed with runtime registration evidence
 - [ ] R3 `sn.atf.coverage_signals` implemented with non-overclaim contract language
 - [ ] R4 rollback snapshot family implemented (`sn.rollback.snapshot.create` and related tools)
@@ -169,3 +169,4 @@ Operational cadence for release-claim integrity:
 | 2026-03-01 | G6   | Passed      | Delivered flow/workflow parity (`sn.flow.*`, `sn.workflow.*`) plus rulepack-backed validation coverage (`flows-v1`, `workflows-v1`); evidence captured via `npm run test:g6` and `artifacts/g6-validation-summary.json`.                                                                                                                                                         |
 | 2026-03-01 | G7   | Passed      | Completed enterprise readiness scope: EPIC-G quality harnesses (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`) + EPIC-H hardening (`audit webhook`, `tool bundles/profiles`) + docs pack (`SECURITY_MODEL_AND_GOVERNANCE`, `ADMIN_RUNBOOK`, `RELEASE_READINESS_G7_CHECKLIST`); gate evidence captured via `npm run test:g7` and `artifacts/g7-readiness-summary.json`. |
 | 2026-03-01 | G7   | Passed      | Documentation integrity pass completed (H5): governance and operations Markdown now consistently enforce non-overclaim contract language, implemented-vs-planned tool boundaries, and companion-as-optional pilot positioning aligned with Architecture v2 + Validation Addendum.                                                                                                |
+| 2026-03-01 | G8   | In Progress | Completed R1/D5 implementation evidence sync: full `sn.validate.*` family now runtime-registered, matrix status moved to implemented, and runtime/matrix counts reconciled to `33/101` via `npm run smoke:summary`.                                                                                                                                                                  |

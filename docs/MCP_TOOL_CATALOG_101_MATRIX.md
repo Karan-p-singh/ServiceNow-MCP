@@ -1,6 +1,6 @@
 # MCP Tool Catalog — 101 Matrix (Authoritative Program Tracker)
 
-Last Updated: 2026-03-01 05:21 PST  
+Last Updated: 2026-03-01 05:41 PST  
 Owner: Engineering + Product Architecture  
 Status: Active (R0 catalog lock complete; G8 integrity execution in progress)
 
@@ -22,15 +22,15 @@ No document should claim 100+ tool availability unless this matrix and runtime e
 
 ## 2) Baseline Counts (Current)
 
-- Runtime-registered tools (implemented): **25**
+- Runtime-registered tools (implemented): **33**
 - v2 catalog target: **101**
-- Remaining to reach full catalog: **76**
+- Remaining to reach full catalog: **68**
 
 Family status snapshot:
 
 - Core/platform + governance: 3 implemented / 18 planned
 - Script tooling: 7 implemented / 14 planned
-- Validation addendum family (`sn.validate.*`): 0 implemented / 8 planned
+- Validation addendum family (`sn.validate.*`): 8 implemented / 0 planned
 - Changeset/updateset/rollback: 9 implemented / 15 planned
 - Flow/workflow: 6 implemented / 10 planned
 - ATF/quality: 0 implemented / 6 planned
@@ -91,14 +91,14 @@ Legend:
 |  41 | `sn.dependency.graph.get`         | dev     | T0   | Planned     | R2               | Dependency mapping expansion               | Eng      |
 |  42 | `sn.release.compatibility.check`  | dev     | T0   | Planned     | R2               | Release-aware guardrails                   | Eng      |
 |  43 | `sn.logs.tail`                    | dev     | T1   | Planned     | R6               | Ops diagnostics w/ governance              | Eng/Sec  |
-|  44 | `sn.validate.script_include`      | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  45 | `sn.validate.business_rule`       | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  46 | `sn.validate.client_script`       | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  47 | `sn.validate.ui_script`           | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  48 | `sn.validate.flow`                | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  49 | `sn.validate.workflow`            | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  50 | `sn.validate.catalog_policy`      | dev     | T0   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
-|  51 | `sn.validate.fix`                 | dev     | T1   | Planned     | R1 (D5)          | Validation addendum                        | Eng      |
+|  44 | `sn.validate.script_include`      | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  45 | `sn.validate.business_rule`       | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  46 | `sn.validate.client_script`       | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  47 | `sn.validate.ui_script`           | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  48 | `sn.validate.flow`                | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  49 | `sn.validate.workflow`            | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  50 | `sn.validate.catalog_policy`      | dev     | T0   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
+|  51 | `sn.validate.fix`                 | dev     | T1   | Implemented | R1 (D5)          | `src/index.js`, `npm run smoke:summary`    | Eng      |
 |  52 | `sn.script.diff`                  | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
 |  53 | `sn.script.history`               | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |
 |  54 | `sn.script.compare`               | dev     | T0   | Planned     | R2               | Script parity expansion                    | Eng      |

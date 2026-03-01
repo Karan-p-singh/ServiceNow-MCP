@@ -1,10 +1,11 @@
 const RULEPACK_ID = "scripts-v1";
 const RULEPACK_VERSION = "1.0.0";
 
-function buildFinding({ id, severity, message, evidence = [] }) {
+function buildFinding({ id, severity, category, message, evidence = [] }) {
   return {
     id,
     severity,
+    category,
     message,
     evidence,
   };
@@ -29,6 +30,7 @@ export function evaluateScriptRulepackV1({ script = "", record = {} } = {}) {
       buildFinding({
         id: "SCRIPT_EVAL_USAGE",
         severity: "CRITICAL",
+        category: "SECURITY",
         message: "Avoid eval(); use safer parsing/execution alternatives.",
         evidence: [{ type: "line", line: lineIndex + 1 }],
       }),
@@ -42,6 +44,7 @@ export function evaluateScriptRulepackV1({ script = "", record = {} } = {}) {
       buildFinding({
         id: "SCRIPT_GLIDERECORD_USAGE",
         severity: "HIGH",
+        category: "PERFORMANCE",
         message: "GlideRecord usage detected; verify query constraints and performance impacts.",
         evidence: [{ type: "line", line: lineIndex + 1 }],
       }),
@@ -54,6 +57,7 @@ export function evaluateScriptRulepackV1({ script = "", record = {} } = {}) {
       buildFinding({
         id: "SCRIPT_LONG_BODY",
         severity: "MEDIUM",
+        category: "BEST_PRACTICE",
         message: "Script body exceeds 200 lines; consider decomposition.",
         evidence: [{ type: "metric", key: "line_count", value: lineCount }],
       }),
@@ -65,6 +69,7 @@ export function evaluateScriptRulepackV1({ script = "", record = {} } = {}) {
       buildFinding({
         id: "SCRIPT_MISSING_DESCRIPTION",
         severity: "LOW",
+        category: "BEST_PRACTICE",
         message: "Script include is missing description metadata.",
       }),
     );

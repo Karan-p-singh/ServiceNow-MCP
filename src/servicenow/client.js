@@ -1250,6 +1250,183 @@ export class ServiceNowClient {
       });
     }
 
+    if (path.includes("/sys_script_client")) {
+      const sampleClientScripts = [
+        {
+          sys_id: "c1111111c2222222c3333333c4444444",
+          name: "x_demo_client_script",
+          script: "function onLoad(){ var gr = new GlideRecord('incident'); gr.query(); }",
+          description: "Mock client script",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleClientScripts;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleClientScripts.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleClientScripts.filter((record) => record.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_ui_script")) {
+      const sampleUiScripts = [
+        {
+          sys_id: "u1111111u2222222u3333333u4444444",
+          name: "x_demo_ui_script",
+          script: "function run(input){ return eval(input); }",
+          description: "Mock UI script with critical pattern",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleUiScripts;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleUiScripts.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleUiScripts.filter((record) => record.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_script_fix")) {
+      const sampleFixScripts = [
+        {
+          sys_id: "f1111111x2222222x3333333x4444444",
+          name: "x_demo_fix_script",
+          script: "var gr = new GlideRecord('incident'); gr.query();",
+          description: "Mock fix script",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleFixScripts;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleFixScripts.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleFixScripts.filter((record) => record.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_script")) {
+      const sampleBusinessRules = [
+        {
+          sys_id: "b1111111b2222222b3333333b4444444",
+          name: "x_demo_business_rule",
+          condition: "current.active == true",
+          script: "if (current.short_description) { gs.info(current.short_description); }",
+          description: "Mock business rule",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleBusinessRules;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleBusinessRules.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleBusinessRules.filter((record) => record.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/catalog_ui_policy")) {
+      const sampleCatalogPolicies = [
+        {
+          sys_id: "p1111111p2222222p3333333p4444444",
+          name: "x_demo_catalog_policy",
+          script_true: "if (g_form.getValue('short_description')) { g_form.setMandatory('category', true); }",
+          script_false: "g_form.setMandatory('category', false);",
+          description: "Mock catalog policy",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleCatalogPolicies;
+      if (sysparmQuery.startsWith("sys_id=")) {
+        const target = sysparmQuery.replace("sys_id=", "");
+        filtered = sampleCatalogPolicies.filter((record) => record.sys_id === target);
+      }
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleCatalogPolicies.filter((record) => record.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
     if (path.includes("/sys_update_set")) {
       const sampleChangesets = [
         {

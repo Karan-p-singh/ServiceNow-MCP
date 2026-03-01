@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 05:22 PST
+Last Updated: 2026-03-01 05:52 PST
 
 ---
 
@@ -778,3 +778,21 @@ When work executes, append entries for:
 - **Reason:** Completed post-R0 documentation synchronization for operational/security/readiness and companion boundaries so 101-tool claims consistently follow runtime-first evidence and implemented-vs-planned language.
 - **Evidence:** `docs/ADMIN_RUNBOOK.md`, `docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`, `companion-app/README.md`, `docs/MCP_TOOL_CATALOG_101_MATRIX.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`
 - **Next step:** Execute release-candidate cadence (`smoke:summary`, `test:g4:ci`, `test:g7`) and move R1/D5 planned tools toward implemented evidence.
+
+### 2026-03-01 05:48 PST
+
+- **Item:** R1-D5-VALIDATION-FAMILY-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Completed runtime + governance synchronization for Validation Addendum expansion by moving full `sn.validate.*` family to implemented status, reconciling runtime/matrix tool counts, and updating epic/PRD/runbook/readiness/context documentation to the same implemented-vs-planned truth set.
+- **Evidence:** `src/index.js`, `src/validation/engine.js`, `src/validation/rulepacks/scripts-v1.js`, `src/servicenow/client.js`, `tests/validation.engine.test.js`, `tests/tooling.policy.test.js`, `docs/MCP_TOOL_CATALOG_101_MATRIX.md`, `README.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `Project PRD/PRD_ServiceNow_MCP_Server.md`, `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md`, `docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/ADMIN_RUNBOOK.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`, `PROJECT_CONTEXT_INDEX.md`; runtime evidence: `npm run smoke:summary` (`33` tools registered).
+- **Next step:** Refresh fixture/CI gate evidence (`test:g3:fixtures`, `test:g4:ci`, `test:g7`) and continue R2 parity cluster implementation.
+
+### 2026-03-01 05:52 PST
+
+- **Item:** G8-REVALIDATION-CADENCE-1
+- **Change:** `Planned -> Done`
+- **Owner:** Engineering
+- **Reason:** Completed post-R1/D5 revalidation cadence to refresh quality and enterprise readiness evidence after fixture update and documentation synchronization.
+- **Evidence:** `npm run test:g4:ci`, `npm run test:g7`, `artifacts/g4-ci-quality-summary.json`, `artifacts/g7-readiness-summary.json`, `artifacts/g3-fixtures-summary.json`.
+- **Next step:** Proceed with R2 dev parity cluster implementation while maintaining release-candidate claim-integrity cadence.

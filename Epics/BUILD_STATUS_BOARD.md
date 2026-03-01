@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 05:22 PST
+Last Updated: 2026-03-01 05:44 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -40,11 +40,11 @@ Source of truth: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 
 | Metric                             |   Value |
 | ---------------------------------- | ------: |
-| Runtime implemented tools          |      25 |
+| Runtime implemented tools          |      33 |
 | v2 target catalog                  |     101 |
-| Remaining tools                    |      76 |
+| Remaining tools                    |      68 |
 | Catalog lock artifact (R0)         |    Done |
-| Validation addendum family (R1/D5) | Pending |
+| Validation addendum family (R1/D5) |    Done |
 | Dev parity clusters (R2)           | Pending |
 | ATF signal track (R3)              | Pending |
 | Rollback snapshot maturity (R4)    | Pending |
@@ -73,7 +73,6 @@ Operational integrity cadence (required for release claims):
 
 - C3 — Scope/capture helper endpoints
 - D4 — Rulepack and gating governance
-- D5 — Validation addendum expansion (`sn.validate.*` + cross-cutting rule coverage)
 
 ## Blocked
 
@@ -121,6 +120,8 @@ Operational integrity cadence (required for release claims):
 - E4 — Flow tooling parity delivered: `sn.flow.list`, `sn.flow.get`, `sn.flow.validate`
 - E5 — Workflow tooling parity delivered: `sn.workflow.list`, `sn.workflow.get`, `sn.workflow.validate`
 - D coverage expanded: added flow/workflow rulepack-backed validation summaries (`flows-v1`, `workflows-v1`)
+- D5 — Validation addendum expansion completed: `sn.validate.script_include`, `sn.validate.business_rule`, `sn.validate.client_script`, `sn.validate.ui_script`, `sn.validate.flow`, `sn.validate.workflow`, `sn.validate.catalog_policy`, `sn.validate.fix`
+- R1 catalog reconciliation completed: runtime and matrix now aligned at `33/101` after `npm run smoke:summary`
 - G5 validation harness added: `scripts/test-g5-validation.js` + `npm run test:g5` and `artifacts/g5-validation-summary.json`
 - G6 validation harness added: `scripts/test-g6-validation.js` + `npm run test:g6` and `artifacts/g6-validation-summary.json`
 - G4 validation harness added: `scripts/test-g4-validation.js` + `npm run test:g4` and `artifacts/g4-validation-summary.json`
@@ -141,13 +142,13 @@ Operational integrity cadence (required for release claims):
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. R1/D5 — Deliver full validation addendum tool family (`sn.validate.*`) and rule category expansion
-2. R2 — Close Dev Edition missing tool clusters (metadata/diagnostics/tool parity)
-3. R3 — Implement ATF suite + `sn.atf.coverage_signals` evidence contract
-4. R4 — Add `sn.rollback.snapshot.create` and complete rollback trio cohesion
-5. R2 — Add remaining changeset/record/property parity tools from v2 Dev catalog
-6. R5 — Begin ITSM/Admin Edition track (strictly separated by edition policy)
-7. R6 — Add docs/runtime drift guards and catalog-claim CI checks
-8. Catalog reconciliation cadence — sync `smoke:summary` with 101 matrix before release claims
-9. Companion pilot hardening closure (optional/deprioritized track only)
-10. Release packaging + final v2 catalog proof artifacts
+1. R2 — Close Dev Edition missing tool clusters (metadata/diagnostics/tool parity)
+2. R3 — Implement ATF suite + `sn.atf.coverage_signals` evidence contract
+3. R4 — Add `sn.rollback.snapshot.create` and complete rollback trio cohesion
+4. R2 — Add remaining changeset/record/property parity tools from v2 Dev catalog
+5. R5 — Begin ITSM/Admin Edition track (strictly separated by edition policy)
+6. R6 — Add docs/runtime drift guards and catalog-claim CI checks
+7. Catalog reconciliation cadence — keep `smoke:summary` synchronized with 101 matrix before release claims
+8. Companion pilot hardening closure (optional/deprioritized track only)
+9. Release packaging + final v2 catalog proof artifacts
+10. Rulepack governance suppression controls (D4) with auditable policy contract

@@ -98,7 +98,7 @@ Security guidance:
 
 For tool-count claims, security governance requires evidence-backed documentation synchronization.
 
-- Current baseline: **25 implemented / 101 target / 76 remaining**.
+- Current baseline: **33 implemented / 101 target / 68 remaining**.
 - Planned tools are roadmap commitments, not runtime-enabled capabilities.
 - Companion pilot enablement does not, by itself, increase implemented runtime tool count.
 

@@ -11,6 +11,7 @@ const TOOL_TO_BUNDLE = [
   { exact: "sn.instance.info", bundle: "dev_core" },
   { exact: "sn.table.list", bundle: "dev_core" },
   { exact: "sn.acl.trace", bundle: "dev_core" },
+  { prefix: "sn.validate.", bundle: "dev_validation" },
   { prefix: "sn.script.", bundle: "dev_validation" },
   { prefix: "sn.flow.", bundle: "dev_validation" },
   { prefix: "sn.workflow.", bundle: "dev_validation" },

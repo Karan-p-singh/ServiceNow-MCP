@@ -19,7 +19,7 @@
 
 - Canonical tool-count and per-tool status tracker: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 - Runtime verification command for implemented tools: `npm run smoke:summary`
-- Current baseline: **25 implemented / 101 target / 76 remaining**
+- Current baseline: **33 implemented / 101 target / 68 remaining**
 
 Before any 100+ tool readiness claim, reconcile:
 

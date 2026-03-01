@@ -6,8 +6,13 @@ import { MCPServer } from "./server/mcp.js";
 import { CompanionClient } from "./servicenow/companion-client.js";
 import { ServiceNowClient } from "./servicenow/client.js";
 import {
+  evaluateBusinessRuleValidation,
+  evaluateCatalogPolicyValidation,
+  evaluateClientScriptValidation,
+  evaluateFixValidation,
   evaluateFlowValidation,
   evaluateScriptValidation,
+  evaluateUiScriptValidation,
   evaluateWorkflowValidation,
   evaluateWriteGate,
 } from "./validation/engine.js";
@@ -47,6 +52,42 @@ function buildScriptEvidence(scriptBody = "") {
   }
 
   return refs;
+}
+
+function buildSingleRecordQuery({ sysId, name, query } = {}) {
+  if (sysId) {
+    return `sys_id=${sysId}`;
+  }
+  if (name) {
+    return `name=${name}`;
+  }
+  return String(query || "").trim();
+}
+
+async function fetchSingleTableRecord({ client, table, input }) {
+  const effectiveQuery = buildSingleRecordQuery({
+    sysId: input?.sys_id,
+    name: input?.name,
+    query: input?.query,
+  });
+  const page = await client.listTable({
+    table,
+    limit: 1,
+    offset: 0,
+    query: effectiveQuery,
+    instanceKey: input?.instance_key,
+  });
+  const record = page?.records?.[0] || null;
+  return {
+    found: Boolean(record),
+    record,
+    query: {
+      table,
+      sys_id: input?.sys_id || null,
+      name: input?.name || null,
+      sysparm_query: effectiveQuery,
+    },
+  };
 }
 
 async function buildDiscoveryAclTrace({ client, input, degradedReasonCode }) {
@@ -673,6 +714,241 @@ function registerBaselineTools(server) {
   });
 
   server.registerTool({
+    name: "sn.validate.script_include",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getScriptInclude({
+        sysId: input?.sys_id,
+        name: input?.name,
+        instanceKey: input?.instance_key,
+      });
+      const record = result?.script || {};
+      const validation = evaluateScriptValidation({
+        script: record?.script || "",
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_script_include",
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.business_rule",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await fetchSingleTableRecord({
+        client,
+        table: "sys_script",
+        input,
+      });
+      const record = result?.record || {};
+      const validation = evaluateBusinessRuleValidation({
+        businessRule: record,
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_script",
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.client_script",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await fetchSingleTableRecord({
+        client,
+        table: "sys_script_client",
+        input,
+      });
+      const record = result?.record || {};
+      const validation = evaluateClientScriptValidation({
+        clientScript: record,
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_script_client",
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.ui_script",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await fetchSingleTableRecord({
+        client,
+        table: "sys_ui_script",
+        input,
+      });
+      const record = result?.record || {};
+      const validation = evaluateUiScriptValidation({
+        uiScript: record,
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_ui_script",
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.flow",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getFlow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+      const flowRecord = result?.record || {};
+      const validation = evaluateFlowValidation({
+        flow: flowRecord,
+        record: flowRecord,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_hub_flow",
+          query: result.query,
+          record: flowRecord,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.workflow",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getWorkflow({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+      const workflowRecord = result?.record || {};
+      const validation = evaluateWorkflowValidation({
+        workflow: workflowRecord,
+        record: workflowRecord,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "wf_workflow",
+          query: result.query,
+          record: workflowRecord,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.catalog_policy",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const table = String(input?.table || "catalog_ui_policy");
+      const result = await fetchSingleTableRecord({
+        client,
+        table,
+        input,
+      });
+      const record = result?.record || {};
+      const validation = evaluateCatalogPolicyValidation({
+        catalogPolicy: record,
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: table,
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.validate.fix",
+    tier: "T1",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await fetchSingleTableRecord({
+        client,
+        table: "sys_script_fix",
+        input,
+      });
+      const record = result?.record || {};
+      const validation = evaluateFixValidation({
+        fixScript: record,
+        record,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          artifact_type: "sys_script_fix",
+          query: result.query,
+          record,
+          findings: validation.findings,
+        },
+        validation_summary: validation.summary,
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.script.update",
     tier: "T2",
     handler: async (input, context) => {
@@ -1021,6 +1297,30 @@ async function main() {
     const workflowValidateResult = await server.invoke("sn.workflow.validate", {
       name: "x_demo_wait_workflow",
     });
+    const validateScriptIncludeResult = await server.invoke("sn.validate.script_include", {
+      name: "x_demo_utility",
+    });
+    const validateBusinessRuleResult = await server.invoke("sn.validate.business_rule", {
+      name: "x_demo_business_rule",
+    });
+    const validateClientScriptResult = await server.invoke("sn.validate.client_script", {
+      name: "x_demo_client_script",
+    });
+    const validateUiScriptResult = await server.invoke("sn.validate.ui_script", {
+      name: "x_demo_ui_script",
+    });
+    const validateFlowResult = await server.invoke("sn.validate.flow", {
+      name: "x_demo_scheduled_flow",
+    });
+    const validateWorkflowResult = await server.invoke("sn.validate.workflow", {
+      name: "x_demo_wait_workflow",
+    });
+    const validateCatalogPolicyResult = await server.invoke("sn.validate.catalog_policy", {
+      name: "x_demo_catalog_policy",
+    });
+    const validateFixResult = await server.invoke("sn.validate.fix", {
+      name: "x_demo_fix_script",
+    });
     const aclTraceResult = await server.invoke("sn.acl.trace", {
       table: "incident",
       operation: "read",
@@ -1124,6 +1424,15 @@ async function main() {
         workflowGetResult?.tool === "sn.workflow.get" &&
         workflowValidateResult?.tool === "sn.workflow.validate" &&
         workflowValidateResult?.validation_summary?.rulepack?.id === "workflows-v1",
+      d5_validate_family_available:
+        validateScriptIncludeResult?.tool === "sn.validate.script_include" &&
+        validateBusinessRuleResult?.tool === "sn.validate.business_rule" &&
+        validateClientScriptResult?.tool === "sn.validate.client_script" &&
+        validateUiScriptResult?.tool === "sn.validate.ui_script" &&
+        validateFlowResult?.tool === "sn.validate.flow" &&
+        validateWorkflowResult?.tool === "sn.validate.workflow" &&
+        validateCatalogPolicyResult?.tool === "sn.validate.catalog_policy" &&
+        validateFixResult?.tool === "sn.validate.fix",
     };
 
     const smokePayload = {
@@ -1151,6 +1460,14 @@ async function main() {
       workflow_list_result: workflowListResult,
       workflow_get_result: workflowGetResult,
       workflow_validate_result: workflowValidateResult,
+      validate_script_include_result: validateScriptIncludeResult,
+      validate_business_rule_result: validateBusinessRuleResult,
+      validate_client_script_result: validateClientScriptResult,
+      validate_ui_script_result: validateUiScriptResult,
+      validate_flow_result: validateFlowResult,
+      validate_workflow_result: validateWorkflowResult,
+      validate_catalog_policy_result: validateCatalogPolicyResult,
+      validate_fix_result: validateFixResult,
       acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,

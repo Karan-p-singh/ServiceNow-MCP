@@ -10,6 +10,7 @@ import {
 test("inferBundleForTool maps known tools to expected bundles", () => {
   assert.equal(inferBundleForTool("sn.instance.info"), "dev_core");
   assert.equal(inferBundleForTool("sn.script.update"), "dev_validation");
+  assert.equal(inferBundleForTool("sn.validate.script_include"), "dev_validation");
   assert.equal(inferBundleForTool("sn.changeset.list"), "dev_changesets");
   assert.equal(inferBundleForTool("sn.changeset.commit"), "dev_commit");
 });

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T12:26:09.678Z",
+  "generated_at": "2026-03-01T13:53:02.225Z",
   "gate": "G2",
   "passed": true,
   "criteria": [
@@ -55,7 +55,8 @@
       "f5_controlled_commit_contract_available": true,
       "f6_rollback_plan_generator_available": true,
       "e4_flow_list_get_validate_available": true,
-      "e5_workflow_list_get_validate_available": true
+      "e5_workflow_list_get_validate_available": true,
+      "d5_validate_family_available": true
     },
     "tools_registered": [
       "sn.script.get",
@@ -79,6 +80,14 @@
       "sn.workflow.list",
       "sn.workflow.get",
       "sn.workflow.validate",
+      "sn.validate.script_include",
+      "sn.validate.business_rule",
+      "sn.validate.client_script",
+      "sn.validate.ui_script",
+      "sn.validate.flow",
+      "sn.validate.workflow",
+      "sn.validate.catalog_policy",
+      "sn.validate.fix",
       "sn.script.update",
       "sn.script.create",
       "sn.changeset.commit",

@@ -66,7 +66,7 @@ npm run test:g7
 
 Required assertions:
 
-- Implemented/runtime baseline is explicitly tracked as **25 implemented / 101 target / 76 remaining** unless fresh runtime evidence proves otherwise.
+- Implemented/runtime baseline is explicitly tracked as **33 implemented / 101 target / 68 remaining** unless fresh runtime evidence proves otherwise.
 - `docs/MCP_TOOL_CATALOG_101_MATRIX.md` remains synchronized with `smoke:summary` tool registration output.
 - README and epics tracker claims keep planned tools separated from implemented tools.
 - Companion pilot wording remains optional and is not used to imply baseline catalog completion.

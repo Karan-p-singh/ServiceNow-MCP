@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 05:15 PST
+Last Updated: 2026-03-01 05:48 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -113,7 +113,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 ## 5) Status Snapshot (Current)
 
 - Phase 1 through Phase 7 are complete with **G1–G7 passed**.
-- Runtime currently registers **25 tools**; program target remains **101 tools**.
+- Runtime currently registers **33 tools**; program target remains **101 tools**.
 - Canonical catalog governance now lives in `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
 - Phase 3 companion authority is now treated as **optional pilot capability** rather than baseline dependency.
 - **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
@@ -130,5 +130,6 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `sn.changeset.commit` now exposes the controlled T3 commit contract (confirm/reason + snapshot coverage + high-risk audit trace), and `sn.rollback.plan.generate` provides rollback planning with restorable/non-restorable declarations.
 - Flow/workflow parity tooling is available via `sn.flow.*` and `sn.workflow.*`, each with deterministic rulepack-backed validation summaries.
 - Enterprise controls now include optional audit webhook export and deploy-profile/tool-bundle gating (`TOOL_DISABLED_BY_BUNDLE`) for runtime policy enforcement.
-- Next queued catalog-enablement focus is **R1/D5**, **R2**, **R3**, **R4**, **R5**, and **R6** after R0 matrix lock.
+- R1/D5 (`sn.validate.*` family) is now implemented and reconciled in runtime + matrix evidence.
+- Next queued catalog-enablement focus is **R2**, **R3**, **R4**, **R5**, and **R6** after R1 completion.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

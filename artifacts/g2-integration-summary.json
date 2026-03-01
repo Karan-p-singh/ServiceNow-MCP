@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T12:26:11.668Z",
+  "generated_at": "2026-03-01T13:53:04.169Z",
   "gate": "G2",
   "validation_type": "integration",
   "passed": true,
@@ -28,7 +28,7 @@
   "evidence": {
     "tier_policy_scenario": {
       "initialize_ok": true,
-      "listed_tools_count": 25,
+      "listed_tools_count": 33,
       "tier_error_codes": [
         "TIER_MAX_EXCEEDED"
       ],

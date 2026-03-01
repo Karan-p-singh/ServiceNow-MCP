@@ -154,7 +154,7 @@ Canonical catalog governance for 100+ enablement:
 
 - Authoritative 101-tool program matrix: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 - Runtime implementation truth command: `npm run smoke:summary`
-- Current baseline: **25 implemented / 101 target**
+- Current baseline: **33 implemented / 101 target**
 
 When any count differs across docs, use this precedence:
 
@@ -203,9 +203,19 @@ Use `npm run smoke:summary` to verify the live registered tool list.
 - `sn.workflow.get` (T0)
 - `sn.workflow.validate` (T0)
 
+#### Validation addendum tooling (`sn.validate.*`)
+
+- `sn.validate.script_include` (T0)
+- `sn.validate.business_rule` (T0)
+- `sn.validate.client_script` (T0)
+- `sn.validate.ui_script` (T0)
+- `sn.validate.flow` (T0)
+- `sn.validate.workflow` (T0)
+- `sn.validate.catalog_policy` (T0)
+- `sn.validate.fix` (T1)
+
 ### B) Planned v2 expansion (documentation target)
 
-- Validation tool family: `sn.validate.*` per artifact type
 - `sn.rollback.snapshot.create`
 - `sn.atf.coverage_signals`
 - broader dev and ITSM catalogs from the architecture plan

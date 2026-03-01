@@ -50,6 +50,86 @@ export function evaluateScriptValidation({ script = "", record = {} } = {}) {
   };
 }
 
+function evaluateScriptLikeValidation({
+  script = "",
+  record = {},
+  rulepackId = "scripts-v1",
+  artifactType = "sys_script_include",
+} = {}) {
+  const startedAt = Date.now();
+  const rulepackResult = evaluateScriptRulepackV1({ script, record });
+  const durationMs = Date.now() - startedAt;
+  const findings = rulepackResult.findings || [];
+
+  return {
+    findings,
+    summary: {
+      findings_count_by_severity: severityCounts(findings),
+      blocked: false,
+      source: "validation-runtime",
+      rulepack: {
+        id: rulepackId,
+        version: rulepackResult?.rulepack?.version || "1.0.0",
+        artifact_type: artifactType,
+      },
+      execution_ms: durationMs,
+      deterministic: true,
+    },
+  };
+}
+
+export function evaluateBusinessRuleValidation({ businessRule = {}, record = {} } = {}) {
+  const mergedRecord = { ...record, ...businessRule };
+  const script = [mergedRecord?.condition, mergedRecord?.script].filter(Boolean).join("\n");
+  return evaluateScriptLikeValidation({
+    script,
+    record: mergedRecord,
+    rulepackId: "business-rules-v1",
+    artifactType: "sys_script",
+  });
+}
+
+export function evaluateClientScriptValidation({ clientScript = {}, record = {} } = {}) {
+  const mergedRecord = { ...record, ...clientScript };
+  return evaluateScriptLikeValidation({
+    script: String(mergedRecord?.script || ""),
+    record: mergedRecord,
+    rulepackId: "client-scripts-v1",
+    artifactType: "sys_script_client",
+  });
+}
+
+export function evaluateUiScriptValidation({ uiScript = {}, record = {} } = {}) {
+  const mergedRecord = { ...record, ...uiScript };
+  return evaluateScriptLikeValidation({
+    script: String(mergedRecord?.script || ""),
+    record: mergedRecord,
+    rulepackId: "ui-scripts-v1",
+    artifactType: "sys_ui_script",
+  });
+}
+
+export function evaluateCatalogPolicyValidation({ catalogPolicy = {}, record = {} } = {}) {
+  const mergedRecord = { ...record, ...catalogPolicy };
+  const script = [mergedRecord?.script_true, mergedRecord?.script_false, mergedRecord?.script].filter(Boolean).join("\n");
+  return evaluateScriptLikeValidation({
+    script,
+    record: mergedRecord,
+    rulepackId: "catalog-policies-v1",
+    artifactType: "catalog_ui_policy",
+  });
+}
+
+export function evaluateFixValidation({ fixScript = {}, record = {} } = {}) {
+  const mergedRecord = { ...record, ...fixScript };
+  return evaluateScriptLikeValidation({
+    script: String(mergedRecord?.script || ""),
+    record: mergedRecord,
+    rulepackId: "fix-scripts-v1",
+    artifactType: "sys_script_fix",
+  });
+}
+
 export function evaluateFlowValidation({ flow = {}, record = {} } = {}) {
   const startedAt = Date.now();
   const rulepackResult = evaluateFlowRulepackV1({ flow, record });

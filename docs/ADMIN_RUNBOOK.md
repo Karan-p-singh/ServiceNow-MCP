@@ -13,7 +13,7 @@ This runbook follows the v2 documentation truth policy:
 
 Catalog claim integrity contract (101-tool program):
 
-- Current documented baseline: **25 implemented / 101 target / 76 remaining**.
+- Current documented baseline: **33 implemented / 101 target / 68 remaining**.
 - Never present planned tools as implemented tools.
 - For any release-candidate or stakeholder claim, reconcile evidence in this order:
   1. `npm run smoke:summary` (runtime registered tools)

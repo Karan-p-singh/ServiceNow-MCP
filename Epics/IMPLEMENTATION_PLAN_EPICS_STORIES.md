@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-03-01 05:16 PST
+Last Updated: 2026-03-01 05:46 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -17,9 +17,10 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 - EPIC-G is complete through G4 with integration/fixtures/CI gate automation (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`)
 - EPIC-H is complete through H4 with audit webhook export, deploy-profile/tool-bundle policy controls, and enterprise docs pack
 - Gate G5, Gate G6, and Gate G7 are passed with evidence artifacts (`artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`, `artifacts/g7-readiness-summary.json`)
-- Runtime catalog currently implements **25 tools** versus v2 architecture target of **101** (gap: **76 tools**)
+- Runtime catalog currently implements **33 tools** versus v2 architecture target of **101** (gap: **68 tools**)
 - Canonical per-tool status now lives in `docs/MCP_TOOL_CATALOG_101_MATRIX.md` (R0 lock artifact)
-- Next queued cross-epic focus: catalog completion roadmap (`R0`–`R6`) with validation-addendum expansion (`D5`) as first critical track
+- Validation addendum expansion (`D5` / `R1`) is now complete for the full `sn.validate.*` family with runtime evidence (`npm run smoke:summary`)
+- Next queued cross-epic focus: catalog completion roadmap (`R2`–`R6`) with Dev parity clusters (`R2`) as the first critical track
 
 - Documentation contract parity hardening (`H5`) is completed and now tracked in governance/status artifacts
 

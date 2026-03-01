@@ -1,8 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  evaluateBusinessRuleValidation,
+  evaluateCatalogPolicyValidation,
+  evaluateClientScriptValidation,
+  evaluateFixValidation,
   evaluateFlowValidation,
   evaluateScriptValidation,
+  evaluateUiScriptValidation,
   evaluateWorkflowValidation,
   evaluateWriteGate,
 } from "../src/validation/engine.js";
@@ -80,4 +85,72 @@ test("evaluateWorkflowValidation returns rulepack metadata and deterministic out
   assert.equal(first.summary.rulepack.id, "workflows-v1");
   assert.equal(first.summary.rulepack.version, "1.0.0");
   assert.equal(first.summary.deterministic, true);
+});
+
+test("evaluateBusinessRuleValidation returns remapped artifact rulepack metadata", () => {
+  const businessRule = {
+    name: "x_demo_business_rule",
+    description: "demo",
+    condition: "current.active == true",
+    script: "if (current.short_description) { gs.info(current.short_description); }",
+  };
+
+  const result = evaluateBusinessRuleValidation({ businessRule, record: businessRule });
+  assert.equal(result.summary.rulepack.id, "business-rules-v1");
+  assert.equal(result.summary.rulepack.artifact_type, "sys_script");
+  assert.equal(result.summary.deterministic, true);
+});
+
+test("evaluateClientScriptValidation returns remapped artifact rulepack metadata", () => {
+  const clientScript = {
+    name: "x_demo_client_script",
+    description: "demo",
+    script: "function onLoad(){ var gr = new GlideRecord('incident'); gr.query(); }",
+  };
+
+  const result = evaluateClientScriptValidation({ clientScript, record: clientScript });
+  assert.equal(result.summary.rulepack.id, "client-scripts-v1");
+  assert.equal(result.summary.rulepack.artifact_type, "sys_script_client");
+  assert.equal(result.summary.deterministic, true);
+});
+
+test("evaluateUiScriptValidation returns remapped artifact rulepack metadata", () => {
+  const uiScript = {
+    name: "x_demo_ui_script",
+    description: "demo",
+    script: "function run(input){ return eval(input); }",
+  };
+
+  const result = evaluateUiScriptValidation({ uiScript, record: uiScript });
+  assert.equal(result.summary.rulepack.id, "ui-scripts-v1");
+  assert.equal(result.summary.rulepack.artifact_type, "sys_ui_script");
+  assert.equal(result.summary.deterministic, true);
+  assert.equal(result.findings.some((entry) => entry.id === "SCRIPT_EVAL_USAGE"), true);
+});
+
+test("evaluateCatalogPolicyValidation returns remapped artifact rulepack metadata", () => {
+  const catalogPolicy = {
+    name: "x_demo_catalog_policy",
+    description: "demo",
+    script_true: "if (g_form.getValue('short_description')) { g_form.setMandatory('category', true); }",
+    script_false: "g_form.setMandatory('category', false);",
+  };
+
+  const result = evaluateCatalogPolicyValidation({ catalogPolicy, record: catalogPolicy });
+  assert.equal(result.summary.rulepack.id, "catalog-policies-v1");
+  assert.equal(result.summary.rulepack.artifact_type, "catalog_ui_policy");
+  assert.equal(result.summary.deterministic, true);
+});
+
+test("evaluateFixValidation returns remapped artifact rulepack metadata", () => {
+  const fixScript = {
+    name: "x_demo_fix_script",
+    description: "demo",
+    script: "var gr = new GlideRecord('incident'); gr.query();",
+  };
+
+  const result = evaluateFixValidation({ fixScript, record: fixScript });
+  assert.equal(result.summary.rulepack.id, "fix-scripts-v1");
+  assert.equal(result.summary.rulepack.artifact_type, "sys_script_fix");
+  assert.equal(result.summary.deterministic, true);
 });
