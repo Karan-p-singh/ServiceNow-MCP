@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-02-28 17:58 PST
+Last Updated: 2026-02-28 18:08 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -25,7 +25,7 @@ Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 Status: `In Progress`
 
-- [ ] A1 complete: server bootstrap + tool registry
+- [x] A1 complete: server bootstrap + tool registry
 - [ ] A2 complete: response envelope implemented for all tools
 - [ ] A3 complete: tier enforcement + T3 confirm/reason contract
 - [ ] A5 complete: structured logs with redaction + correlation IDs
@@ -102,6 +102,7 @@ Status: `Not Started`
 
 ## 3) Gate Decision Log
 
-| Date       | Gate | Decision    | Notes                                                           |
-| ---------- | ---- | ----------- | --------------------------------------------------------------- |
-| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A |
+| Date       | Gate | Decision    | Notes                                                                 |
+| ---------- | ---- | ----------- | --------------------------------------------------------------------- |
+| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A       |
+| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit |

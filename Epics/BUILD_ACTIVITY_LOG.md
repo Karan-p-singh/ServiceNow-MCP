@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 17:58 PST
+Last Updated: 2026-02-28 18:07 PST
 
 ---
 
@@ -56,6 +56,15 @@ Each entry should include:
 - **Reason:** Program entered Phase 1 with framework-first implementation path selected.
 - **Evidence:** Story queue order in `IMPLEMENTATION_PLAN_EPICS_STORIES.md`
 - **Next step:** Start Story A1 execution in code (server bootstrap + tool registry).
+
+### 2026-02-28 18:07 PST
+
+- **Item:** A1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented initial MCP server bootstrap, tool registry abstraction with tier metadata, and deterministic request/correlation context for each invocation.
+- **Evidence:** `package.json`, `src/index.js`, `src/config.js`, `src/server/mcp.js`, `src/server/tool-registry.js`, `src/server/request-context.js`; smoke run `node src/index.js --smoke`
+- **Next step:** Start A2 implementation for standardized response envelope fields across all tool responses.
 
 ---
 

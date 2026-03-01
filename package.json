@@ -1,0 +1,14 @@
+{
+	"name": "servicenow-mcp-server",
+	"version": "0.1.0",
+	"private": true,
+	"description": "ServiceNow MCP Server v2 scaffold",
+	"type": "module",
+	"scripts": {
+		"start": "node src/index.js",
+		"smoke": "node src/index.js --smoke"
+	},
+	"engines": {
+		"node": ">=18"
+	}
+}
