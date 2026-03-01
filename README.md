@@ -146,6 +146,17 @@ Run unit tests for validation/runtime and script tooling:
 npm test
 ```
 
+Run compact smoke summary output (short, console-friendly):
+
+```bash
+npm run smoke:summary
+```
+
+This prints only:
+
+- `smoke_summary`
+- registered tool names/count
+
 Run the end-user Gate G2 validation checklist (human-readable + JSON artifact):
 
 ```bash
@@ -165,6 +176,16 @@ Expected output includes a criterion-by-criterion checklist like:
 Machine-readable report is generated at:
 
 - `artifacts/g2-validation-summary.json`
+
+Run the end-user Gate G4 validation checklist (human-readable + JSON artifact):
+
+```bash
+npm run test:g4
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g4-validation-summary.json`
 
 ### Connectivity Diagnostics (Gate G1 Evidence)
 
@@ -354,17 +375,17 @@ All script read tools attach validation summaries. Write tools enforce:
 
 ### Update Set Deployment Readiness
 
-Current implemented F-series read tools (F1):
+Current implemented F-series tools (F1-F3):
 
 - `sn.changeset.list`
 - `sn.changeset.get`
 - `sn.changeset.contents`
 - `sn.changeset.export`
-
-Planned next tools (F2+):
-
 - `sn.changeset.gaps`
 - `sn.updateset.capture.verify`
+
+Planned next tools (F4+):
+
 - `sn.changeset.commit.preview`
 - `sn.rollback.plan.generate`
 

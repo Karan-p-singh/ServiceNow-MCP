@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-03-01T10:30:04.226Z",
+  "gate": "G4",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "F1",
+      "label": "Changeset read tooling list/get/contents/export is registered and smoke-available",
+      "passed": true
+    },
+    {
+      "id": "F2",
+      "label": "Gap detection exposes confidence-tier evidence buckets",
+      "passed": true
+    },
+    {
+      "id": "F3",
+      "label": "Capture verification emits deterministic reason codes",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "smoke_summary": {
+      "d1_runtime_deterministic": true,
+      "d2_rulepack_versioned": true,
+      "d3_critical_blocks_write": true,
+      "d3_high_ack_required_or_satisfied": true,
+      "e1_get_list_search_available": true,
+      "e2_refs_deps_evidence_available": true,
+      "e3_create_update_auditable": true,
+      "f1_changeset_read_tools_available": true,
+      "f2_changeset_gap_detection_available": true,
+      "f3_capture_verify_reason_codes_deterministic": true
+    },
+    "tools_registered": [
+      "sn.script.get",
+      "sn.script.list",
+      "sn.script.search",
+      "sn.script.refs",
+      "sn.script.deps",
+      "sn.instance.info",
+      "sn.acl.trace",
+      "sn.table.list",
+      "sn.changeset.list",
+      "sn.changeset.get",
+      "sn.changeset.contents",
+      "sn.changeset.export",
+      "sn.changeset.gaps",
+      "sn.updateset.capture.verify",
+      "sn.script.update",
+      "sn.script.create",
+      "sn.changeset.commit"
+    ],
+    "changeset_gaps_counts": {
+      "hard": 1,
+      "soft": 1,
+      "heuristic": 1
+    },
+    "capture_verify": {
+      "table": "sys_script_include",
+      "sys_id": "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+      "changeset_sys_id": "a1111111b2222222c3333333d4444444",
+      "captured": true,
+      "captured_in_target_set": true,
+      "reason_code": "CAPTURED_IN_TARGET_SET",
+      "evidence": [
+        {
+          "sys_update_xml": "x1111111x2222222x3333333x4444444",
+          "name": "sys_script_include_9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          "update_set": "a1111111b2222222c3333333d4444444"
+        }
+      ]
+    }
+  }
+}

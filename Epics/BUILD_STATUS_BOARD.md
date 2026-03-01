@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 02:18 PST
+Last Updated: 2026-03-01 02:28 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -12,7 +12,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | 1     | Foundation + First Vertical Slice  | Done        |     100% | Gate G1 passed: E1 minimal (`sn.script.get` + validation summary) and first vertical-slice demo evidence captured               |
 | 2     | Validation MVP + Script Tooling    | Done        |     100% | Gate G2 passed: validation runtime/rulepack, script tooling E2E, and unit coverage completed                                    |
 | 3     | Optional Companion Authority Pilot | Done        |     100% | Phase B optional capability: companion health/version contract + authoritative ACL path + dual-mode degraded behavior validated |
-| 4     | Update Set MVP                     | In Progress |      25% | F1 complete (`sn.changeset.list/get/contents/export`) with unit+smoke evidence; proceeding to F2/F3                             |
+| 4     | Update Set MVP                     | In Progress |      70% | F1/F2/F3 complete with unit+smoke+Gate G4 validation evidence; remaining exit item is non-prod integration flow validation      |
 | 5     | Commit + Rollback Planning         | Backlog     |       0% | Dependent on Phase 4 readiness                                                                                                  |
 | 6     | Flows + Workflows Coverage         | Backlog     |       0% | Dependent on core validation maturity                                                                                           |
 | 7     | Enterprise Hardening               | Backlog     |       0% | Final hardening and release prep                                                                                                |
@@ -28,7 +28,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | EPIC-C  | Optional Companion Authority        | SN Dev  | Done        | 2026-03-01 | 2026-03-01 |     100% | EPIC-B                    |
 | EPIC-D  | Validation Engine & Rulepacks       | Eng     | Done        | 2026-02-28 | 2026-02-28 |     100% | EPIC-A, EPIC-B            |
 | EPIC-E  | Developer Artifact Tooling          | Eng     | In Progress | 2026-02-28 | TBD        |      55% | EPIC-B, EPIC-D            |
-| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      20% | EPIC-E (baseline), EPIC-C |
+| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      55% | EPIC-E (baseline), EPIC-C |
 | EPIC-G  | Quality Engineering & Test Strategy | Eng/QA  | In Progress | 2026-02-28 | TBD        |      10% | Core feature completeness |
 | EPIC-H  | Enterprise Hardening                | Eng/Sec | Backlog     | TBD        | TBD        |       0% | EPIC-A..G maturity        |
 
@@ -42,15 +42,14 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ## Ready
 
-- F2 — Gap detection with confidence tiers
-- F3 — Capture verify deterministic reasons
+- F4 — Commit preview dry-run
 
 ## Backlog
 
 - C3 — Scope/capture helper endpoints
 - D4 — Rulepack and gating governance
 - E4, E5 — flows, workflows
-- F2, F3, F4, F5, F6 — changesets, commit, rollback plan
+- F4, F5, F6 — changesets, commit, rollback plan
 - G1, G2, G3, G4 — quality/testing
 - H1, H2, H3, H4 — enterprise hardening
 
@@ -92,18 +91,21 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - EPIC-C — Optional companion authority pilot (C1/C2/C4) complete; Gate G3 exit achieved
 - EPIC-C live deployment verification — companion endpoints validated in target Zurich instance via discovered base URI (`/api/240215/v1`) using `npm run test:companion:live`
 - F1 — Changeset read tooling delivered: `sn.changeset.list`, `sn.changeset.get`, `sn.changeset.contents`, `sn.changeset.export` with pagination-aware client support and tests (`npm test`, `node src/index.js --smoke`)
+- F2 — Gap detection delivered: `sn.changeset.gaps` with confidence-tier outputs (`hard_dependencies`, `soft_dependencies`, `heuristic_candidates`) and evidence-backed reason codes
+- F3 — Capture verification delivered: `sn.updateset.capture.verify` with deterministic reason codes (`CAPTURED_IN_TARGET_SET`, `CAPTURED_IN_DIFFERENT_SET`, `NOT_CAPTURED`)
+- G4 validation harness added: `scripts/test-g4-validation.js` + `npm run test:g4` and `artifacts/g4-validation-summary.json`
 
 ---
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. F2 — Gap detection with confidence tiers
-2. F3 — Capture verify deterministic reasons
-3. E4 — Flow list/get/validate parity
-4. E5 — Workflow list/get/validate parity
-5. G2 — Integration tests against dev instance
-6. G4 — CI quality gates
-7. C3 — Scope/capture helper endpoints
-8. D4 — Rulepack and gating governance
-9. H1 — SIEM/webhook export
-10. F4 — Commit preview dry-run
+1. E4 — Flow list/get/validate parity
+2. E5 — Workflow list/get/validate parity
+3. G2 — Integration tests against dev instance
+4. G4 — CI quality gates
+5. C3 — Scope/capture helper endpoints
+6. D4 — Rulepack and gating governance
+7. F4 — Commit preview dry-run
+8. H1 — SIEM/webhook export
+9. F5 — Controlled commit (T3)
+10. F6 — Rollback plan generator

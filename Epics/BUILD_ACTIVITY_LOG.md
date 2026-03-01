@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 02:18 PST
+Last Updated: 2026-03-01 02:29 PST
 
 ---
 
@@ -535,3 +535,21 @@ When work executes, append entries for:
 - **Reason:** Gate G4 advanced after F1 completion and validation evidence capture.
 - **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
 - **Next step:** Complete F2/F3 and add integration tests for Update Set flows.
+
+### 2026-03-01 02:29 PST
+
+- **Item:** F2
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented confidence-tier update set gap detection tooling and runtime smoke checks for deterministic dependency-evidence outputs.
+- **Evidence:** `src/index.js` (`sn.changeset.gaps`), `src/servicenow/client.js` (`detectChangesetGaps`), `tests/script.tooling.test.js`; runs: `npm test`, `node src/index.js --smoke`.
+- **Next step:** Finalize F3 capture verification and close remaining Gate G4 functional criteria.
+
+### 2026-03-01 02:29 PST
+
+- **Item:** F3
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented deterministic update set capture verification reason codes and added dedicated Gate G4 validation harness.
+- **Evidence:** `src/index.js` (`sn.updateset.capture.verify`), `src/servicenow/client.js` (`verifyChangesetCapture`), `tests/script.tooling.test.js`, `scripts/test-g4-validation.js`, `package.json` (`test:g4`), `artifacts/g4-validation-summary.json`; runs: `npm test`, `npm run test:g4`.
+- **Next step:** Execute non-prod integration tests for end-to-end update set flow to complete Gate G4 exit criteria.

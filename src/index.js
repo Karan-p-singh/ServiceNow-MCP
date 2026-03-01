@@ -453,6 +453,45 @@ function registerBaselineTools(server) {
   });
 
   server.registerTool({
+    name: "sn.changeset.gaps",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(500, Math.max(1, Number(input?.limit || 200)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+
+      const result = await client.detectChangesetGaps({
+        changesetSysId: input?.changeset_sys_id || input?.sys_id,
+        limit,
+        offset,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.updateset.capture.verify",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.verifyChangesetCapture({
+        table: input?.table,
+        sysId: input?.sys_id,
+        changesetSysId: input?.changeset_sys_id || input?.changeset,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.script.update",
     tier: "T2",
     handler: async (input, context) => {
@@ -644,7 +683,8 @@ function registerBaselineTools(server) {
 }
 
 async function main() {
-  const isSmokeMode = process.argv.includes("--smoke");
+  const isSmokeSummaryMode = process.argv.includes("--smoke-summary");
+  const isSmokeMode = process.argv.includes("--smoke") || isSmokeSummaryMode;
   const config = loadConfig();
   const smokeLogger = {
     info: () => {},
@@ -724,6 +764,16 @@ async function main() {
       sys_id: "a1111111b2222222c3333333d4444444",
       format: "xml",
     });
+    const changesetGapsResult = await server.invoke("sn.changeset.gaps", {
+      changeset_sys_id: "a1111111b2222222c3333333d4444444",
+      limit: 5,
+      offset: 0,
+    });
+    const captureVerifyResult = await server.invoke("sn.updateset.capture.verify", {
+      table: "sys_script_include",
+      sys_id: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+      changeset_sys_id: "a1111111b2222222c3333333d4444444",
+    });
     const aclTraceResult = await server.invoke("sn.acl.trace", {
       table: "incident",
       operation: "read",
@@ -791,9 +841,19 @@ async function main() {
         changesetGetResult?.tool === "sn.changeset.get" &&
         changesetContentsResult?.tool === "sn.changeset.contents" &&
         changesetExportResult?.tool === "sn.changeset.export",
+      f2_changeset_gap_detection_available:
+        changesetGapsResult?.tool === "sn.changeset.gaps" &&
+        Array.isArray(changesetGapsResult?.data?.hard_dependencies) &&
+        Array.isArray(changesetGapsResult?.data?.soft_dependencies) &&
+        Array.isArray(changesetGapsResult?.data?.heuristic_candidates),
+      f3_capture_verify_reason_codes_deterministic:
+        captureVerifyResult?.tool === "sn.updateset.capture.verify" &&
+        ["CAPTURED_IN_TARGET_SET", "CAPTURED_IN_DIFFERENT_SET", "NOT_CAPTURED"].includes(
+          captureVerifyResult?.data?.reason_code,
+        ),
     };
 
-    console.log(JSON.stringify({
+    const smokePayload = {
       tools: server.listTools(),
       smoke_summary: smokeSummary,
       smoke_result: result,
@@ -807,6 +867,8 @@ async function main() {
       changeset_get_result: changesetGetResult,
       changeset_contents_result: changesetContentsResult,
       changeset_export_result: changesetExportResult,
+      changeset_gaps_result: changesetGapsResult,
+      capture_verify_result: captureVerifyResult,
       acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,
@@ -815,7 +877,17 @@ async function main() {
       t3_blocked_result: t3Blocked,
       policy_blocked_result: policyBlocked,
       break_glass_result: breakGlassAllowed,
-    }, null, 2));
+    };
+
+    if (isSmokeSummaryMode) {
+      console.log(JSON.stringify({
+        smoke_summary: smokeSummary,
+        tools_registered_count: smokePayload.tools.length,
+        tools_registered: smokePayload.tools.map((entry) => entry.name),
+      }, null, 2));
+    } else {
+      console.log(JSON.stringify(smokePayload, null, 2));
+    }
     await server.stop();
     return;
   }

@@ -106,3 +106,69 @@ test("changeset read tooling list/get/contents/export returns structured mock pa
   assert.equal(exported.format, "xml");
   assert.equal(exported.download_url.includes("sys_update_set.do?XML"), true);
 });
+
+test("changeset gap detection returns confidence-tier dependency buckets", async () => {
+  const client = createMockClient();
+
+  const result = await client.detectChangesetGaps({
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+    limit: 20,
+    offset: 0,
+  });
+
+  assert.equal(result.changeset_sys_id, "a1111111b2222222c3333333d4444444");
+  assert.equal(result.scanned_entries >= 1, true);
+  assert.equal(Array.isArray(result.hard_dependencies), true);
+  assert.equal(Array.isArray(result.soft_dependencies), true);
+  assert.equal(Array.isArray(result.heuristic_candidates), true);
+
+  assert.equal(
+    result.hard_dependencies.some(
+      (entry) => entry.reason_code === "XML_TARGET_REFERENCE" && entry.confidence === "high",
+    ),
+    true,
+  );
+  assert.equal(
+    result.soft_dependencies.some(
+      (entry) => entry.reason_code === "SCRIPT_INCLUDE_NAME_PATTERN" && entry.confidence === "medium",
+    ),
+    true,
+  );
+  assert.equal(
+    result.heuristic_candidates.some(
+      (entry) => entry.reason_code === "GENERIC_SYS_ID_PATTERN" && entry.confidence === "low",
+    ),
+    true,
+  );
+});
+
+test("changeset capture verification returns deterministic reason codes", async () => {
+  const client = createMockClient();
+
+  const capturedInTarget = await client.verifyChangesetCapture({
+    table: "sys_script_include",
+    sysId: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+  });
+  assert.equal(capturedInTarget.captured, true);
+  assert.equal(capturedInTarget.captured_in_target_set, true);
+  assert.equal(capturedInTarget.reason_code, "CAPTURED_IN_TARGET_SET");
+
+  const capturedInDifferent = await client.verifyChangesetCapture({
+    table: "sys_properties",
+    sysId: "1234567890abcdef1234567890abcdef",
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+  });
+  assert.equal(capturedInDifferent.captured, true);
+  assert.equal(capturedInDifferent.captured_in_target_set, false);
+  assert.equal(capturedInDifferent.reason_code, "CAPTURED_IN_DIFFERENT_SET");
+
+  const notCaptured = await client.verifyChangesetCapture({
+    table: "sys_script_include",
+    sysId: "ffffffffffffffffffffffffffffffff",
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+  });
+  assert.equal(notCaptured.captured, false);
+  assert.equal(notCaptured.captured_in_target_set, false);
+  assert.equal(notCaptured.reason_code, "NOT_CAPTURED");
+});

@@ -503,6 +503,134 @@ export class ServiceNowClient {
     };
   }
 
+  async detectChangesetGaps({ changesetSysId, limit = 200, offset = 0, instanceKey } = {}) {
+    const page = await this.listChangesetContents({
+      changesetSysId,
+      limit,
+      offset,
+      instanceKey,
+    });
+
+    const hardMap = new Map();
+    const softMap = new Map();
+    const heuristicMap = new Map();
+
+    for (const record of page.records || []) {
+      const targetTable = String(record?.target_table || "").trim();
+      const targetSysId = String(record?.target_sys_id || "").trim();
+      const recordName = String(record?.name || "");
+
+      if (targetTable && targetSysId) {
+        const key = `${targetTable}:${targetSysId}`;
+        if (!hardMap.has(key)) {
+          hardMap.set(key, {
+            artifact_type: targetTable,
+            identifier: targetSysId,
+            confidence: "high",
+            reason_code: "XML_TARGET_REFERENCE",
+            evidence: [{ type: "sys_update_xml", sys_id: record?.sys_id || null, name: recordName }],
+          });
+        }
+      }
+
+      const scriptIncludeMatch = recordName.match(/sys_script_include_([a-f0-9]{32})/i);
+      if (scriptIncludeMatch) {
+        const softKey = `sys_script_include:${scriptIncludeMatch[1]}`;
+        if (!softMap.has(softKey)) {
+          softMap.set(softKey, {
+            artifact_type: "sys_script_include",
+            identifier: scriptIncludeMatch[1],
+            confidence: "medium",
+            reason_code: "SCRIPT_INCLUDE_NAME_PATTERN",
+            evidence: [{ type: "name_pattern", value: recordName }],
+          });
+        }
+      }
+
+      const genericSysIdMatches = recordName.match(/[a-f0-9]{32}/gi) || [];
+      for (const sysId of genericSysIdMatches) {
+        const heuristicKey = `unknown:${sysId.toLowerCase()}`;
+        if (!heuristicMap.has(heuristicKey)) {
+          heuristicMap.set(heuristicKey, {
+            artifact_type: "unknown",
+            identifier: sysId.toLowerCase(),
+            confidence: "low",
+            reason_code: "GENERIC_SYS_ID_PATTERN",
+            evidence: [{ type: "name_pattern", value: recordName }],
+          });
+        }
+      }
+    }
+
+    return {
+      changeset_sys_id: changesetSysId || null,
+      scanned_entries: page.records?.length || 0,
+      hard_dependencies: Array.from(hardMap.values()),
+      soft_dependencies: Array.from(softMap.values()),
+      heuristic_candidates: Array.from(heuristicMap.values()),
+      limitations: [
+        "Dependency analysis is confidence-based and does not guarantee completeness.",
+      ],
+      page: page.page,
+    };
+  }
+
+  async verifyChangesetCapture({ table, sysId, changesetSysId, instanceKey } = {}) {
+    const targetTable = String(table || "").trim();
+    const targetSysId = String(sysId || "").trim();
+
+    const exactQuery = [
+      targetTable ? `target_table=${targetTable}` : "",
+      targetSysId ? `target_sys_id=${targetSysId}` : "",
+    ]
+      .filter(Boolean)
+      .join("^");
+
+    const exactMatches = await this.listTable({
+      table: "sys_update_xml",
+      limit: 50,
+      offset: 0,
+      query: exactQuery,
+      instanceKey,
+    });
+
+    let records = exactMatches.records || [];
+    if (records.length === 0 && targetTable && targetSysId) {
+      const fallback = await this.listTable({
+        table: "sys_update_xml",
+        limit: 50,
+        offset: 0,
+        query: `nameLIKE${targetTable}_${targetSysId}`,
+        instanceKey,
+      });
+      records = fallback.records || [];
+    }
+
+    const updateSets = [...new Set(records.map((record) => record?.update_set).filter(Boolean))];
+    const inTargetSet = changesetSysId ? updateSets.includes(changesetSysId) : false;
+
+    let reasonCode = "NOT_CAPTURED";
+    if (inTargetSet) {
+      reasonCode = "CAPTURED_IN_TARGET_SET";
+    } else if (records.length > 0) {
+      reasonCode = "CAPTURED_IN_DIFFERENT_SET";
+    }
+
+    return {
+      table: targetTable || null,
+      sys_id: targetSysId || null,
+      changeset_sys_id: changesetSysId || null,
+      captured: records.length > 0,
+      captured_in_target_set: inTargetSet,
+      reason_code: reasonCode,
+      evidence: records.map((record) => ({
+        sys_update_xml: record?.sys_id || null,
+        name: record?.name || null,
+        update_set: record?.update_set || null,
+      })),
+    };
+  }
+
   mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
     if (path.includes("/api/x_mcp_companion/v1/health")) {
       return Promise.resolve({
@@ -774,6 +902,7 @@ export class ServiceNowClient {
           name: "sys_script_include_9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
           target_name: "x_demo_utility",
           target_table: "sys_script_include",
+          target_sys_id: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
           action: "INSERT_OR_UPDATE",
           update_set: "a1111111b2222222c3333333d4444444",
         },
@@ -782,20 +911,36 @@ export class ServiceNowClient {
           name: "sys_properties_1234567890abcdef1234567890abcdef",
           target_name: "x.demo.property",
           target_table: "sys_properties",
+          target_sys_id: "1234567890abcdef1234567890abcdef",
           action: "INSERT_OR_UPDATE",
-          update_set: "a1111111b2222222c3333333d4444444",
+          update_set: "b1111111c2222222d3333333e4444444",
         },
       ];
 
       const sysparmQuery = String(query.sysparm_query || "");
       let filtered = sampleEntries;
-      if (sysparmQuery.includes("update_set=")) {
-        const target = sysparmQuery
-          .split("^")
-          .find((entry) => entry.startsWith("update_set="))
-          ?.replace("update_set=", "");
-        if (target) {
-          filtered = filtered.filter((entry) => entry.update_set === target);
+      if (sysparmQuery) {
+        const clauses = sysparmQuery.split("^").filter(Boolean);
+        for (const clause of clauses) {
+          if (clause.startsWith("update_set=")) {
+            const target = clause.replace("update_set=", "");
+            filtered = filtered.filter((entry) => entry.update_set === target);
+            continue;
+          }
+          if (clause.startsWith("target_table=")) {
+            const target = clause.replace("target_table=", "");
+            filtered = filtered.filter((entry) => entry.target_table === target);
+            continue;
+          }
+          if (clause.startsWith("target_sys_id=")) {
+            const target = clause.replace("target_sys_id=", "");
+            filtered = filtered.filter((entry) => entry.target_sys_id === target);
+            continue;
+          }
+          if (clause.startsWith("nameLIKE")) {
+            const term = clause.replace("nameLIKE", "").toLowerCase();
+            filtered = filtered.filter((entry) => String(entry.name || "").toLowerCase().includes(term));
+          }
         }
       }
 
