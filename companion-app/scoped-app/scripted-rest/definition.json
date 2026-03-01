@@ -1,0 +1,22 @@
+{
+	"name": "x_mcp_companion",
+	"api_id": "x_mcp_companion",
+	"base_path": "/api/x_mcp_companion/v1",
+	"active": true,
+	"require_acl_authorization": true,
+	"enforced_role": "x_mcp_companion.api_user",
+	"resources": [
+		{
+			"name": "health",
+			"http_method": "GET",
+			"relative_path": "/health",
+			"script_file": "health.get.js"
+		},
+		{
+			"name": "acl_evaluate",
+			"http_method": "POST",
+			"relative_path": "/acl/evaluate",
+			"script_file": "acl-evaluate.post.js"
+		}
+	]
+}

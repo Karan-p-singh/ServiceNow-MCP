@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T06:39:17.417Z",
+  "generated_at": "2026-03-01T10:10:41.244Z",
   "gate": "G2",
   "passed": true,
   "criteria": [
@@ -56,6 +56,7 @@
       "sn.script.refs",
       "sn.script.deps",
       "sn.instance.info",
+      "sn.acl.trace",
       "sn.table.list",
       "sn.script.update",
       "sn.script.create",

@@ -9,6 +9,9 @@
 		"start:stdio": "set MCP_TRANSPORT=stdio&&node src/index.js",
 		"smoke": "node src/index.js --smoke",
 		"test": "node --test tests/**/*.test.js",
+		"build:companion": "node scripts/build-companion-updateset.js",
+		"deploy:companion": "node scripts/deploy-companion-update-set.js",
+		"test:companion:live": "node scripts/test-companion-live.js",
 		"test:g2": "node scripts/test-g2-validation.js",
 		"test:live": "node scripts/test-live-connection.js",
 		"test:live:mcp": "node scripts/test-live-mcp-transport.js"

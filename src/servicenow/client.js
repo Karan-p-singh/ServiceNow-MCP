@@ -415,6 +415,94 @@ export class ServiceNowClient {
     };
   }
 
+  async listChangesets({ limit = 25, offset = 0, query = "", instanceKey } = {}) {
+    return this.listTable({
+      table: "sys_update_set",
+      limit,
+      offset,
+      query,
+      instanceKey,
+    });
+  }
+
+  async getChangeset({ sysId, name, query, instanceKey } = {}) {
+    if (sysId) {
+      const response = await this.request({
+        method: "GET",
+        path: `/api/now/table/sys_update_set/${sysId}`,
+        instanceKey,
+      });
+
+      return {
+        found: Boolean(response?.data?.result),
+        record: response?.data?.result || null,
+        query: {
+          sys_id: sysId,
+          name: name || null,
+          sysparm_query: query || "",
+        },
+      };
+    }
+
+    let resolvedQuery = String(query || "").trim();
+    if (!resolvedQuery && name) {
+      resolvedQuery = `name=${name}`;
+    }
+
+    const page = await this.listChangesets({
+      limit: 1,
+      offset: 0,
+      query: resolvedQuery,
+      instanceKey,
+    });
+
+    const record = page.records?.[0] || null;
+    return {
+      found: Boolean(record),
+      record,
+      query: {
+        sys_id: sysId || null,
+        name: name || null,
+        sysparm_query: resolvedQuery,
+      },
+    };
+  }
+
+  async listChangesetContents({ changesetSysId, limit = 50, offset = 0, query = "", instanceKey } = {}) {
+    const clauses = [];
+    if (changesetSysId) {
+      clauses.push(`update_set=${changesetSysId}`);
+    }
+    if (query) {
+      clauses.push(String(query));
+    }
+
+    return this.listTable({
+      table: "sys_update_xml",
+      limit,
+      offset,
+      query: clauses.join("^"),
+      instanceKey,
+    });
+  }
+
+  async exportChangeset({ sysId, format = "xml", instanceKey } = {}) {
+    const instance = this.resolveInstance(instanceKey);
+    const normalizedFormat = String(format || "xml").trim().toLowerCase();
+    const exportPath =
+      normalizedFormat === "xml"
+        ? `/sys_update_set.do?XML&sys_id=${encodeURIComponent(sysId || "")}`
+        : `/sys_update_set.do?sys_id=${encodeURIComponent(sysId || "")}`;
+
+    return {
+      exported: Boolean(sysId),
+      format: normalizedFormat,
+      sys_id: sysId || null,
+      path: exportPath,
+      download_url: `${String(instance.instanceUrl || "").replace(/\/$/, "")}${exportPath}`,
+    };
+  }
+
   mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
     if (path.includes("/api/x_mcp_companion/v1/health")) {
       return Promise.resolve({
@@ -593,6 +681,122 @@ export class ServiceNowClient {
           String(record.script || "").toLowerCase().includes(normalized) ||
           String(record.description || "").toLowerCase().includes(normalized),
         );
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_update_set")) {
+      const sampleChangesets = [
+        {
+          sys_id: "a1111111b2222222c3333333d4444444",
+          name: "u_demo_changeset",
+          state: "in progress",
+          application: "global",
+          sys_created_on: "2026-03-01 01:00:00",
+          sys_updated_on: "2026-03-01 01:15:00",
+        },
+        {
+          sys_id: "b1111111c2222222d3333333e4444444",
+          name: "u_demo_changeset_second",
+          state: "complete",
+          application: "x_demo_scope",
+          sys_created_on: "2026-03-01 01:20:00",
+          sys_updated_on: "2026-03-01 01:30:00",
+        },
+      ];
+
+      const upperMethod = String(method).toUpperCase();
+      if (upperMethod === "GET" && /\/sys_update_set\/[a-z0-9]+$/i.test(path)) {
+        const sysId = path.split("/").pop();
+        const record = sampleChangesets.find((entry) => entry.sys_id === sysId);
+        if (!record) {
+          return Promise.reject({
+            code: "SN_RESOURCE_NOT_FOUND",
+            message: "No Record found",
+            status: 404,
+            status_text: "Not Found",
+            retriable: false,
+            details: {
+              instance: instance.instanceUrl,
+              path,
+              attempt: 1,
+            },
+          });
+        }
+
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: record,
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleChangesets;
+      if (sysparmQuery.startsWith("name=")) {
+        const target = sysparmQuery.replace("name=", "");
+        filtered = sampleChangesets.filter((entry) => entry.name === target);
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
+
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: paged,
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_update_xml")) {
+      const sampleEntries = [
+        {
+          sys_id: "x1111111x2222222x3333333x4444444",
+          name: "sys_script_include_9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          target_name: "x_demo_utility",
+          target_table: "sys_script_include",
+          action: "INSERT_OR_UPDATE",
+          update_set: "a1111111b2222222c3333333d4444444",
+        },
+        {
+          sys_id: "y1111111y2222222y3333333y4444444",
+          name: "sys_properties_1234567890abcdef1234567890abcdef",
+          target_name: "x.demo.property",
+          target_table: "sys_properties",
+          action: "INSERT_OR_UPDATE",
+          update_set: "a1111111b2222222c3333333d4444444",
+        },
+      ];
+
+      const sysparmQuery = String(query.sysparm_query || "");
+      let filtered = sampleEntries;
+      if (sysparmQuery.includes("update_set=")) {
+        const target = sysparmQuery
+          .split("^")
+          .find((entry) => entry.startsWith("update_set="))
+          ?.replace("update_set=", "");
+        if (target) {
+          filtered = filtered.filter((entry) => entry.update_set === target);
+        }
       }
 
       const limit = Number(query.sysparm_limit || filtered.length || 1);

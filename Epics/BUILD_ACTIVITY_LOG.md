@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 00:15 PST
+Last Updated: 2026-03-01 02:18 PST
 
 ---
 
@@ -426,6 +426,69 @@ Each entry should include:
 - **Evidence:** `README.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/BUILD_ACTIVITY_LOG.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`
 - **Next step:** Keep cross-doc updates atomic as F-series implementation begins.
 
+### 2026-03-01 00:44 PST
+
+- **Item:** EPIC-C-LIVE-DEPLOY-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Resolved Zurich Scripted REST routing mismatch by binding operations with `web_service_definition`-scoped lookup/create and validating effective runtime `base_uri` discovery.
+- **Evidence:** `scripts/deploy-companion-update-set.js`, `src/servicenow/companion-client.js`, service table checks (`sys_ws_definition`, `sys_ws_operation`).
+- **Next step:** Run full automated verification and synchronize status docs.
+
+### 2026-03-01 00:45 PST
+
+- **Item:** EPIC-C-LIVE-VERIFY-1
+- **Change:** `Blocked -> Done`
+- **Owner:** Engineering
+- **Reason:** Companion live verification now passes end-to-end against deployed instance using discovered base path (`/api/240215/v1`) with expected health + ACL endpoint behavior.
+- **Evidence:** `npm test`, `npm run test:companion:live`, `scripts/test-companion-live.js`.
+- **Next step:** Proceed to next queued stories (F1/F2/F3/E4).
+
+### 2026-03-01 00:59 PST
+
+- **Item:** EPIC-C-SCOPE-CORRECTNESS-1
+- **Change:** `Done -> In Progress (hardening)`
+- **Owner:** Engineering
+- **Reason:** Added strict deployment invariants and expanded live verification matrix to assert scope ownership, API naming, linkage, payload schema, and negative-path behavior.
+- **Evidence:** `scripts/deploy-companion-update-set.js`, `scripts/test-companion-live.js`, `npm run test:companion:live`
+- **Next step:** Resolve true scoped-record ownership (`sys_scope=x_mcp_companion`) via scoped-app install path (Studio/update-set in scope context), then re-run strict matrix until zero required failures.
+
+### 2026-03-01 01:00 PST
+
+- **Item:** EPIC-C-SCOPE-CORRECTNESS-2
+- **Change:** `In Progress -> Blocked`
+- **Owner:** Engineering
+- **Reason:** Live matrix shows companion endpoints are functional, but records remain global-scoped (`api_name=global.*`, `sys_scope=global`) despite existing `sys_scope` app record. Table API path does not assign scoped ownership for these records under current permissions/context.
+- **Evidence:** `npm run deploy:companion` invariant output; `npm run test:companion:live` detailed matrix (`Required failures: 7`).
+- **Next step:** Install/create companion artifacts through scoped app context (ServiceNow Studio or scoped update set import) and then re-verify.
+
+### 2026-03-01 01:15 PST
+
+- **Item:** EPIC-C-SCOPE-CORRECTNESS-3
+- **Change:** `Blocked -> In Progress (guardrail refactor)`
+- **Owner:** Engineering
+- **Reason:** Refactored companion deployment automation to eliminate global creation path for companion artifacts. Script now performs scope bootstrap only (`sys_scope`) and enforces update-only behavior for role/script includes/REST definition/operations with hard fail on missing or global-scoped records.
+- **Evidence:** `scripts/deploy-companion-update-set.js`; run: `npm run deploy:companion` now fails fast with prescriptive scoped-context error instead of recreating global artifacts.
+- **Next step:** Recreate companion artifacts in true `x_mcp_companion` scoped context (Studio/scoped update set/app repo), then rerun deployment.
+
+### 2026-03-01 01:17 PST
+
+- **Item:** EPIC-C-HARDENING-CHECKS-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Expanded companion live verification matrix with additional security/hardening checks (script include client-callable flags; REST operation auth/ACL/internal-role flags).
+- **Evidence:** `scripts/test-companion-live.js`; run: `npm run test:companion:live` now reports expanded required checks.
+- **Next step:** Recreate scoped artifacts and verify all required checks pass.
+
+### 2026-03-01 01:17 PST
+
+- **Item:** EPIC-C-SCOPE-CORRECTNESS-4
+- **Change:** `In Progress -> Blocked (awaiting scoped artifact recreation)`
+- **Owner:** Engineering
+- **Reason:** User-deleted global companion artifacts are now absent, and deploy/test runs correctly fail due strict no-global-create policy until records are recreated inside true scoped app context.
+- **Evidence:** `npm run deploy:companion` failure on missing scoped role; `npm run test:companion:live` summary (`Required failures: 24`) due missing companion artifacts/endpoints.
+- **Next step:** Create role/script includes/REST definition/operations in `x_mcp_companion` scope via Studio or scoped import, then rerun deploy/live/unit verification.
+
 ---
 
 ## Ongoing Update Rules
@@ -436,3 +499,39 @@ When work executes, append entries for:
 2. Blocker creation/removal
 3. Acceptance test pass/fail events
 4. Scope change decisions
+
+### 2026-03-01 02:05 PST
+
+- **Item:** PHASE-A-DEFAULT-COMPANION-OPTIONAL-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Refactored runtime/docs to make discovery-mode ACL the baseline and companion authority an explicit opt-in (`none|scoped|global`).
+- **Evidence:** `src/config.js`, `src/servicenow/companion-client.js`, `src/index.js`, `.env.example`, `README.md`, `PROJECT_CONTEXT_INDEX.md`
+- **Next step:** Run full validation pass and complete remaining PRD/epics companion-optional language sync.
+
+### 2026-03-01 02:05 PST
+
+- **Item:** TRACKING-SYNC-PHASE-A-1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Updated gate/board/risk framing so companion authority is tracked as optional Phase B pilot while preserving strict scope guardrails for teams that enable it.
+- **Evidence:** `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`
+- **Next step:** Finalize remaining planning/PRD/timeline docs and companion README.
+
+### 2026-03-01 02:18 PST
+
+- **Item:** F1
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented Update Set read tooling for Gate G4 entry criteria with pagination-aware contracts and read-only export metadata surface.
+- **Evidence:** `src/index.js` (`sn.changeset.list`, `sn.changeset.get`, `sn.changeset.contents`, `sn.changeset.export`), `src/servicenow/client.js` (changeset read helpers), `tests/script.tooling.test.js`; runs: `npm test`, `node src/index.js --smoke`.
+- **Next step:** Start F2 confidence-tier dependency gap detection.
+
+### 2026-03-01 02:18 PST
+
+- **Item:** G4
+- **Change:** `Not Started -> In Progress`
+- **Owner:** Engineering
+- **Reason:** Gate G4 advanced after F1 completion and validation evidence capture.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
+- **Next step:** Complete F2/F3 and add integration tests for Update Set flows.

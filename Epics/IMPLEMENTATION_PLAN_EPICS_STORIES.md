@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-03-01 00:16 PST
+Last Updated: 2026-03-01 02:18 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -8,11 +8,12 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 
 - EPIC-A is complete (`Done`)
 - EPIC-B is complete (`Done`)
-- EPIC-C baseline scope (C1/C2/C4) is complete (`Done`) and Gate G3 has passed
+- EPIC-C optional pilot scope (C1/C2/C4) is complete (`Done`) and Gate G3 has passed
 - Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`, `A6 — HTTP/SSE transport endpoint + URL-first MCP runtime`
 - Completed in EPIC-B: `B1 — Auth + client abstraction`, `B2 — Retry/pagination/error normalization`, `B3 — Instance capability discovery`, `B4 — README-aligned structure adoption`
-- Completed in EPIC-C baseline: `C1 — Scoped app packaging + version contract`, `C2 — ACL authoritative endpoint`, `C4 — Dual-mode sn.acl.trace`
-- Next queued cross-epic focus: `F1`, `F2`, `F3`, `E4`
+- Completed in EPIC-C optional pilot: `C1 — Scoped app packaging + version contract`, `C2 — ACL authoritative endpoint`, `C4 — Dual-mode sn.acl.trace`
+- EPIC-F has started with F1 complete (`sn.changeset.list/get/contents/export`) and validation evidence captured
+- Next queued cross-epic focus: `F2`, `F3`, `E4`
 
 ---
 
@@ -39,7 +40,7 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 | ------- | ----: | ------------------------------------------------------ | ---------------------- |
 | Phase 1 |   1–2 | Core skeleton + first vertical slice                   | EPIC-A, EPIC-B, EPIC-E |
 | Phase 2 |   3–5 | Validation MVP + script tooling                        | EPIC-D, EPIC-E         |
-| Phase 3 |   6–8 | Companion app + ACL authoritative mode                 | EPIC-C, EPIC-A         |
+| Phase 3 |   6–8 | Optional companion pilot + ACL authoritative mode      | EPIC-C, EPIC-A         |
 | Phase 4 |  9–12 | Update set reads + gaps + capture verify               | EPIC-F                 |
 | Phase 5 | 13–16 | Commit preview + controlled commit + rollback planning | EPIC-F                 |
 | Phase 6 | 17–20 | Flow/workflow parity                                   | EPIC-E, EPIC-D         |
@@ -159,9 +160,9 @@ Goal: Reliable, secure, and release-tolerant ServiceNow API foundation.
 
 ---
 
-## EPIC-C — Companion App (Authoritative Checks)
+## EPIC-C — Optional Companion Authority Pilot
 
-Goal: Provide platform-native truth where external APIs are insufficient.
+Goal: Provide optional platform-native authority where external APIs are insufficient, without blocking discovery-first baseline runtime.
 
 ### Story C1 — Scoped app packaging + version contract
 

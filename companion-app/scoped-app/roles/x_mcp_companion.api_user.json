@@ -1,0 +1,5 @@
+{
+	"name": "x_mcp_companion.api_user",
+	"description": "Allows MCP Companion Scripted REST access for health and ACL evaluate endpoints.",
+	"suffix": "api_user"
+}

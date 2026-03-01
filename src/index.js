@@ -303,9 +303,11 @@ function registerBaselineTools(server) {
             ...authoritative,
             companion: {
               enabled: companionStatus.enabled,
+              mode: companionStatus.mode || "none",
               status: companionStatus.status,
               version: companionStatus.version,
               min_version: companionStatus.min_version,
+              degraded_reason_code: companionStatus.degraded_reason_code || null,
             },
           },
         };
@@ -323,9 +325,11 @@ function registerBaselineTools(server) {
           ...discovery,
           companion: {
             enabled: companionStatus.enabled,
+            mode: companionStatus.mode || "none",
             status: companionStatus.status,
             version: companionStatus.version,
             min_version: companionStatus.min_version,
+            degraded_reason_code: companionStatus.degraded_reason_code || degradedReasonCode,
           },
         },
       };
@@ -351,6 +355,99 @@ function registerBaselineTools(server) {
           records: result.records,
           page: result.page,
         },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.list",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(100, Math.max(1, Number(input?.limit || 25)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+      const query = String(input?.query || "");
+
+      const page = await client.listChangesets({
+        limit,
+        offset,
+        query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          records: page.records,
+          page: page.page,
+          query,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.get",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.getChangeset({
+        sysId: input?.sys_id,
+        name: input?.name,
+        query: input?.query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          found: result.found,
+          query: result.query,
+          record: result.record,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.contents",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const limit = Math.min(200, Math.max(1, Number(input?.limit || 50)));
+      const offset = Math.max(0, Number(input?.offset || 0));
+      const query = String(input?.query || "");
+
+      const page = await client.listChangesetContents({
+        changesetSysId: input?.changeset_sys_id || input?.sys_id,
+        limit,
+        offset,
+        query,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          changeset_sys_id: input?.changeset_sys_id || input?.sys_id || null,
+          records: page.records,
+          page: page.page,
+          query,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.export",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.exportChangeset({
+        sysId: input?.sys_id,
+        format: input?.format || "xml",
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
       };
     },
   });
@@ -611,6 +708,22 @@ async function main() {
     const scriptDepsResult = await server.invoke("sn.script.deps", {
       name: "x_demo_utility",
     });
+    const changesetListResult = await server.invoke("sn.changeset.list", {
+      limit: 2,
+      offset: 0,
+    });
+    const changesetGetResult = await server.invoke("sn.changeset.get", {
+      name: "u_demo_changeset",
+    });
+    const changesetContentsResult = await server.invoke("sn.changeset.contents", {
+      changeset_sys_id: "a1111111b2222222c3333333d4444444",
+      limit: 2,
+      offset: 0,
+    });
+    const changesetExportResult = await server.invoke("sn.changeset.export", {
+      sys_id: "a1111111b2222222c3333333d4444444",
+      format: "xml",
+    });
     const aclTraceResult = await server.invoke("sn.acl.trace", {
       table: "incident",
       operation: "read",
@@ -673,6 +786,11 @@ async function main() {
       e3_create_update_auditable:
         Boolean(scriptCreateAllowed?.data?.audit?.action) &&
         Boolean(scriptUpdateAllowed?.data?.audit?.action),
+      f1_changeset_read_tools_available:
+        changesetListResult?.tool === "sn.changeset.list" &&
+        changesetGetResult?.tool === "sn.changeset.get" &&
+        changesetContentsResult?.tool === "sn.changeset.contents" &&
+        changesetExportResult?.tool === "sn.changeset.export",
     };
 
     console.log(JSON.stringify({
@@ -685,6 +803,10 @@ async function main() {
       script_search_result: scriptSearchResult,
       script_refs_result: scriptRefsResult,
       script_deps_result: scriptDepsResult,
+      changeset_list_result: changesetListResult,
+      changeset_get_result: changesetGetResult,
+      changeset_contents_result: changesetContentsResult,
+      changeset_export_result: changesetExportResult,
       acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,

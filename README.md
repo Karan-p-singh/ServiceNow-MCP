@@ -5,7 +5,8 @@ A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that en
 This repository delivers:
 
 - **MCP Server (TypeScript)**: tool registry, tier enforcement, policy engine, validation engine, audit logs
-- **ServiceNow Companion App (Scoped)**: authoritative platform-native evaluation endpoints (e.g., ACL evaluation)
+- **Discovery-first ACL tracing (default)**: companion-optional baseline that works without companion deployment
+- **Optional Companion integration**: scoped or global pilot mode for authoritative ACL evaluation when explicitly enabled
 - **Rulepacks**: versioned best-practice and governance validations
 
 ---
@@ -33,7 +34,8 @@ ServiceNow is not a generic CRUD system. External tooling cannot safely “guess
 
 This project is designed to be **honest and safe**:
 
-- “Authoritative” actions require a **Companion App**.
+- Baseline operation does **not** require Companion deployment.
+- Authoritative ACL evaluation is **optional** and only active when companion mode is explicitly enabled.
 - Dependency tools return **confidence tiers**.
 - Commit and rollback are implemented as **preview + plan**, not false promises.
 
@@ -88,9 +90,16 @@ MCP_ENFORCE_CHANGESET_SCOPE=true
 VALIDATION_RULEPACK_VERSION=1.0.0
 VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 
-# Companion integration (Gate G3)
-SN_COMPANION_ENABLED=true
+# Companion integration (optional)
+# Phase A default (recommended): discovery-only ACL mode
+SN_COMPANION_ENABLED=false
+SN_COMPANION_MODE=none
+# Optional Phase B pilot: scoped or global companion authority
+# SN_COMPANION_ENABLED=true
+# SN_COMPANION_MODE=scoped
+# SN_COMPANION_MODE=global
 SN_COMPANION_BASE_PATH=/api/x_mcp_companion/v1
+SN_COMPANION_GLOBAL_BASE_PATH=/api/global/x_mcp_companion/v1
 SN_COMPANION_MIN_VERSION=1.0.0
 SN_COMPANION_REQUEST_TIMEOUT_MS=3000
 ```
@@ -250,7 +259,21 @@ A typical enterprise posture:
 
 ---
 
-## Companion App (ServiceNow Scoped)
+## ACL Trace Modes (Default + Optional Authority)
+
+`sn.acl.trace` always works, but with explicit mode signaling:
+
+- **Phase A default**: `mode=discovery` (best-effort, explicit limitations, no companion dependency)
+- **Phase B optional pilot**: `mode=authoritative` when companion is enabled and compatible
+
+Companion activation is controlled by:
+
+- `SN_COMPANION_ENABLED=true`
+- `SN_COMPANION_MODE=scoped|global`
+
+With `SN_COMPANION_MODE=none` (default), companion is intentionally disabled.
+
+## Optional Companion App (Scoped/Global)
 
 Some platform truths cannot be reproduced externally.
 The Companion App provides:
@@ -264,7 +287,9 @@ If the Companion App is missing or outdated:
 - tools degrade safely or refuse “authoritative” operations
 - outputs explicitly declare what is and is not reliable
 
-### `sn.acl.trace` dual-mode behavior (Gate G3)
+Zurich note: some instances auto-generate Scripted REST `base_uri` from namespace (for example `/api/240215/v1`) even when scoped artifacts are named `x_mcp_companion`. Runtime and live verification now auto-discover effective base path from `sys_ws_definition(name=x_mcp_companion)` and fall back to `SN_COMPANION_BASE_PATH`.
+
+### `sn.acl.trace` dual-mode behavior
 
 - **Authoritative mode** (`mode=authoritative`): used when Companion is enabled, reachable, and version-compatible.
 - **Discovery mode** (`mode=discovery`): automatic fallback with explicit `limitations[]` and deterministic `degraded_reason_code` when authoritative path is unavailable.
@@ -328,6 +353,20 @@ All script read tools attach validation summaries. Write tools enforce:
 - `VALIDATION_ACK_REQUIRED_HIGH` when HIGH findings are not acknowledged
 
 ### Update Set Deployment Readiness
+
+Current implemented F-series read tools (F1):
+
+- `sn.changeset.list`
+- `sn.changeset.get`
+- `sn.changeset.contents`
+- `sn.changeset.export`
+
+Planned next tools (F2+):
+
+- `sn.changeset.gaps`
+- `sn.updateset.capture.verify`
+- `sn.changeset.commit.preview`
+- `sn.rollback.plan.generate`
 
 1. `sn.changeset.get`
 2. `sn.changeset.gaps` (confidence-tier output)

@@ -71,3 +71,38 @@ test("script tooling create/update returns auditable record payloads", async () 
   assert.equal(updated.record.sys_id, "9f2b2d3fdb001010a1b2c3d4e5f6a7b8");
   assert.equal(updated.record.description, "updated in test");
 });
+
+test("changeset read tooling list/get/contents/export returns structured mock payloads", async () => {
+  const client = createMockClient();
+
+  const listPage = await client.listChangesets({ limit: 1, offset: 0 });
+  assert.equal(listPage.records.length, 1);
+  assert.equal(listPage.page.limit, 1);
+  assert.equal(listPage.page.has_more, true);
+
+  const getByName = await client.getChangeset({ name: "u_demo_changeset" });
+  assert.equal(getByName.found, true);
+  assert.equal(getByName.record.name, "u_demo_changeset");
+
+  const getById = await client.getChangeset({
+    sysId: "a1111111b2222222c3333333d4444444",
+  });
+  assert.equal(getById.found, true);
+  assert.equal(getById.record.sys_id, "a1111111b2222222c3333333d4444444");
+
+  const contents = await client.listChangesetContents({
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+    limit: 10,
+    offset: 0,
+  });
+  assert.equal(contents.records.length >= 1, true);
+  assert.equal(contents.records.every((record) => record.update_set === "a1111111b2222222c3333333d4444444"), true);
+
+  const exported = await client.exportChangeset({
+    sysId: "a1111111b2222222c3333333d4444444",
+    format: "xml",
+  });
+  assert.equal(exported.exported, true);
+  assert.equal(exported.format, "xml");
+  assert.equal(exported.download_url.includes("sys_update_set.do?XML"), true);
+});

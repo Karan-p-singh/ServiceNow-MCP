@@ -57,6 +57,7 @@ test("CompanionClient getStatus resolves available for compatible health payload
     config: {
       companion: {
         enabled: true,
+        mode: "scoped",
         minVersion: "1.0.0",
         basePath: "/api/x_mcp_companion/v1",
       },
@@ -77,6 +78,7 @@ test("CompanionClient evaluateAcl returns authoritative contract", async () => {
     config: {
       companion: {
         enabled: true,
+        mode: "scoped",
         minVersion: "1.0.0",
         basePath: "/api/x_mcp_companion/v1",
       },

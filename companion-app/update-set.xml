@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2026-03-01T09:46:55.996Z" version="Zurich">
+  <sys_remote_update_set action="INSERT_OR_UPDATE">
+    <sys_id>4a3f5ac080828e12244eba04602e68e7</sys_id>
+    <name>ServiceNow MCP Companion (x_mcp_companion)</name>
+    <description>Companion baseline for health/version + ACL evaluate endpoints (scope-enforced).</description>
+    <application display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</application>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <state>loaded</state>
+  </sys_remote_update_set>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>e29b9338b9af9f7574cb929b4cb08f02</sys_id>
+    <name>sys_user_role_x_mcp_companion.api_user</name>
+    <source_table>sys_user_role</source_table>
+    <target_name>x_mcp_companion.api_user</target_name>
+    <type>User Role</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_user_role">
+  <sys_user_role action="INSERT_OR_UPDATE">
+    <sys_id>eba68245226b799b5677ae8bcf496e9c</sys_id>
+    <name>x_mcp_companion.api_user</name>
+    <description>Allows MCP Companion Scripted REST access.</description>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_user_role>
+</record_update>]]></payload>
+  </sys_update_xml>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>9b761b4e4d2bb2a59ad64f1a172e4411</sys_id>
+    <name>sys_script_include_XMcpCompanionVersion</name>
+    <source_table>sys_script_include</source_table>
+    <target_name>XMcpCompanionVersion</target_name>
+    <type>Script Include</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+  <sys_script_include action="INSERT_OR_UPDATE">
+    <sys_id>97e34efd81ff44b38413338f55ea4680</sys_id>
+    <name>XMcpCompanionVersion</name>
+    <api_name>x_mcp_companion.XMcpCompanionVersion</api_name>
+    <active>true</active>
+    <client_callable>false</client_callable>
+    <description>MCP Companion health/version provider</description>
+    <script><![CDATA[var XMcpCompanionVersion = Class.create();
+XMcpCompanionVersion.prototype = {
+  initialize: function () {},
+
+  getInfo: function () {
+    return {
+      status: "ok",
+      version: "1.0.0",
+      app_scope: "x_mcp_companion",
+      family: "Zurich"
+    };
+  },
+
+  type: "XMcpCompanionVersion"
+};
+]]]]><![CDATA[></script>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_script_include>
+</record_update>]]></payload>
+  </sys_update_xml>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>44d28ff98b5cbebd025b1b113bea3137</sys_id>
+    <name>sys_script_include_XMcpAclEvaluator</name>
+    <source_table>sys_script_include</source_table>
+    <target_name>XMcpAclEvaluator</target_name>
+    <type>Script Include</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+  <sys_script_include action="INSERT_OR_UPDATE">
+    <sys_id>6dbf030caa178dfa452a17ee83a38dc6</sys_id>
+    <name>XMcpAclEvaluator</name>
+    <api_name>x_mcp_companion.XMcpAclEvaluator</api_name>
+    <active>true</active>
+    <client_callable>false</client_callable>
+    <description>MCP Companion ACL evaluation service</description>
+    <script><![CDATA[var XMcpAclEvaluator = Class.create();
+XMcpAclEvaluator.prototype = {
+  initialize: function () {},
+
+  evaluate: function (params) {
+    var input = params || {};
+    var table = String(input.table || "");
+    var operation = String(input.operation || "read");
+    var field = input.field ? String(input.field) : "*";
+
+    if (!table) {
+      return {
+        decision: "indeterminate",
+        reasoning_summary: "Missing required field: table",
+        evaluated_acls: []
+      };
+    }
+
+    var acl = new GlideRecord("sys_security_acl");
+    acl.addQuery("name", "CONTAINS", table);
+    acl.addQuery("operation", operation);
+    acl.setLimit(10);
+    acl.query();
+
+    var evaluated = [];
+    while (acl.next()) {
+      evaluated.push({
+        sys_id: String(acl.getUniqueValue()),
+        name: String(acl.getValue("name") || ""),
+        operation: String(acl.getValue("operation") || ""),
+        active: String(acl.getValue("active") || "")
+      });
+    }
+
+    return {
+      decision: evaluated.length > 0 ? "indeterminate" : "indeterminate",
+      reasoning_summary:
+        "Companion ACL evaluation currently returns metadata-backed deterministic output. Runtime scripted ACL execution context is intentionally conservative.",
+      evaluated_acls: evaluated,
+      context: {
+        table: table,
+        operation: operation,
+        field: field
+      }
+    };
+  },
+
+  type: "XMcpAclEvaluator"
+};
+]]]]><![CDATA[></script>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_script_include>
+</record_update>]]></payload>
+  </sys_update_xml>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>01555307a8e2c2c456ac82b0eb56aafd</sys_id>
+    <name>sys_ws_definition_x_mcp_companion</name>
+    <source_table>sys_ws_definition</source_table>
+    <target_name>x_mcp_companion</target_name>
+    <type>Scripted REST API</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_definition">
+  <sys_ws_definition action="INSERT_OR_UPDATE">
+    <sys_id>5da101f4744c6960a7a8519d82a5d47c</sys_id>
+    <name>x_mcp_companion</name>
+    <api_id>x_mcp_companion</api_id>
+    <namespace>x_mcp_companion</namespace>
+    <service_id>v1</service_id>
+    <is_versioned>false</is_versioned>
+    <active>true</active>
+    <base_path>/api/x_mcp_companion/v1</base_path>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_ws_definition>
+</record_update>]]></payload>
+  </sys_update_xml>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>ad15198fb12c3b9d01458adcf517e0fb</sys_id>
+    <name>sys_ws_operation_health</name>
+    <source_table>sys_ws_operation</source_table>
+    <target_name>health</target_name>
+    <type>Scripted REST Resource</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+  <sys_ws_operation action="INSERT_OR_UPDATE">
+    <sys_id>679e6682c59199e8754b0e3e4b0abe1e</sys_id>
+    <name>health</name>
+    <http_method>GET</http_method>
+    <relative_path>/health</relative_path>
+    <active>true</active>
+    <requires_authentication>true</requires_authentication>
+    <requires_acl_authorization>true</requires_acl_authorization>
+    <requires_snc_internal_role>false</requires_snc_internal_role>
+    <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var provider = new XMcpCompanionVersion();
+  response.setStatus(200);
+  response.setBody({
+    result: provider.getInfo()
+  });
+})(request, response);
+]]]]><![CDATA[></operation_script>
+    <script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var provider = new XMcpCompanionVersion();
+  response.setStatus(200);
+  response.setBody({
+    result: provider.getInfo()
+  });
+})(request, response);
+]]]]><![CDATA[></script>
+    <web_service_definition display_value="x_mcp_companion">5da101f4744c6960a7a8519d82a5d47c</web_service_definition>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_ws_operation>
+</record_update>]]></payload>
+  </sys_update_xml>
+
+  <sys_update_xml action="INSERT_OR_UPDATE">
+    <sys_id>3f014438ba94d679bbbd6b8dca5afa27</sys_id>
+    <name>sys_ws_operation_acl_evaluate</name>
+    <source_table>sys_ws_operation</source_table>
+    <target_name>acl_evaluate</target_name>
+    <type>Scripted REST Resource</type>
+    <category>customer</category>
+    <replace_on_upgrade>false</replace_on_upgrade>
+    <update_set display_value="ServiceNow MCP Companion (x_mcp_companion)">4a3f5ac080828e12244eba04602e68e7</update_set>
+    <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+  <sys_ws_operation action="INSERT_OR_UPDATE">
+    <sys_id>73f9207dd7f184a623ec9a86119f1089</sys_id>
+    <name>acl_evaluate</name>
+    <http_method>POST</http_method>
+    <relative_path>/acl/evaluate</relative_path>
+    <active>true</active>
+    <requires_authentication>true</requires_authentication>
+    <requires_acl_authorization>true</requires_acl_authorization>
+    <requires_snc_internal_role>false</requires_snc_internal_role>
+    <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var body = request.body && request.body.data ? request.body.data : {};
+  var evaluator = new XMcpAclEvaluator();
+  var result = evaluator.evaluate(body);
+
+  response.setStatus(200);
+  response.setBody({
+    result: result
+  });
+})(request, response);
+]]]]><![CDATA[></operation_script>
+    <script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var body = request.body && request.body.data ? request.body.data : {};
+  var evaluator = new XMcpAclEvaluator();
+  var result = evaluator.evaluate(body);
+
+  response.setStatus(200);
+  response.setBody({
+    result: result
+  });
+})(request, response);
+]]]]><![CDATA[></script>
+    <web_service_definition display_value="x_mcp_companion">5da101f4744c6960a7a8519d82a5d47c</web_service_definition>
+    <sys_scope display_value="x_mcp_companion">ff88c9eb5f52e35e34e169e1662eb9c9</sys_scope>
+    <sys_package display_value="x_mcp_companion">05425b48370a80a791cd1f5e41a4f728</sys_package>
+  </sys_ws_operation>
+</record_update>]]></payload>
+  </sys_update_xml>
+</unload>

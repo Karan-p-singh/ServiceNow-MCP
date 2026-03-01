@@ -56,26 +56,77 @@ function toCompanionStatusFromError(error) {
   };
 }
 
+function unwrapCompanionPayload(data) {
+  const root = data?.result ?? data ?? {};
+  if (root && typeof root === "object" && root.result && typeof root.result === "object") {
+    return root.result;
+  }
+  return root;
+}
+
 export class CompanionClient {
   constructor({ serviceNowClient, config } = {}) {
     this.serviceNowClient = serviceNowClient;
     this.config = config || {};
+    this.discoveredBasePath = null;
   }
 
   resolveCompanionConfig() {
+    const rawMode = String(this.config?.companion?.mode || "none").toLowerCase();
+    const mode = ["none", "scoped", "global"].includes(rawMode) ? rawMode : "none";
+    const explicitEnabled = Boolean(this.config?.companion?.enabled);
+    const enabled = explicitEnabled && mode !== "none";
+    const configuredBasePath =
+      mode === "global"
+        ? this.config?.companion?.globalBasePath || "/api/global/x_mcp_companion/v1"
+        : this.config?.companion?.basePath || "/api/x_mcp_companion/v1";
+
     return {
-      enabled: Boolean(this.config?.companion?.enabled),
-      basePath: this.config?.companion?.basePath || "/api/x_mcp_companion/v1",
+      enabled,
+      mode,
+      basePath: configuredBasePath,
       minVersion: this.config?.companion?.minVersion || "1.0.0",
       requestTimeoutMs: Number(this.config?.companion?.requestTimeoutMs || 3000),
     };
   }
 
-  async getHealth({ instanceKey } = {}) {
+  async resolveBasePath({ instanceKey } = {}) {
     const companionConfig = this.resolveCompanionConfig();
+    if (this.discoveredBasePath) {
+      return this.discoveredBasePath;
+    }
+
+    if (companionConfig.mode === "global") {
+      this.discoveredBasePath = companionConfig.basePath;
+      return this.discoveredBasePath;
+    }
+
+    try {
+      const definitions = await this.serviceNowClient.listTable({
+        table: "sys_ws_definition",
+        query: "name=x_mcp_companion",
+        limit: 1,
+        offset: 0,
+        instanceKey,
+      });
+      const discovered = definitions?.records?.[0]?.base_uri;
+      if (discovered) {
+        this.discoveredBasePath = discovered;
+        return discovered;
+      }
+    } catch {
+      // Ignore discovery issues and fall back to configured base path.
+    }
+
+    this.discoveredBasePath = companionConfig.basePath;
+    return this.discoveredBasePath;
+  }
+
+  async getHealth({ instanceKey } = {}) {
+    const basePath = await this.resolveBasePath({ instanceKey });
     return this.serviceNowClient.request({
       method: "GET",
-      path: `${companionConfig.basePath}/health`,
+      path: `${basePath}/health`,
       instanceKey,
       headers: {
         "X-MCP-Companion-Probe": "health",
@@ -93,13 +144,14 @@ export class CompanionClient {
         compatible: false,
         version: null,
         min_version: companionConfig.minVersion,
+        mode: companionConfig.mode,
         degraded_reason_code: "COMPANION_DISABLED_BY_CONFIG",
       };
     }
 
     try {
       const response = await this.getHealth({ instanceKey });
-      const payload = response?.data?.result || response?.data || {};
+      const payload = unwrapCompanionPayload(response?.data);
       const installedVersion = payload.version || payload.companion_version || null;
       const versionComparison = compareSemver(installedVersion, companionConfig.minVersion);
       const compatible = versionComparison !== null && versionComparison >= 0;
@@ -112,6 +164,7 @@ export class CompanionClient {
         compatible: !outdated,
         version: installedVersion,
         min_version: companionConfig.minVersion,
+        mode: companionConfig.mode,
         app_scope: payload.app_scope || "x_mcp_companion",
         degraded_reason_code: outdated ? "COMPANION_OUTDATED" : null,
       };
@@ -119,16 +172,17 @@ export class CompanionClient {
       const unavailable = toCompanionStatusFromError(error);
       return {
         ...unavailable,
+        mode: companionConfig.mode,
         min_version: companionConfig.minVersion,
       };
     }
   }
 
   async evaluateAcl({ instanceKey, input } = {}) {
-    const companionConfig = this.resolveCompanionConfig();
+    const basePath = await this.resolveBasePath({ instanceKey });
     const response = await this.serviceNowClient.request({
       method: "POST",
-      path: `${companionConfig.basePath}/acl/evaluate`,
+      path: `${basePath}/acl/evaluate`,
       instanceKey,
       body: {
         user: input?.user || null,
@@ -143,7 +197,7 @@ export class CompanionClient {
       },
     });
 
-    const payload = response?.data?.result || response?.data || {};
+    const payload = unwrapCompanionPayload(response?.data);
     const decisionRaw = String(payload.decision || payload.outcome || "indeterminate").toLowerCase();
     const decision = ["allow", "deny", "indeterminate"].includes(decisionRaw)
       ? decisionRaw

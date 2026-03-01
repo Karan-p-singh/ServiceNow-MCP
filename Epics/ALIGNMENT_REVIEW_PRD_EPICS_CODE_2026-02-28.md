@@ -4,6 +4,9 @@ Last Updated: 2026-02-28 20:20 PST
 Reviewer: Engineering (Cline)
 Scope Reviewed: Current repository implementation and trackers through EPIC-A/EPIC-B completion claims
 
+> Note (2026-03-01): This is a historical alignment snapshot from 2026-02-28.
+> Current architecture baseline has shifted to Phase A discovery-first ACL mode with optional companion authority (Phase B pilot).
+
 ---
 
 ## 1) Review Objective

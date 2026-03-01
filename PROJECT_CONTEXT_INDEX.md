@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 00:16 PST
+Last Updated: 2026-03-01 02:19 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -63,13 +63,15 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `src/server/mcp.js` → server lifecycle + invocation orchestration
 - `src/server/http-sse.js` → HTTP/SSE transport host + JSON-RPC bridge (`/mcp`, `/mcp/sse`)
 - `src/servicenow/client.js` → ServiceNow REST adapter (auth, retries, normalization, capability discovery)
-- `src/servicenow/companion-client.js` → Companion app health/version + authoritative ACL integration client
+- `src/servicenow/companion-client.js` → Companion mode resolver (`none|scoped|global`) + optional authoritative ACL integration client
 - `src/config.js` → environment parsing + local `.env` loading and merged config resolution
 
 ### `scripts/` (diagnostics + verification)
 
 - `scripts/test-live-connection.js` → expanded live instance diagnostics matrix (auth, stats, metadata, script read, failure classification)
 - `scripts/test-live-mcp-transport.js` → MCP transport/runtime verification (`GET /mcp`, JSON-RPC initialize/list/call)
+- `scripts/deploy-companion-update-set.js` → Optional companion deployment helper with strict scope invariants (not required for baseline runtime)
+- `scripts/test-companion-live.js` → Optional companion live endpoint verification for scoped/global pilot modes
 - `package.json` scripts: `npm run smoke`, `npm run test:live`, `npm run test:live:mcp`
 
 ---
@@ -88,10 +90,14 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 5) Status Snapshot (Current)
 
-- Phase 1 and Phase 2 are complete with **G1/G2 passed**, and Phase 3 is complete with **Gate G3 passed**.
+- Phase 1 and Phase 2 are complete with **G1/G2 passed**.
+- Phase 3 companion authority is now treated as **optional pilot capability** rather than baseline dependency.
 - **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
 - **EPIC-C baseline** (`C1/C2/C4`) is complete with dual-mode `sn.acl.trace` and deterministic degraded reason codes.
 - G1 evidence now includes live diagnostics tooling (`test:live`, `test:live:mcp`) and secure env publishing baseline (`.env.example` + `.gitignore`).
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
-- Next queued stories are **F1, F2, F3, E4**.
+- Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
+- **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
+- EPIC-F has started with **F1 complete** (`sn.changeset.list/get/contents/export`) and Gate G4 now in progress.
+- Next queued stories are **F2, F3, E4**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

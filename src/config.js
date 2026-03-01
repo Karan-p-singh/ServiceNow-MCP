@@ -14,7 +14,9 @@ const DEFAULTS = {
   retryBaseDelayMs: 200,
   requestTimeoutMs: 4000,
   companionEnabled: false,
+  companionMode: "none",
   companionBasePath: "/api/x_mcp_companion/v1",
+  companionGlobalBasePath: "/api/global/x_mcp_companion/v1",
   companionMinVersion: "1.0.0",
   companionTimeoutMs: 3000,
   tierMax: "T0",
@@ -190,7 +192,10 @@ export function loadConfig(env = process.env) {
     },
     companion: {
       enabled: parseBoolean(mergedEnv.SN_COMPANION_ENABLED, DEFAULTS.companionEnabled),
+      mode: (mergedEnv.SN_COMPANION_MODE || DEFAULTS.companionMode).toLowerCase(),
       basePath: mergedEnv.SN_COMPANION_BASE_PATH || DEFAULTS.companionBasePath,
+      globalBasePath:
+        mergedEnv.SN_COMPANION_GLOBAL_BASE_PATH || DEFAULTS.companionGlobalBasePath,
       minVersion: mergedEnv.SN_COMPANION_MIN_VERSION || DEFAULTS.companionMinVersion,
       requestTimeoutMs: parseInteger(
         mergedEnv.SN_COMPANION_REQUEST_TIMEOUT_MS,

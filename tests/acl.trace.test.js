@@ -40,6 +40,7 @@ test("sn.acl.trace returns discovery mode when companion is disabled", async () 
 test("sn.acl.trace returns authoritative mode when companion is enabled and compatible", async () => {
   const payload = await runSmoke({
     SN_COMPANION_ENABLED: "true",
+    SN_COMPANION_MODE: "scoped",
     SN_COMPANION_MIN_VERSION: "1.0.0",
   });
 
@@ -52,6 +53,7 @@ test("sn.acl.trace returns authoritative mode when companion is enabled and comp
 test("sn.acl.trace falls back to discovery for outdated companion", async () => {
   const payload = await runSmoke({
     SN_COMPANION_ENABLED: "true",
+    SN_COMPANION_MODE: "scoped",
     SN_COMPANION_MIN_VERSION: "2.0.0",
   });
 
