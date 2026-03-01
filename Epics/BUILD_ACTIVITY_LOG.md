@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-03-01 02:43 PST
+Last Updated: 2026-03-01 02:55 PST
 
 ---
 
@@ -571,3 +571,30 @@ When work executes, append entries for:
 - **Reason:** All Gate G4 checklist criteria are now complete, including non-prod integration validation for core update set flows.
 - **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `artifacts/g4-validation-summary.json`, `artifacts/g4-integration-summary.json`
 - **Next step:** Begin Phase 5 execution (`F4 -> F5 -> F6`) while continuing queued quality/integration work (`G2`).
+
+### 2026-03-01 02:55 PST
+
+- **Item:** F4
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented commit preview dry-run contract as read-only deployment intelligence with scope impact reporting, potential conflict candidates, and mitigation guidance.
+- **Evidence:** `src/index.js` (`sn.changeset.commit.preview`), `src/servicenow/client.js` (`previewChangesetCommit`), `tests/script.tooling.test.js`, `scripts/test-live-mcp-transport.js`, `README.md`; run: `npm test`.
+- **Next step:** Begin F5 controlled commit contract (`confirm/reason` + snapshot coverage matrix).
+
+### 2026-03-01 02:55 PST
+
+- **Item:** G5
+- **Change:** `Not Started -> In Progress`
+- **Owner:** Engineering
+- **Reason:** Gate G5 advanced after F4 completion and test-backed evidence capture.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
+- **Next step:** Deliver F5 and F6 plus high-risk operation audit trace validation.
+
+### 2026-03-01 02:55 PST
+
+- **Item:** DOCS-F4-SYNC-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Synchronized README/context/tracking artifacts to reflect F4 completion and Phase 5 progression.
+- **Evidence:** `README.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`, `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`.
+- **Next step:** Keep cross-doc sync atomic as F5/F6 are implemented.

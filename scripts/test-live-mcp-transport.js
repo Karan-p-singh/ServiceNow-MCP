@@ -122,6 +122,7 @@ async function run() {
     "sn.table.list",
     "sn.script.get",
     "sn.script.update",
+    "sn.changeset.commit.preview",
     "sn.changeset.commit",
   ];
   const expectedGuardrailObservations = [];
@@ -304,6 +305,25 @@ async function run() {
         expected_error_code: expectedChangesetCode,
         error_codes: changesetCodes,
       },
+    );
+
+    const changesetPreview = await rpcCall(endpoint, 12, "tools/call", {
+      name: "sn.changeset.commit.preview",
+      arguments: {
+        changeset_sys_id: "a1111111b2222222c3333333d4444444",
+        include_conflicts: true,
+      },
+    });
+    log("RPC tools/call sn.changeset.commit.preview", changesetPreview);
+    const previewEnvelope = changesetPreview?.body?.result?.structuredContent;
+    assertCheck(
+      "tools/call sn.changeset.commit.preview returns read-only dry-run contract",
+      changesetPreview.status === 200 &&
+        previewEnvelope?.tool === "sn.changeset.commit.preview" &&
+        previewEnvelope?.data?.preview_generated === true &&
+        previewEnvelope?.data?.write_side_effects === false &&
+        Array.isArray(previewEnvelope?.data?.recommended_mitigations),
+      previewEnvelope,
     );
 
     const unknownMethod = await rpcCall(endpoint, 6, "unknown/method", {});

@@ -1,21 +1,21 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 02:43 PST
+Last Updated: 2026-03-01 02:57 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
 
 ## 1) Phase Progress Snapshot
 
-| Phase | Name                               | Status  | Progress | Notes                                                                                                                           |
-| ----- | ---------------------------------- | ------- | -------: | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | Foundation + First Vertical Slice  | Done    |     100% | Gate G1 passed: E1 minimal (`sn.script.get` + validation summary) and first vertical-slice demo evidence captured               |
-| 2     | Validation MVP + Script Tooling    | Done    |     100% | Gate G2 passed: validation runtime/rulepack, script tooling E2E, and unit coverage completed                                    |
-| 3     | Optional Companion Authority Pilot | Done    |     100% | Phase B optional capability: companion health/version contract + authoritative ACL path + dual-mode degraded behavior validated |
-| 4     | Update Set MVP                     | Done    |     100% | Gate G4 passed: F1/F2/F3 complete and non-prod integration validation completed (`npm run test:g4:live`)                        |
-| 5     | Commit + Rollback Planning         | Backlog |       0% | Dependent on Phase 4 readiness                                                                                                  |
-| 6     | Flows + Workflows Coverage         | Backlog |       0% | Dependent on core validation maturity                                                                                           |
-| 7     | Enterprise Hardening               | Backlog |       0% | Final hardening and release prep                                                                                                |
+| Phase | Name                               | Status      | Progress | Notes                                                                                                                           |
+| ----- | ---------------------------------- | ----------- | -------: | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Foundation + First Vertical Slice  | Done        |     100% | Gate G1 passed: E1 minimal (`sn.script.get` + validation summary) and first vertical-slice demo evidence captured               |
+| 2     | Validation MVP + Script Tooling    | Done        |     100% | Gate G2 passed: validation runtime/rulepack, script tooling E2E, and unit coverage completed                                    |
+| 3     | Optional Companion Authority Pilot | Done        |     100% | Phase B optional capability: companion health/version contract + authoritative ACL path + dual-mode degraded behavior validated |
+| 4     | Update Set MVP                     | Done        |     100% | Gate G4 passed: F1/F2/F3 complete and non-prod integration validation completed (`npm run test:g4:live`)                        |
+| 5     | Commit + Rollback Planning         | In Progress |      33% | F4 commit preview dry-run delivered; remaining Phase 5 scope is F5/F6 with high-risk audit trace validation                     |
+| 6     | Flows + Workflows Coverage         | Backlog     |       0% | Dependent on core validation maturity                                                                                           |
+| 7     | Enterprise Hardening               | Backlog     |       0% | Final hardening and release prep                                                                                                |
 
 ---
 
@@ -28,7 +28,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | EPIC-C  | Optional Companion Authority        | SN Dev  | Done        | 2026-03-01 | 2026-03-01 |     100% | EPIC-B                    |
 | EPIC-D  | Validation Engine & Rulepacks       | Eng     | Done        | 2026-02-28 | 2026-02-28 |     100% | EPIC-A, EPIC-B            |
 | EPIC-E  | Developer Artifact Tooling          | Eng     | In Progress | 2026-02-28 | TBD        |      55% | EPIC-B, EPIC-D            |
-| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      60% | EPIC-E (baseline), EPIC-C |
+| EPIC-F  | Update Set & Commit Operations      | Eng     | In Progress | 2026-03-01 | TBD        |      70% | EPIC-E (baseline), EPIC-C |
 | EPIC-G  | Quality Engineering & Test Strategy | Eng/QA  | In Progress | 2026-02-28 | TBD        |      10% | Core feature completeness |
 | EPIC-H  | Enterprise Hardening                | Eng/Sec | Backlog     | TBD        | TBD        |       0% | EPIC-A..G maturity        |
 
@@ -42,15 +42,16 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ## Ready
 
-- F4 — Commit preview dry-run
+- G2 — Integration tests against dev instance
+- F5 — Controlled commit (T3)
 
 ## Backlog
 
 - C3 — Scope/capture helper endpoints
 - D4 — Rulepack and gating governance
-- E4, E5 — flows, workflows
-- F4, F5, F6 — changesets, commit, rollback plan
-- G1, G2, G3, G4 — quality/testing
+- E5 — workflows
+- F6 — rollback plan generator
+- G1, G3, G4 — quality/testing
 - H1, H2, H3, H4 — enterprise hardening
 
 ## Blocked
@@ -93,6 +94,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - F1 — Changeset read tooling delivered: `sn.changeset.list`, `sn.changeset.get`, `sn.changeset.contents`, `sn.changeset.export` with pagination-aware client support and tests (`npm test`, `node src/index.js --smoke`)
 - F2 — Gap detection delivered: `sn.changeset.gaps` with confidence-tier outputs (`hard_dependencies`, `soft_dependencies`, `heuristic_candidates`) and evidence-backed reason codes
 - F3 — Capture verification delivered: `sn.updateset.capture.verify` with deterministic reason codes (`CAPTURED_IN_TARGET_SET`, `CAPTURED_IN_DIFFERENT_SET`, `NOT_CAPTURED`)
+- F4 — Commit preview dry-run delivered: `sn.changeset.commit.preview` with read-only no-side-effect contract, scope impact summary, potential conflict candidates, and mitigation guidance
 - G4 validation harness added: `scripts/test-g4-validation.js` + `npm run test:g4` and `artifacts/g4-validation-summary.json`
 - G4 non-prod integration validation completed: `scripts/test-g4-integration-live.js` + `npm run test:g4:live` and `artifacts/g4-integration-summary.json`
 
@@ -106,7 +108,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 4. G4 — CI quality gates
 5. C3 — Scope/capture helper endpoints
 6. D4 — Rulepack and gating governance
-7. F4 — Commit preview dry-run
+7. F5 — Controlled commit (T3)
 8. H1 — SIEM/webhook export
-9. F5 — Controlled commit (T3)
-10. F6 — Rollback plan generator
+9. F6 — Rollback plan generator
+10. H2 — Tool bundles + deploy profiles

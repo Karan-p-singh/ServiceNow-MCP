@@ -172,3 +172,29 @@ test("changeset capture verification returns deterministic reason codes", async 
   assert.equal(notCaptured.captured_in_target_set, false);
   assert.equal(notCaptured.reason_code, "NOT_CAPTURED");
 });
+
+test("changeset commit preview returns dry-run summary with scope impact", async () => {
+  const client = createMockClient();
+
+  const preview = await client.previewChangesetCommit({
+    changesetSysId: "a1111111b2222222c3333333d4444444",
+    includeConflicts: true,
+  });
+
+  assert.equal(preview.preview_generated, true);
+  assert.equal(preview.write_side_effects, false);
+  assert.equal(preview.changeset.sys_id, "a1111111b2222222c3333333d4444444");
+  assert.equal(typeof preview.summary.change_count, "number");
+  assert.equal(Array.isArray(preview.affected_tables), true);
+  assert.equal(Array.isArray(preview.recommended_mitigations), true);
+  assert.equal(typeof preview.scope_impact.cross_scope_detected, "boolean");
+});
+
+test("changeset commit preview returns deterministic invalid-params contract without id", async () => {
+  const client = createMockClient();
+
+  const preview = await client.previewChangesetCommit({});
+  assert.equal(preview.preview_generated, false);
+  assert.equal(preview.write_side_effects, false);
+  assert.equal(preview.error.code, "INVALID_PARAMS");
+});

@@ -631,6 +631,118 @@ export class ServiceNowClient {
     };
   }
 
+  async previewChangesetCommit({ changesetSysId, includeConflicts = true, instanceKey } = {}) {
+    const resolvedChangesetSysId = String(changesetSysId || "").trim();
+    if (!resolvedChangesetSysId) {
+      return {
+        preview_generated: false,
+        write_side_effects: false,
+        error: {
+          code: "INVALID_PARAMS",
+          message: "changeset_sys_id is required for commit preview.",
+        },
+      };
+    }
+
+    const changeset = await this.getChangeset({
+      sysId: resolvedChangesetSysId,
+      instanceKey,
+    });
+
+    const contents = await this.listChangesetContents({
+      changesetSysId: resolvedChangesetSysId,
+      limit: 500,
+      offset: 0,
+      instanceKey,
+    });
+
+    const records = Array.isArray(contents?.records) ? contents.records : [];
+    const targetCounts = new Map();
+    for (const record of records) {
+      const key = `${String(record?.target_table || "")}:${String(record?.target_sys_id || "")}`;
+      if (!key || key === ":") {
+        continue;
+      }
+      targetCounts.set(key, (targetCounts.get(key) || 0) + 1);
+    }
+
+    const potentialConflicts = [];
+    for (const [key, count] of targetCounts.entries()) {
+      if (count > 1) {
+        const [targetTable, targetSysId] = key.split(":");
+        potentialConflicts.push({
+          conflict_type: "MULTIPLE_UPDATES_SAME_TARGET",
+          confidence: "medium",
+          target_table: targetTable || null,
+          target_sys_id: targetSysId || null,
+          occurrences: count,
+          reason_code: "PREVIEW_DUPLICATE_TARGET_IN_SET",
+          evidence: [
+            {
+              type: "changeset_contents_count",
+              value: count,
+            },
+          ],
+          mitigation: "Review ordering and final intended state for repeated target updates before commit.",
+        });
+      }
+    }
+
+    const sourceScope =
+      changeset?.record?.application?.display_value ||
+      changeset?.record?.application?.value ||
+      changeset?.record?.application ||
+      "unknown";
+    const affectedTables = [...new Set(records.map((record) => String(record?.target_table || "").trim()).filter(Boolean))];
+    const affectedScopes = [sourceScope];
+    const crossScopeDetected = sourceScope === "global";
+
+    const recommendedMitigations = [
+      "Run sn.changeset.gaps and review hard/soft/heuristic dependency evidence before commit.",
+      "Verify critical records with sn.updateset.capture.verify to reduce missed-capture risk.",
+    ];
+    if (crossScopeDetected) {
+      recommendedMitigations.push(
+        "Global-scope update set detected; re-check policy allowlists and break-glass approvals before any T3 commit operation.",
+      );
+    }
+    if (includeConflicts && potentialConflicts.length > 0) {
+      recommendedMitigations.push(
+        "Resolve duplicate-target conflict candidates in preview output before promoting this update set.",
+      );
+    }
+
+    return {
+      preview_generated: true,
+      write_side_effects: false,
+      changeset: {
+        sys_id: resolvedChangesetSysId,
+        found: Boolean(changeset?.found),
+        record: changeset?.record || null,
+      },
+      summary: {
+        change_count: records.length,
+        affected_tables_count: affectedTables.length,
+        potential_conflict_count: includeConflicts ? potentialConflicts.length : 0,
+        affected_scopes: affectedScopes,
+      },
+      scope_impact: {
+        source_scope: sourceScope,
+        affected_scopes: affectedScopes,
+        cross_scope_detected: crossScopeDetected,
+        cross_scope_risk_level: crossScopeDetected ? "high" : "low",
+      },
+      potential_conflicts: includeConflicts ? potentialConflicts : [],
+      affected_tables: affectedTables,
+      recommended_mitigations: recommendedMitigations,
+      limitations: [
+        "Preview is read-only and evidence-based; it does not execute or simulate a platform commit transaction.",
+        "Conflict detection currently focuses on deterministic in-set signals and does not guarantee full completeness.",
+      ],
+      page: contents?.page || null,
+    };
+  }
+
   mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
     if (path.includes("/api/x_mcp_companion/v1/health")) {
       return Promise.resolve({
@@ -925,6 +1037,11 @@ export class ServiceNowClient {
           if (clause.startsWith("update_set=")) {
             const target = clause.replace("update_set=", "");
             filtered = filtered.filter((entry) => entry.update_set === target);
+            continue;
+          }
+          if (clause.startsWith("update_set!=")) {
+            const target = clause.replace("update_set!=", "");
+            filtered = filtered.filter((entry) => entry.update_set !== target);
             continue;
           }
           if (clause.startsWith("target_table=")) {

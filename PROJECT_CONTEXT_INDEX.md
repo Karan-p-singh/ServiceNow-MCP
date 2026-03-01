@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 02:43 PST
+Last Updated: 2026-03-01 02:56 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -99,6 +99,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
 - Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
 - **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
-- EPIC-F has **F1/F2/F3 complete** and Gate G4 is now **Passed** with non-prod live integration evidence (`artifacts/g4-integration-summary.json`).
-- Next queued stories are **E4, F4, G2** (with Phase 5 planning active after G4 pass).
+- EPIC-F has **F1/F2/F3/F4 complete**; Gate G4 is **Passed** and Gate G5 is now **In Progress**.
+- `sn.changeset.commit.preview` is available with read-only/no-side-effect preview output, scope impact summary, conflict candidates, and mitigation guidance.
+- Next queued stories are **E4, F5, G2**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

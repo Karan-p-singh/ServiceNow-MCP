@@ -492,6 +492,23 @@ function registerBaselineTools(server) {
   });
 
   server.registerTool({
+    name: "sn.changeset.commit.preview",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.previewChangesetCommit({
+        changesetSysId: input?.changeset_sys_id || input?.sys_id,
+        includeConflicts: input?.include_conflicts !== false,
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
     name: "sn.script.update",
     tier: "T2",
     handler: async (input, context) => {
@@ -774,6 +791,14 @@ async function main() {
       sys_id: "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
       changeset_sys_id: "a1111111b2222222c3333333d4444444",
     });
+    const previewChangesetSysId =
+      changesetGetResult?.data?.record?.sys_id ||
+      changesetListResult?.data?.records?.[0]?.sys_id ||
+      "a1111111b2222222c3333333d4444444";
+    const commitPreviewResult = await server.invoke("sn.changeset.commit.preview", {
+      changeset_sys_id: previewChangesetSysId,
+      include_conflicts: true,
+    });
     const aclTraceResult = await server.invoke("sn.acl.trace", {
       table: "incident",
       operation: "read",
@@ -851,6 +876,11 @@ async function main() {
         ["CAPTURED_IN_TARGET_SET", "CAPTURED_IN_DIFFERENT_SET", "NOT_CAPTURED"].includes(
           captureVerifyResult?.data?.reason_code,
         ),
+      f4_commit_preview_dry_run_available:
+        commitPreviewResult?.tool === "sn.changeset.commit.preview" &&
+        commitPreviewResult?.data?.preview_generated === true &&
+        commitPreviewResult?.data?.write_side_effects === false &&
+        Array.isArray(commitPreviewResult?.data?.recommended_mitigations),
     };
 
     const smokePayload = {
@@ -869,6 +899,7 @@ async function main() {
       changeset_export_result: changesetExportResult,
       changeset_gaps_result: changesetGapsResult,
       capture_verify_result: captureVerifyResult,
+      commit_preview_result: commitPreviewResult,
       acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,

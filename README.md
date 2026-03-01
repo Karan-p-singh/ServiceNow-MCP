@@ -385,7 +385,7 @@ All script read tools attach validation summaries. Write tools enforce:
 
 ### Update Set Deployment Readiness
 
-Current implemented F-series tools (F1-F3):
+Current implemented F-series tools (F1-F4):
 
 - `sn.changeset.list`
 - `sn.changeset.get`
@@ -393,10 +393,11 @@ Current implemented F-series tools (F1-F3):
 - `sn.changeset.export`
 - `sn.changeset.gaps`
 - `sn.updateset.capture.verify`
+- `sn.changeset.commit.preview`
 
 Planned next tools (F4+):
 
-- `sn.changeset.commit.preview`
+- `sn.changeset.commit`
 - `sn.rollback.plan.generate`
 
 1. `sn.changeset.get`
