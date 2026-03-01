@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 21:12 PST
+Last Updated: 2026-02-28 22:16 PST
 
 ---
 
@@ -227,6 +227,69 @@ Each entry should include:
 - **Reason:** Executed expanded live diagnostics against configured instance and captured partial pass/fail matrix.
 - **Evidence:** `npm run test:live`, `npm run test:live:mcp`.
 - **Next step:** Resolve `sys_plugins` authorization (403) or switch capability probe table while preserving release/plugin discovery requirements.
+
+### 2026-02-28 21:22 PST
+
+- **Item:** G1-CONNECTIVITY-HARDENING-2
+- **Change:** `Done -> Done (enhanced)`
+- **Owner:** Engineering
+- **Reason:** Upgraded MCP transport diagnostics from log-only output to assertion-driven checks with explicit JSON-RPC negative-path coverage and deterministic non-zero exit behavior.
+- **Evidence:** `scripts/test-live-mcp-transport.js`; execution: `npm run test:live:mcp`
+- **Next step:** Keep transport script as CI-ready protocol contract guard and monitor for contract drift.
+
+### 2026-02-28 21:23 PST
+
+- **Item:** B2-ROBUSTNESS-2
+- **Change:** `Done -> Done (enhanced)`
+- **Owner:** Engineering
+- **Reason:** Expanded live ServiceNow diagnostics with deterministic pagination/capability/error-shape contract checks to improve confidence in connectivity and normalization behavior.
+- **Evidence:** `scripts/test-live-connection.js`; execution: `npm run test:live`
+- **Next step:** Maintain endpoint-specific authorization remediation for `sys_plugins` while keeping the broader connectivity suite green.
+
+### 2026-02-28 21:24 PST
+
+- **Item:** TOOL-CALL-ACCURACY-VERIFY-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Re-verified tool invocation naming and script wiring consistency across runtime, transport endpoint, and npm scripts (`test:live`, `test:live:mcp`).
+- **Evidence:** `src/index.js`, `src/server/http-sse.js`, `package.json`, `scripts/test-live-mcp-transport.js`; run evidence: `npm run test:live:mcp`
+- **Next step:** Track any new tool additions by extending expected tool list assertions in transport diagnostics.
+
+### 2026-02-28 21:50 PST
+
+- **Item:** DOCS-TIER-CLARITY-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Clarified supported tier configuration values to prevent invalid tier selection drift in local `.env` setup.
+- **Evidence:** `.env.example` safety tiering comments (allowed `T0|T1|T2|T3`, unknown values fallback note), `README.md` configuration section update.
+- **Next step:** Keep docs synchronized with runtime if additional tiers are introduced in code.
+
+### 2026-02-28 21:50 PST
+
+- **Item:** LIVE-TEST-RESULTS-2
+- **Change:** `Logged -> Done (stabilized)`
+- **Owner:** Engineering
+- **Reason:** Re-ran both live diagnostics after env tier correction; MCP transport suite passed fully and connectivity suite stabilized for restricted `sys_plugins` ACL environments.
+- **Evidence:** `npm run test:live:mcp` (all assertions pass), `npm run test:live` (all checks pass), `scripts/test-live-connection.js` restricted-ACL handling for `SN_AUTH_FORBIDDEN` on `sys_plugins`.
+- **Next step:** Continue reporting restricted-table visibility as a classified warning signal rather than transport-level failure.
+
+### 2026-02-28 22:16 PST
+
+- **Item:** G1-CONNECTIVITY-HARDENING-3
+- **Change:** `Done (enhanced) -> Done (enhanced)`
+- **Owner:** Engineering
+- **Reason:** Updated plugin capability probe and live table-access diagnostics to prefer `v_plugin` with `sys_plugins` fallback for better compatibility with WebService policy restrictions.
+- **Evidence:** `src/servicenow/client.js`, `scripts/test-live-connection.js`; runs: `npm run test:live`, `npm run test:live:mcp`.
+- **Next step:** Keep probe-order behavior documented and monitor instance-specific table policy drift.
+
+### 2026-02-28 22:16 PST
+
+- **Item:** G1-TEST-UX-CLARITY-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Reduced confusion in MCP transport test output by adding explicit interpretation guidance for expected negative-path guardrail warnings.
+- **Evidence:** `scripts/test-live-mcp-transport.js` (`How to read this output`, `Interpretation summary`, expected guardrail stderr annotation); run: `npm run test:live:mcp`.
+- **Next step:** Maintain clarity wording as new guardrail checks are added.
 
 ---
 

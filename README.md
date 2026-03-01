@@ -89,6 +89,8 @@ VALIDATION_RULEPACK_VERSION=1.0.0
 VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 ```
 
+`MCP_TIER_MAX` valid values are `T0|T1|T2|T3`. Unknown values (for example `T4`) are treated as `T0`.
+
 > Production guidance: default `MCP_TIER_MAX=T0` and disable all write bundles.
 
 Security note:
@@ -135,7 +137,7 @@ This verifies:
 - auth handshake (`sys_user`)
 - REST stats endpoint (`/api/now/stats/sys_user`)
 - capability probe (`sn.instance.info` path)
-- table/metadata access (`sys_plugins`, `sys_db_object`)
+- table/metadata access (`v_plugin` preferred, `sys_plugins` fallback, `sys_db_object`)
 - script include read (`sys_script_include`)
 - classified failure output (`401/403/429/5xx`) with remediation guidance
 
@@ -149,10 +151,16 @@ This validates:
 
 - MCP endpoint readiness (`GET /mcp`)
 - JSON-RPC `initialize`
+- JSON-RPC `ping`
 - JSON-RPC `tools/list`
-- JSON-RPC `tools/call` (currently `sn.instance.info`)
+- JSON-RPC `tools/call` envelope contracts (`sn.instance.info`, `sn.script.update`, `sn.changeset.commit`)
+- JSON-RPC negative-path handling (`parse error`, `invalid request`, `method not found`, `invalid params`, unknown tool)
 
-Known current behavior in some instances: `sys_plugins` may return `403` even when other probes pass; treat this as endpoint-level authorization scope, not full connectivity failure.
+Both diagnostics scripts are assertion-driven and return non-zero exit codes on contract failures, making them safe for CI-style gating.
+
+Known current behavior in some instances: `sys_plugins` may return `403` even when other probes pass. Diagnostics now probe plugin tables as `v_plugin` first with `sys_plugins` fallback, and classify table-level authorization limits as limited-access warnings rather than transport failures.
+
+Transport diagnostics output now includes an interpretation section that explicitly explains expected guardrail warnings (for example `POLICY_BLOCKED`, `T3_CONFIRMATION_REQUIRED`) during negative-path checks.
 
 ---
 

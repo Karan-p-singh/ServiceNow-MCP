@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-02-28 21:13 PST
+Last Updated: 2026-02-28 22:16 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -73,7 +73,10 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - E1 (minimal) — `sn.script.get` read path + validation summary attachment
 - G1 demo evidence — first vertical slice smoke evidence captured
 - G1 connectivity diagnostics baseline — `npm run test:live` and `npm run test:live:mcp` scripts added and validated
+- G1 connectivity diagnostics hardening — assertion-driven protocol/tool contract tests added (including JSON-RPC negative-path checks) and validated
 - Secure env publishing baseline — `.env.example` template + `.gitignore` protection + README setup guidance
+- G1 connectivity diagnostics stabilization — plugin probe now uses `v_plugin` preferred with `sys_plugins` fallback, and ACL-restricted paths are classified as limited-access warnings in `test:live` while preserving overall connectivity pass criteria
+- G1 transport output clarity — `test:live:mcp` now includes an explicit interpretation summary so expected guardrail warnings (`POLICY_BLOCKED`, `T3_CONFIRMATION_REQUIRED`) are not confused with test failures
 
 ---
 

@@ -54,6 +54,8 @@ function buildInstanceDescriptor(instance) {
   };
 }
 
+const PLUGIN_PROBE_TABLE_CANDIDATES = ["v_plugin", "sys_plugins"];
+
 export class ServiceNowClient {
   constructor({ config, fetchImpl = globalThis.fetch, logger = console } = {}) {
     this.config = config || {};
@@ -277,22 +279,33 @@ export class ServiceNowClient {
 
     let plugins = [];
     let pluginProbe = null;
-    try {
-      const pluginPage = await this.listTable({
-        table: "sys_plugins",
-        limit: 10,
-        offset: 0,
-        instanceKey,
-      });
-      plugins = pluginPage.records
-        .map((record) => record.name || record.id || record.sys_id)
-        .filter(Boolean);
-      pluginProbe = { table: "sys_plugins", status: "ok", plugin_count: plugins.length };
-    } catch (error) {
+    const pluginProbeFailures = [];
+    for (const table of PLUGIN_PROBE_TABLE_CANDIDATES) {
+      try {
+        const pluginPage = await this.listTable({
+          table,
+          limit: 10,
+          offset: 0,
+          instanceKey,
+        });
+        plugins = pluginPage.records
+          .map((record) => record.name || record.id || record.sys_id)
+          .filter(Boolean);
+        pluginProbe = { table, status: "ok", plugin_count: plugins.length };
+        break;
+      } catch (error) {
+        const normalized = isObject(error) ? error : { message: String(error) };
+        pluginProbeFailures.push({ table, error: normalized });
+      }
+    }
+
+    if (!pluginProbe) {
+      const lastFailure = pluginProbeFailures[pluginProbeFailures.length - 1];
       pluginProbe = {
-        table: "sys_plugins",
+        table: lastFailure?.table || PLUGIN_PROBE_TABLE_CANDIDATES[0],
         status: "failed",
-        error: isObject(error) ? error : { message: String(error) },
+        attempted_tables: PLUGIN_PROBE_TABLE_CANDIDATES,
+        error: lastFailure?.error || { message: "Plugin probe failed" },
       };
     }
 
@@ -351,7 +364,7 @@ export class ServiceNowClient {
   }
 
   mockRequest({ path, query = {}, instance }) {
-    if (path.includes("/sys_plugins")) {
+    if (path.includes("/sys_plugins") || path.includes("/v_plugin")) {
       return Promise.resolve({
         status: 200,
         data: {

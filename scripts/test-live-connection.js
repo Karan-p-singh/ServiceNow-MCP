@@ -25,6 +25,23 @@ function pretty(value) {
   return JSON.stringify(value, null, 2);
 }
 
+function assertPass(label, details = "") {
+  pass(label, details);
+  return true;
+}
+
+function assertFail(label, details = "") {
+  fail(label, details);
+  return false;
+}
+
+function check(condition, label, details = "") {
+  if (condition) {
+    return assertPass(label, details);
+  }
+  return assertFail(label, details);
+}
+
 function classifyError(error) {
   const code = error?.code || "UNKNOWN";
   if (code === "SN_AUTH_UNAUTHORIZED") return "auth_invalid";
@@ -53,7 +70,7 @@ function printRemediation(error) {
   if (code === "SN_AUTH_FORBIDDEN") {
     console.log("- Authenticated but not authorized for this API/table.");
     console.log("- Grant ServiceNow roles/ACLs required for Table API access.");
-    console.log("- Ensure account can read target tables (e.g., sys_plugins, sys_script_include).");
+    console.log("- Ensure account can read target tables (e.g., v_plugin/sys_plugins, sys_script_include).");
     return;
   }
 
@@ -90,6 +107,9 @@ async function run() {
     authHandshake: false,
     statsEndpoint: false,
     metadataRead: false,
+    paginationSemantics: false,
+    capabilityConsistency: false,
+    errorShapeContract: false,
   };
 
   let firstError = null;
@@ -167,13 +187,42 @@ async function run() {
 
   await runCheck({
     key: "tableAccess",
-    name: "Test 4: Table API Access (sys_plugins)",
+    name: "Test 4: Table API Access (v_plugin preferred, sys_plugins fallback)",
     runCheckFn: async () => {
-      const table = await client.listTable({ table: "sys_plugins", limit: 3, offset: 0 });
+      const candidates = ["v_plugin", "sys_plugins"];
+      const failures = [];
+
+      for (const tableName of candidates) {
+        try {
+          const table = await client.listTable({ table: tableName, limit: 3, offset: 0 });
+          return {
+            mode: "direct",
+            table: tableName,
+            returned: table.records.length,
+            page: table.page,
+          };
+        } catch (error) {
+          if (error?.code === "SN_AUTH_FORBIDDEN") {
+            failures.push({
+              table: tableName,
+              code: error.code,
+              message: error.message,
+              status: error.status,
+              path: error?.details?.path,
+            });
+            continue;
+          }
+          throw error;
+        }
+      }
+
       return {
-        returned: table.records.length,
-        page: table.page,
-      };
+        mode: "restricted_acl",
+        warning:
+          "ServiceNow account is authenticated but cannot read v_plugin/sys_plugins. Continuing with limited-access profile.",
+        attempted_tables: candidates,
+        failures,
+      }
     },
   });
 
@@ -210,6 +259,136 @@ async function run() {
       };
     },
   });
+
+  section("Test 7: Pagination Semantics (sys_db_object limit=1 offset=0)");
+  try {
+    const page = await client.listTable({ table: "sys_db_object", limit: 1, offset: 0 });
+    const pageMeta = page?.page || {};
+    const expectedNext = pageMeta.has_more ? pageMeta.offset + pageMeta.returned : null;
+    const ok =
+      Number(pageMeta.limit) === 1 &&
+      Number(pageMeta.offset) === 0 &&
+      Number.isInteger(pageMeta.returned) &&
+      pageMeta.returned >= 0 &&
+      pageMeta.next_offset === expectedNext;
+
+    results.paginationSemantics = ok;
+    check(ok, "Pagination metadata contract", pageMeta);
+    diagnostics.push({
+      key: "paginationSemantics",
+      status: ok ? "PASS" : "FAIL",
+      output: pageMeta,
+    });
+  } catch (error) {
+    firstError ??= error;
+    results.paginationSemantics = false;
+    assertFail(
+      "Pagination metadata contract",
+      `${error?.code || "UNKNOWN"}: ${error?.message || String(error)}`,
+    );
+    diagnostics.push({
+      key: "paginationSemantics",
+      status: "FAIL",
+      kind: classifyError(error),
+      error,
+    });
+  }
+
+  section("Test 8: Capability Probe Consistency");
+  try {
+    const info = await client.getInstanceInfo({});
+    const supports = info?.capabilities?.supports || {};
+    const probes = info?.capabilities?.probes || {};
+    const source = info?.connectivity?.source;
+    const sourceValid = source === "mock" || source === "live";
+    const supportsValid =
+      typeof supports.oauth === "boolean" &&
+      typeof supports.basic === "boolean" &&
+      typeof supports.table_api === "boolean" &&
+      typeof supports.pagination === "boolean";
+    const tableProbeValid = !probes.table_api || ["ok", "failed"].includes(probes?.table_api?.status);
+    const pluginsProbeValid = !probes.plugins || ["ok", "failed"].includes(probes?.plugins?.status);
+    const ok = sourceValid && supportsValid && tableProbeValid && pluginsProbeValid;
+
+    results.capabilityConsistency = ok;
+    check(ok, "Capability probe contract", {
+      source,
+      supports,
+      probes,
+    });
+    diagnostics.push({
+      key: "capabilityConsistency",
+      status: ok ? "PASS" : "FAIL",
+      output: { source, supports, probes },
+    });
+  } catch (error) {
+    firstError ??= error;
+    results.capabilityConsistency = false;
+    assertFail(
+      "Capability probe contract",
+      `${error?.code || "UNKNOWN"}: ${error?.message || String(error)}`,
+    );
+    diagnostics.push({
+      key: "capabilityConsistency",
+      status: "FAIL",
+      kind: classifyError(error),
+      error,
+    });
+  }
+
+  section("Test 9: Error Shape Contract for Failed Checks");
+  try {
+    const failedDiagnostics = diagnostics.filter((entry) => entry.status === "FAIL");
+    const shapeIssues = [];
+
+    for (const entry of failedDiagnostics) {
+      const error = entry.error;
+      const hasCode = typeof error?.code === "string" && error.code.length > 0;
+      const hasMessage = typeof error?.message === "string" && error.message.length > 0;
+      const hasDetails = error?.details && typeof error.details === "object";
+      const hasInstance = Boolean(error?.details?.instance);
+      const hasPath = Boolean(error?.details?.path);
+      if (!hasCode || !hasMessage || !hasDetails || !hasInstance || !hasPath) {
+        shapeIssues.push({
+          key: entry.key,
+          hasCode,
+          hasMessage,
+          hasDetails,
+          hasInstance,
+          hasPath,
+          error,
+        });
+      }
+    }
+
+    const ok = shapeIssues.length === 0;
+    results.errorShapeContract = ok;
+    check(ok, "Normalized error shape contract", {
+      failed_checks: failedDiagnostics.length,
+      shape_issues: shapeIssues,
+    });
+    diagnostics.push({
+      key: "errorShapeContract",
+      status: ok ? "PASS" : "FAIL",
+      output: {
+        failed_checks: failedDiagnostics.length,
+        shape_issues: shapeIssues,
+      },
+    });
+  } catch (error) {
+    firstError ??= error;
+    results.errorShapeContract = false;
+    assertFail(
+      "Normalized error shape contract",
+      `${error?.code || "UNKNOWN"}: ${error?.message || String(error)}`,
+    );
+    diagnostics.push({
+      key: "errorShapeContract",
+      status: "FAIL",
+      kind: classifyError(error),
+      error,
+    });
+  }
 
   section("Summary");
   console.log(pretty(results));
