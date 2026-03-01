@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-02-28 22:16 PST
+Last Updated: 2026-02-28 22:33 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -87,8 +87,9 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 5) Status Snapshot (Current)
 
-- Phase 1 is complete with **Gate G1 passed**; **EPIC-A** and **EPIC-B** are complete and **EPIC-E** remains in progress.
+- Phase 1 is complete with **Gate G1 passed** and Phase 2 is complete with **Gate G2 passed**.
+- **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
 - G1 evidence now includes live diagnostics tooling (`test:live`, `test:live:mcp`) and secure env publishing baseline (`.env.example` + `.gitignore`).
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
-- Next queued stories are **D1, D2, D3, E1 (full scope)**.
+- Next queued stories are **C1, C2, C4, F1**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

@@ -123,6 +123,33 @@ Expected behavior:
 - Tools above `MCP_TIER_MAX` are rejected before any ServiceNow call.
 - All artifact reads include a `validation_summary` block.
 - Writes are blocked on CRITICAL validation findings.
+- HIGH-severity findings require explicit `acknowledged_findings[]` in write calls.
+
+Run unit tests for validation/runtime and script tooling:
+
+```bash
+npm test
+```
+
+Run the end-user Gate G2 validation checklist (human-readable + JSON artifact):
+
+```bash
+npm run test:g2
+```
+
+Expected output includes a criterion-by-criterion checklist like:
+
+- `✅ D1: Validation runtime is deterministic`
+- `✅ D2: Script rulepack v1 metadata/version is attached`
+- `✅ D3-CRITICAL: CRITICAL findings block writes`
+- `✅ D3-HIGH: HIGH findings require/satisfy acknowledgment`
+- `✅ E1: Script read/list/search lifecycle is available`
+- `✅ E2: refs/deps include evidence arrays`
+- `✅ E3: create/update include audit metadata`
+
+Machine-readable report is generated at:
+
+- `artifacts/g2-validation-summary.json`
 
 ### Connectivity Diagnostics (Gate G1 Evidence)
 
@@ -266,9 +293,20 @@ All tool calls emit structured JSON logs with:
 ### Validate a Script Before Changing It
 
 1. `sn.script.get` → read + see `validation_summary`
-2. `sn.script.validate` → full findings
+2. `sn.script.refs` / `sn.script.deps` → inspect evidence-backed dependencies/references
 3. Fix changes
 4. `sn.script.update` (tier gated) with `acknowledged_findings` if needed
+
+### Script Tooling Coverage (Gate G2)
+
+- Read/navigation: `sn.script.get`, `sn.script.list`, `sn.script.search`
+- Evidence: `sn.script.refs`, `sn.script.deps`
+- Writes: `sn.script.create`, `sn.script.update`
+
+All script read tools attach validation summaries. Write tools enforce:
+
+- `VALIDATION_BLOCKED_CRITICAL` for CRITICAL findings
+- `VALIDATION_ACK_REQUIRED_HIGH` when HIGH findings are not acknowledged
 
 ### Update Set Deployment Readiness
 

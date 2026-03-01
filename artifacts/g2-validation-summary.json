@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-03-01T06:39:17.417Z",
+  "gate": "G2",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "D1",
+      "label": "Validation runtime is deterministic",
+      "passed": true
+    },
+    {
+      "id": "D2",
+      "label": "Script rulepack v1 metadata/version is attached",
+      "passed": true
+    },
+    {
+      "id": "D3-CRITICAL",
+      "label": "CRITICAL findings block writes",
+      "passed": true
+    },
+    {
+      "id": "D3-HIGH",
+      "label": "HIGH findings require/satisfy acknowledgment",
+      "passed": true
+    },
+    {
+      "id": "E1",
+      "label": "Script read/list/search lifecycle is available",
+      "passed": true
+    },
+    {
+      "id": "E2",
+      "label": "refs/deps include evidence arrays",
+      "passed": true
+    },
+    {
+      "id": "E3",
+      "label": "create/update include audit metadata",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "smoke_summary": {
+      "d1_runtime_deterministic": true,
+      "d2_rulepack_versioned": true,
+      "d3_critical_blocks_write": true,
+      "d3_high_ack_required_or_satisfied": true,
+      "e1_get_list_search_available": true,
+      "e2_refs_deps_evidence_available": true,
+      "e3_create_update_auditable": true
+    },
+    "tools_registered": [
+      "sn.script.get",
+      "sn.script.list",
+      "sn.script.search",
+      "sn.script.refs",
+      "sn.script.deps",
+      "sn.instance.info",
+      "sn.table.list",
+      "sn.script.update",
+      "sn.script.create",
+      "sn.changeset.commit"
+    ],
+    "validation_rulepack": {
+      "id": "scripts-v1",
+      "version": "1.0.0",
+      "artifact_type": "sys_script_include"
+    },
+    "sample_error_codes": {
+      "script_create_blocked": [
+        "VALIDATION_BLOCKED_CRITICAL"
+      ],
+      "script_update_blocked": [
+        "VALIDATION_BLOCKED_CRITICAL"
+      ]
+    }
+  }
+}

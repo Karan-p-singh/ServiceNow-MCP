@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 22:16 PST
+Last Updated: 2026-02-28 22:38 PST
 
 ---
 
@@ -290,6 +290,96 @@ Each entry should include:
 - **Reason:** Reduced confusion in MCP transport test output by adding explicit interpretation guidance for expected negative-path guardrail warnings.
 - **Evidence:** `scripts/test-live-mcp-transport.js` (`How to read this output`, `Interpretation summary`, expected guardrail stderr annotation); run: `npm run test:live:mcp`.
 - **Next step:** Maintain clarity wording as new guardrail checks are added.
+
+### 2026-02-28 22:31 PST
+
+- **Item:** D1
+- **Change:** `In Progress -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented reusable validation runtime with deterministic summary output, severity counting, and write-gate contract helpers.
+- **Evidence:** `src/validation/engine.js`, `tests/validation.engine.test.js`
+- **Next step:** Complete D2 script rulepack v1 and wire runtime into script tools.
+
+### 2026-02-28 22:31 PST
+
+- **Item:** D2
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented script rulepack v1 with versioned metadata and baseline CRITICAL/HIGH/MEDIUM/LOW findings.
+- **Evidence:** `src/validation/rulepacks/scripts-v1.js`, `src/validation/engine.js`
+- **Next step:** Integrate D3 read-summary and write-gating behavior.
+
+### 2026-02-28 22:31 PST
+
+- **Item:** D3
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Added read-summary integration and deterministic write gating (`VALIDATION_BLOCKED_CRITICAL`, `VALIDATION_ACK_REQUIRED_HIGH`) for script write paths.
+- **Evidence:** `src/index.js`, `src/validation/engine.js`
+- **Next step:** Complete E1 full script navigation and E2/E3 tooling.
+
+### 2026-02-28 22:32 PST
+
+- **Item:** E1
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Expanded script read tooling from minimal get-only to full paginated get/list/search with validation summary attachment.
+- **Evidence:** `src/index.js`, `src/servicenow/client.js`
+- **Next step:** Deliver refs/deps evidence outputs and write lifecycle completion.
+
+### 2026-02-28 22:32 PST
+
+- **Item:** E2
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Added script reference/dependency tooling with confidence and evidence payloads.
+- **Evidence:** `src/index.js` (`sn.script.refs`, `sn.script.deps`)
+- **Next step:** Finalize create/update write path with validation + audit outputs.
+
+### 2026-02-28 22:32 PST
+
+- **Item:** E3
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented script create/update write lifecycle with validation gating and auditable before/after metadata.
+- **Evidence:** `src/index.js`, `src/servicenow/client.js`
+- **Next step:** Expand quality coverage for Gate G2 acceptance.
+
+### 2026-02-28 22:32 PST
+
+- **Item:** G1 (partial)
+- **Change:** `In Progress -> In Progress (expanded)`
+- **Owner:** Engineering
+- **Reason:** Added focused unit tests for validation runtime and script tooling and wired `npm test` to run project tests only.
+- **Evidence:** `tests/validation.engine.test.js`, `tests/script.tooling.test.js`, `package.json`; run: `npm test`
+- **Next step:** Continue broader test story coverage under G2/G4.
+
+### 2026-02-28 22:32 PST
+
+- **Item:** G2
+- **Change:** `Not Started -> Passed`
+- **Owner:** Engineering
+- **Reason:** Completed validation MVP + script E2E lifecycle with deterministic gating, evidence outputs, and unit test coverage.
+- **Evidence:** `src/validation/*`, `src/index.js`, `src/servicenow/client.js`, `tests/*.test.js`, `npm test`
+- **Next step:** Proceed to Gate G3 companion authority stories.
+
+### 2026-02-28 22:33 PST
+
+- **Item:** DOCS-G2-SYNC-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Synchronized milestone/gate status, risk/decision register, build board, and README for completed Gate G2 scope.
+- **Evidence:** `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/RISKS_AND_DECISIONS.md`, `README.md`
+- **Next step:** Keep status docs aligned as Gate G3 work starts.
+
+### 2026-02-28 22:38 PST
+
+- **Item:** G2-VALIDATION-UX-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Added end-user Gate G2 verification workflow with checklist-style output and generated JSON summary artifact.
+- **Evidence:** `scripts/test-g2-validation.js`, `package.json` (`test:g2`), `artifacts/g2-validation-summary.json`; run: `npm run test:g2`
+- **Next step:** Keep Gate validation scripts aligned as future gate criteria evolve.
 
 ---
 

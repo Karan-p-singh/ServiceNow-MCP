@@ -363,7 +363,59 @@ export class ServiceNowClient {
     };
   }
 
-  mockRequest({ path, query = {}, instance }) {
+  async listScriptIncludes({ limit = 25, offset = 0, query = "", instanceKey } = {}) {
+    return this.listTable({
+      table: "sys_script_include",
+      limit,
+      offset,
+      query,
+      instanceKey,
+    });
+  }
+
+  async searchScriptIncludes({ term = "", limit = 25, offset = 0, instanceKey } = {}) {
+    const normalizedTerm = String(term || "").trim();
+    const query = normalizedTerm
+      ? `nameLIKE${normalizedTerm}^ORscriptLIKE${normalizedTerm}^ORdescriptionLIKE${normalizedTerm}`
+      : "";
+
+    return this.listScriptIncludes({
+      limit,
+      offset,
+      query,
+      instanceKey,
+    });
+  }
+
+  async createScriptInclude({ record, instanceKey } = {}) {
+    const response = await this.request({
+      method: "POST",
+      path: "/api/now/table/sys_script_include",
+      body: record || {},
+      instanceKey,
+    });
+
+    return {
+      created: true,
+      record: response?.data?.result || null,
+    };
+  }
+
+  async updateScriptInclude({ sysId, changes, instanceKey } = {}) {
+    const response = await this.request({
+      method: "PATCH",
+      path: `/api/now/table/sys_script_include/${sysId}`,
+      body: changes || {},
+      instanceKey,
+    });
+
+    return {
+      updated: true,
+      record: response?.data?.result || null,
+    };
+  }
+
+  mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
     if (path.includes("/sys_plugins") || path.includes("/v_plugin")) {
       return Promise.resolve({
         status: 200,
@@ -391,7 +443,55 @@ export class ServiceNowClient {
           description: "Mock script include used for baseline retrieval",
           sys_updated_on: "2026-02-28 19:00:00",
         },
+        {
+          sys_id: "aaabbbcccdddeeefff11122233344455",
+          name: "x_demo_eval_helper",
+          api_name: "x_demo_eval_helper",
+          sys_scope: { display_value: "x_demo_scope", value: "x_demo_scope" },
+          active: "true",
+          script: "function run(input) {\n  return eval(input);\n}\n",
+          description: "Mock script include with CRITICAL finding",
+          sys_updated_on: "2026-02-28 19:05:00",
+        },
       ];
+
+      if (String(method).toUpperCase() === "POST") {
+        return Promise.resolve({
+          status: 201,
+          data: {
+            result: {
+              sys_id: "mock-created-script-include",
+              name: body?.name || "unnamed_script",
+              api_name: body?.api_name || body?.name || "unnamed_script",
+              script: body?.script || "",
+              description: body?.description || "",
+              sys_scope: body?.sys_scope || { display_value: body?.scope || "global", value: body?.scope || "global" },
+              active: String(body?.active ?? "true"),
+              sys_updated_on: "2026-02-28 22:00:00",
+            },
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
+
+      if (String(method).toUpperCase() === "PATCH") {
+        const sysId = path.split("/").pop();
+        const existing = sampleRecords.find((record) => record.sys_id === sysId) || sampleRecords[0];
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: {
+              ...existing,
+              ...body,
+              sys_id: sysId,
+              sys_updated_on: "2026-02-28 22:00:00",
+            },
+          },
+          headers: {},
+          attempt: 1,
+        });
+      }
 
       const sysparmQuery = String(query.sysparm_query || "");
       let filtered = sampleRecords;
@@ -403,11 +503,24 @@ export class ServiceNowClient {
         const target = sysparmQuery.replace("name=", "");
         filtered = sampleRecords.filter((record) => record.name === target);
       }
+      if (sysparmQuery.includes("LIKE")) {
+        const term = sysparmQuery.split("LIKE")[1]?.split("^")[0] || "";
+        const normalized = String(term || "").toLowerCase();
+        filtered = sampleRecords.filter((record) =>
+          String(record.name || "").toLowerCase().includes(normalized) ||
+          String(record.script || "").toLowerCase().includes(normalized) ||
+          String(record.description || "").toLowerCase().includes(normalized),
+        );
+      }
+
+      const limit = Number(query.sysparm_limit || filtered.length || 1);
+      const offset = Number(query.sysparm_offset || 0);
+      const paged = filtered.slice(offset, offset + limit);
 
       return Promise.resolve({
         status: 200,
         data: {
-          result: filtered,
+          result: paged,
         },
         headers: {},
         attempt: 1,

@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Risks & Decisions Register
 
-Last Updated: 2026-02-28 21:25 PST
+Last Updated: 2026-02-28 22:32 PST
 
 ---
 
@@ -14,7 +14,7 @@ Scales:
 
 | Risk ID | Risk                                                  | Probability | Impact   | Owner             | Mitigation Plan                                                                | Trigger / Early Signal                       | Status     |
 | ------- | ----------------------------------------------------- | ----------- | -------- | ----------------- | ------------------------------------------------------------------------------ | -------------------------------------------- | ---------- |
-| R-001   | Rulepack drift and governance challenge               | High        | High     | Eng Lead          | Versioned rulepacks, per-rule metadata, quarterly review                       | Frequent policy exceptions / rule disputes   | Open       |
+| R-001   | Rulepack drift and governance challenge               | High        | High     | Eng Lead          | Versioned rulepacks, per-rule metadata, quarterly review                       | Frequent policy exceptions / rule disputes   | Monitoring |
 | R-002   | Release/plugin variability breaks adapters            | High        | High     | Platform Eng      | Capability discovery + conditional adapters + fixture matrix                   | Endpoint/table mismatch in target instance   | Open       |
 | R-003   | Companion app deployment blocked by governance        | Medium      | High     | SN Dev + Security | Safe degradation mode, read-only fallback, governance package docs             | Delayed scoped app approvals                 | Monitoring |
 | R-004   | Validation noise causes developer bypass              | Medium      | High     | Eng Lead          | Suppression workflow, severity tuning, telemetry-backed rule calibration       | Rising suppressions, reduced tool adoption   | Open       |
@@ -37,6 +37,7 @@ Scales:
 | D-006       | 2026-02-28 | README structure is target architecture for Epic B+ with incremental migration | Maintain architectural consistency without disruptive refactor risk         | Immediate full TS/v2 restructure   | Predictable folder ownership now; controlled path to TS/v2 over time                                                |
 | D-007       | 2026-02-28 | MCP transport defaults to HTTP/SSE URL endpoint with stdio fallback            | Maximize compatibility for URL-based LLM integrations                       | Keep stdio as default              | Easier client onboarding via `http://localhost:3001/mcp`; maintain backward compatibility via `MCP_TRANSPORT=stdio` |
 | D-008       | 2026-02-28 | Connectivity diagnostics are assertion-driven and CI-gate friendly             | Reduce false positives from log-only checks and detect contract drift early | Human log review only              | Faster regression detection for MCP protocol/tool-call contracts; more deterministic release confidence             |
+| D-009       | 2026-02-28 | Gate G2 validation runtime enforces deterministic CRITICAL/HIGH write gating   | Align script lifecycle safety with PRD (`CRITICAL` block + `HIGH` ack flow) | Advisory-only validation           | Safer script write path with explicit acknowledgment obligations and standardized gate error codes                  |
 
 ---
 
