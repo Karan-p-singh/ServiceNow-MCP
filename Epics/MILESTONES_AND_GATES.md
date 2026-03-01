@@ -1,0 +1,107 @@
+# ServiceNow MCP Server v2 — Milestones & Gate Criteria
+
+Last Updated: 2026-02-28 17:58 PST
+Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
+
+---
+
+## 1) Milestone Map
+
+| Milestone ID | Name                                             | Target Window | Status      | Owner                  |
+| ------------ | ------------------------------------------------ | ------------- | ----------- | ---------------------- |
+| M1           | Phase 1 Exit — Foundation Slice                  | Week 2        | In Progress | Engineering            |
+| M2           | Phase 2 Exit — Validation MVP + Script E2E       | Week 5        | Not Started | Engineering            |
+| M3           | Phase 3 Exit — Companion + ACL Authority         | Week 8        | Not Started | Engineering + SN Dev   |
+| M4           | Phase 4 Exit — Update Set MVP                    | Week 12       | Not Started | Engineering            |
+| M5           | Phase 5 Exit — Controlled Commit + Rollback Plan | Week 16       | Not Started | Engineering            |
+| M6           | Phase 6 Exit — Flow/Workflow Coverage            | Week 20       | Not Started | Engineering            |
+| M7           | Phase 7 Exit — Enterprise Readiness              | Week 24       | Not Started | Engineering + Security |
+
+---
+
+## 2) Gate Checklists
+
+## Gate G1 — Foundation Slice (M1)
+
+Status: `In Progress`
+
+- [ ] A1 complete: server bootstrap + tool registry
+- [ ] A2 complete: response envelope implemented for all tools
+- [ ] A3 complete: tier enforcement + T3 confirm/reason contract
+- [ ] A5 complete: structured logs with redaction + correlation IDs
+- [ ] B1 complete: auth abstraction (OAuth first)
+- [ ] B2 baseline complete: retries/pagination/error normalization
+- [ ] B3 complete: `sn.instance.info`
+- [ ] E1 minimal complete: `sn.script.get` + validation summary attachment
+- [ ] Demo evidence captured for end-to-end first vertical slice
+
+Exit Rule: G1 passes only when all checklist items are complete and demonstrated.
+
+## Gate G2 — Validation MVP + Script E2E (M2)
+
+Status: `Not Started`
+
+- [ ] D1 complete: validation engine framework
+- [ ] D2 complete: script rulepack v1 baseline
+- [ ] D3 complete: read summary + write gating
+- [ ] E1 full complete: list/search/get
+- [ ] E2 complete: refs/deps evidence outputs
+- [ ] E3 complete: script create/update with gating and audit
+- [ ] Unit test coverage for validation runtime and script tooling
+
+Exit Rule: G2 passes when script lifecycle (read → validate → write) is safe, test-covered, and auditable.
+
+## Gate G3 — Companion Authority (M3)
+
+Status: `Not Started`
+
+- [ ] C1 complete: scoped app package + version contract
+- [ ] C2 complete: ACL authoritative endpoint
+- [ ] C4 complete: dual-mode acl.trace behavior
+- [ ] A4 complete: policy scope/global controls + exception handling
+- [ ] Explicit degraded mode behavior validated when Companion absent/outdated
+
+## Gate G4 — Update Set MVP (M4)
+
+Status: `Not Started`
+
+- [ ] F1 complete: list/get/contents/export
+- [ ] F2 complete: confidence-tier gap detection with evidence
+- [ ] F3 complete: capture verification with deterministic reason codes
+- [ ] Integration tests for core update set flows in non-prod instance
+
+## Gate G5 — Commit/Rollback Planning (M5)
+
+Status: `Not Started`
+
+- [ ] F4 complete: dry-run commit preview
+- [ ] F5 complete: T3 controlled commit with confirm/reason + snapshot matrix
+- [ ] F6 complete: rollback plan generator with non-restorable declarations
+- [ ] High-risk operation audit trace validated
+
+## Gate G6 — Artifact Parity (M6)
+
+Status: `Not Started`
+
+- [ ] E4 complete: flow list/get/validate
+- [ ] E5 complete: workflow list/get/validate
+- [ ] D coverage expanded for flow/workflow rulepacks
+
+## Gate G7 — Enterprise Readiness (M7)
+
+Status: `Not Started`
+
+- [ ] G1–G4 quality/testing epics complete
+- [ ] H1 SIEM/webhook export complete
+- [ ] H2 tool bundles and deploy profiles complete
+- [ ] H3 security docs complete
+- [ ] H4 admin/runbook docs complete
+- [ ] Release package reviewed against PRD acceptance criteria
+
+---
+
+## 3) Gate Decision Log
+
+| Date       | Gate | Decision    | Notes                                                           |
+| ---------- | ---- | ----------- | --------------------------------------------------------------- |
+| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A |
