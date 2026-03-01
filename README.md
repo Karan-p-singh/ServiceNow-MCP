@@ -87,6 +87,12 @@ MCP_ENFORCE_CHANGESET_SCOPE=true
 # Validation
 VALIDATION_RULEPACK_VERSION=1.0.0
 VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
+
+# Companion integration (Gate G3)
+SN_COMPANION_ENABLED=true
+SN_COMPANION_BASE_PATH=/api/x_mcp_companion/v1
+SN_COMPANION_MIN_VERSION=1.0.0
+SN_COMPANION_REQUEST_TIMEOUT_MS=3000
 ```
 
 `MCP_TIER_MAX` valid values are `T0|T1|T2|T3`. Unknown values (for example `T4`) are treated as `T0`.
@@ -257,6 +263,19 @@ If the Companion App is missing or outdated:
 
 - tools degrade safely or refuse “authoritative” operations
 - outputs explicitly declare what is and is not reliable
+
+### `sn.acl.trace` dual-mode behavior (Gate G3)
+
+- **Authoritative mode** (`mode=authoritative`): used when Companion is enabled, reachable, and version-compatible.
+- **Discovery mode** (`mode=discovery`): automatic fallback with explicit `limitations[]` and deterministic `degraded_reason_code` when authoritative path is unavailable.
+
+Degraded reason codes currently include:
+
+- `COMPANION_DISABLED_BY_CONFIG`
+- `COMPANION_OUTDATED`
+- `COMPANION_NOT_INSTALLED`
+- `COMPANION_FORBIDDEN`
+- `COMPANION_UNREACHABLE`
 
 ---
 

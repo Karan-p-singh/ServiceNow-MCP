@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-02-28 22:33 PST
+Last Updated: 2026-03-01 00:16 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -63,6 +63,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - `src/server/mcp.js` → server lifecycle + invocation orchestration
 - `src/server/http-sse.js` → HTTP/SSE transport host + JSON-RPC bridge (`/mcp`, `/mcp/sse`)
 - `src/servicenow/client.js` → ServiceNow REST adapter (auth, retries, normalization, capability discovery)
+- `src/servicenow/companion-client.js` → Companion app health/version + authoritative ACL integration client
 - `src/config.js` → environment parsing + local `.env` loading and merged config resolution
 
 ### `scripts/` (diagnostics + verification)
@@ -87,9 +88,10 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ## 5) Status Snapshot (Current)
 
-- Phase 1 is complete with **Gate G1 passed** and Phase 2 is complete with **Gate G2 passed**.
+- Phase 1 and Phase 2 are complete with **G1/G2 passed**, and Phase 3 is complete with **Gate G3 passed**.
 - **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
+- **EPIC-C baseline** (`C1/C2/C4`) is complete with dual-mode `sn.acl.trace` and deterministic degraded reason codes.
 - G1 evidence now includes live diagnostics tooling (`test:live`, `test:live:mcp`) and secure env publishing baseline (`.env.example` + `.gitignore`).
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
-- Next queued stories are **C1, C2, C4, F1**.
+- Next queued stories are **F1, F2, F3, E4**.
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

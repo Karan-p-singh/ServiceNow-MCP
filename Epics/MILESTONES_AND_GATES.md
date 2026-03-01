@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-02-28 22:32 PST
+Last Updated: 2026-03-01 00:14 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -11,7 +11,7 @@ Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 | ------------ | ------------------------------------------------ | ------------- | ----------- | ---------------------- |
 | M1           | Phase 1 Exit — Foundation Slice                  | Week 2        | Passed      | Engineering            |
 | M2           | Phase 2 Exit — Validation MVP + Script E2E       | Week 5        | Passed      | Engineering            |
-| M3           | Phase 3 Exit — Companion + ACL Authority         | Week 8        | Not Started | Engineering + SN Dev   |
+| M3           | Phase 3 Exit — Companion + ACL Authority         | Week 8        | Passed      | Engineering + SN Dev   |
 | M4           | Phase 4 Exit — Update Set MVP                    | Week 12       | Not Started | Engineering            |
 | M5           | Phase 5 Exit — Controlled Commit + Rollback Plan | Week 16       | Not Started | Engineering            |
 | M6           | Phase 6 Exit — Flow/Workflow Coverage            | Week 20       | Not Started | Engineering            |
@@ -68,13 +68,13 @@ Exit Rule: G2 passes when script lifecycle (read → validate → write) is safe
 
 ## Gate G3 — Companion Authority (M3)
 
-Status: `Not Started`
+Status: `Passed`
 
-- [ ] C1 complete: scoped app package + version contract
-- [ ] C2 complete: ACL authoritative endpoint
-- [ ] C4 complete: dual-mode acl.trace behavior
+- [x] C1 complete: scoped app package + version contract
+- [x] C2 complete: ACL authoritative endpoint
+- [x] C4 complete: dual-mode acl.trace behavior
 - [x] A4 complete: policy scope/global controls + exception handling
-- [ ] Explicit degraded mode behavior validated when Companion absent/outdated
+- [x] Explicit degraded mode behavior validated when Companion absent/outdated
 
 ## Gate G4 — Update Set MVP (M4)
 
@@ -135,3 +135,4 @@ Status: `Not Started`
 | 2026-02-28 | G1   | Passed      | Plugin probe strategy updated to `v_plugin` preferred with `sys_plugins` fallback; live diagnostics and gate interpretation now reflect table-level policy variance without masking failures       |
 | 2026-02-28 | G2   | Passed      | Implemented validation runtime + script rulepack v1, full script lifecycle tooling (`get/list/search/refs/deps/create/update`), CRITICAL/HIGH write gating, audit metadata, and unit test coverage |
 | 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                                                                                                                  |
+| 2026-03-01 | G3   | Passed      | Completed C1/C2/C4: companion health/version contract, authoritative `sn.acl.trace`, dual-mode degraded behavior with deterministic reason codes, and test evidence via `npm test`                 |

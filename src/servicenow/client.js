@@ -416,6 +416,46 @@ export class ServiceNowClient {
   }
 
   mockRequest({ method = "GET", path, query = {}, body = {}, instance }) {
+    if (path.includes("/api/x_mcp_companion/v1/health")) {
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: {
+            status: "ok",
+            version: "1.2.0",
+            app_scope: "x_mcp_companion",
+          },
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/api/x_mcp_companion/v1/acl/evaluate")) {
+      const operation = String(body?.operation || "read").toLowerCase();
+      const decision = operation === "write" ? "deny" : "allow";
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: {
+            decision,
+            reasoning_summary:
+              decision === "allow"
+                ? "Mock companion allows read operation."
+                : "Mock companion denies write operation.",
+            evaluated_acls: [
+              {
+                acl: `${body?.table || "task"}.${body?.field || "*"}.${operation}`,
+                decision,
+              },
+            ],
+          },
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
     if (path.includes("/sys_plugins") || path.includes("/v_plugin")) {
       return Promise.resolve({
         status: 200,
@@ -424,6 +464,48 @@ export class ServiceNowClient {
             { name: "com.snc.scripted_rest_api" },
             { name: "com.glide.update_set" },
             { name: "com.glide.script.fencing" },
+          ],
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_security_acl")) {
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: [
+            {
+              sys_id: "mock-acl-1",
+              name: "incident.*.read",
+              operation: "read",
+              type: "record",
+              active: "true",
+            },
+            {
+              sys_id: "mock-acl-2",
+              name: "incident.short_description.write",
+              operation: "write",
+              type: "record",
+              active: "true",
+            },
+          ],
+        },
+        headers: {},
+        attempt: 1,
+      });
+    }
+
+    if (path.includes("/sys_user_has_role")) {
+      return Promise.resolve({
+        status: 200,
+        data: {
+          result: [
+            {
+              user: { value: body?.user || "mock-user" },
+              role: { display_value: "itil" },
+            },
           ],
         },
         headers: {},

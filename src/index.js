@@ -1,6 +1,7 @@
 import { loadConfig } from "./config.js";
 import { HttpSseTransport } from "./server/http-sse.js";
 import { MCPServer } from "./server/mcp.js";
+import { CompanionClient } from "./servicenow/companion-client.js";
 import { ServiceNowClient } from "./servicenow/client.js";
 import { evaluateScriptValidation, evaluateWriteGate } from "./validation/engine.js";
 
@@ -39,6 +40,63 @@ function buildScriptEvidence(scriptBody = "") {
   }
 
   return refs;
+}
+
+async function buildDiscoveryAclTrace({ client, input, degradedReasonCode }) {
+  const table = String(input?.table || "task").trim() || "task";
+  const operation = String(input?.operation || "read").trim().toLowerCase() || "read";
+  const field = input?.field ? String(input.field) : "*";
+  const user = input?.user ? String(input.user) : null;
+
+  const aclQuery = `nameLIKE${table}^operation=${operation}`;
+  const aclPage = await client.listTable({
+    table: "sys_security_acl",
+    limit: 25,
+    offset: 0,
+    query: aclQuery,
+    instanceKey: input?.instance_key,
+  });
+
+  const rolePage = await client.listTable({
+    table: "sys_user_has_role",
+    limit: 25,
+    offset: 0,
+    query: user ? `user=${user}` : "",
+    instanceKey: input?.instance_key,
+  });
+
+  const matchedAcls = (aclPage.records || []).map((record) => ({
+    sys_id: record?.sys_id || null,
+    name: record?.name || null,
+    operation: record?.operation || null,
+    type: record?.type || null,
+    active: record?.active || null,
+  }));
+
+  const resolvedRoles = (rolePage.records || []).map((record) =>
+    record?.role?.display_value || record?.role?.value || record?.role || null,
+  ).filter(Boolean);
+
+  return {
+    mode: "discovery",
+    decision: matchedAcls.length > 0 ? "indeterminate" : "indeterminate",
+    confidence: matchedAcls.length > 0 ? "medium" : "low",
+    degraded_reason_code: degradedReasonCode,
+    limitations: [
+      "Discovery mode is best-effort and cannot execute scripted ACL runtime context.",
+      "Domain separation, impersonation, and runtime script conditions are not fully evaluated externally.",
+    ],
+    evidence: {
+      table,
+      operation,
+      field,
+      user,
+      acl_matches: matchedAcls,
+      user_roles: resolvedRoles,
+    },
+    reasoning_summary:
+      "Companion authoritative evaluation unavailable; returning discovery-only ACL evidence with explicit limitations.",
+  };
 }
 
 function registerBaselineTools(server) {
@@ -198,7 +256,11 @@ function registerBaselineTools(server) {
     tier: "T0",
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
+      const companionClient = context.services?.companion;
       const details = await client.getInstanceInfo({
+        instanceKey: input?.instance_key,
+      });
+      const companion = await companionClient.getStatus({
         instanceKey: input?.instance_key,
       });
 
@@ -211,8 +273,60 @@ function registerBaselineTools(server) {
           },
           connectivity: details.connectivity,
           capabilities: details.capabilities,
+          companion,
           edition: context.config.edition,
           tier_max: context.config.tierMax,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.acl.trace",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const companionClient = context.services?.companion;
+
+      const companionStatus = await companionClient.getStatus({
+        instanceKey: input?.instance_key,
+      });
+
+      if (companionStatus.ready && companionStatus.compatible) {
+        const authoritative = await companionClient.evaluateAcl({
+          instanceKey: input?.instance_key,
+          input,
+        });
+
+        return {
+          data: {
+            ...authoritative,
+            companion: {
+              enabled: companionStatus.enabled,
+              status: companionStatus.status,
+              version: companionStatus.version,
+              min_version: companionStatus.min_version,
+            },
+          },
+        };
+      }
+
+      const degradedReasonCode = companionStatus?.degraded_reason_code || "COMPANION_UNREACHABLE";
+      const discovery = await buildDiscoveryAclTrace({
+        client,
+        input,
+        degradedReasonCode,
+      });
+
+      return {
+        data: {
+          ...discovery,
+          companion: {
+            enabled: companionStatus.enabled,
+            status: companionStatus.status,
+            version: companionStatus.version,
+            min_version: companionStatus.min_version,
+          },
         },
       };
     },
@@ -442,11 +556,13 @@ async function main() {
   };
   const runtimeLogger = isSmokeMode ? smokeLogger : console;
   const serviceNow = new ServiceNowClient({ config, logger: runtimeLogger });
+  const companion = new CompanionClient({ serviceNowClient: serviceNow, config });
   const server = new MCPServer({
     config,
     logger: runtimeLogger,
     services: {
       serviceNow,
+      companion,
     },
   });
   let transport = null;
@@ -494,6 +610,11 @@ async function main() {
     });
     const scriptDepsResult = await server.invoke("sn.script.deps", {
       name: "x_demo_utility",
+    });
+    const aclTraceResult = await server.invoke("sn.acl.trace", {
+      table: "incident",
+      operation: "read",
+      user: "mock-user",
     });
     const scriptCreateBlocked = await server.invoke("sn.script.create", {
       name: "x_demo_created_blocked",
@@ -564,6 +685,7 @@ async function main() {
       script_search_result: scriptSearchResult,
       script_refs_result: scriptRefsResult,
       script_deps_result: scriptDepsResult,
+      acl_trace_result: aclTraceResult,
       script_create_blocked_result: scriptCreateBlocked,
       script_create_allowed_result: scriptCreateAllowed,
       tier_blocked_result: tierBlocked,

@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-02-28 20:03 PST
+Last Updated: 2026-03-01 00:16 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -8,9 +8,11 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 
 - EPIC-A is complete (`Done`)
 - EPIC-B is complete (`Done`)
+- EPIC-C baseline scope (C1/C2/C4) is complete (`Done`) and Gate G3 has passed
 - Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`, `A6 — HTTP/SSE transport endpoint + URL-first MCP runtime`
 - Completed in EPIC-B: `B1 — Auth + client abstraction`, `B2 — Retry/pagination/error normalization`, `B3 — Instance capability discovery`, `B4 — README-aligned structure adoption`
-- Next queued cross-epic focus: `E1`, `D1`, `D2`, `D3`
+- Completed in EPIC-C baseline: `C1 — Scoped app packaging + version contract`, `C2 — ACL authoritative endpoint`, `C4 — Dual-mode sn.acl.trace`
+- Next queued cross-epic focus: `F1`, `F2`, `F3`, `E4`
 
 ---
 

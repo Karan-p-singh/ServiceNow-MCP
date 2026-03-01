@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 22:38 PST
+Last Updated: 2026-03-01 00:15 PST
 
 ---
 
@@ -380,6 +380,51 @@ Each entry should include:
 - **Reason:** Added end-user Gate G2 verification workflow with checklist-style output and generated JSON summary artifact.
 - **Evidence:** `scripts/test-g2-validation.js`, `package.json` (`test:g2`), `artifacts/g2-validation-summary.json`; run: `npm run test:g2`
 - **Next step:** Keep Gate validation scripts aligned as future gate criteria evolve.
+
+### 2026-03-01 00:10 PST
+
+- **Item:** C1
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented Companion integration contract in MCP runtime with config-driven enablement, health/version detection, and capability exposure in `sn.instance.info`.
+- **Evidence:** `src/config.js`, `src/servicenow/companion-client.js`, `src/index.js`, `.env.example`, `companion-app/README.md`
+- **Next step:** Complete authoritative ACL endpoint integration and dual-mode behavior.
+
+### 2026-03-01 00:11 PST
+
+- **Item:** C2
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Added Companion authoritative ACL evaluation path and normalized authoritative response contract for `sn.acl.trace`.
+- **Evidence:** `src/servicenow/companion-client.js`, `src/servicenow/client.js`, `src/index.js`
+- **Next step:** Finalize degraded discovery fallback contract and deterministic reason codes.
+
+### 2026-03-01 00:12 PST
+
+- **Item:** C4
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented dual-mode `sn.acl.trace` with Companion-authoritative mode and discovery fallback with explicit limitations + deterministic degraded reason codes.
+- **Evidence:** `src/index.js`, `src/servicenow/companion-client.js`, `tests/acl.trace.test.js`
+- **Next step:** Validate Gate G3 acceptance and synchronize tracking/docs.
+
+### 2026-03-01 00:13 PST
+
+- **Item:** G3
+- **Change:** `Not Started -> Passed`
+- **Owner:** Engineering
+- **Reason:** Completed Companion Authority gate scope (C1/C2/C4) and verified behavior via targeted unit tests and smoke-backed tool contracts.
+- **Evidence:** `tests/companion.client.test.js`, `tests/acl.trace.test.js`, `npm test`, `Epics/MILESTONES_AND_GATES.md`, `Epics/BUILD_STATUS_BOARD.md`
+- **Next step:** Advance to Gate G4 execution (`F1 -> F2 -> F3`).
+
+### 2026-03-01 00:15 PST
+
+- **Item:** DOCS-G3-SYNC-1
+- **Change:** `Not Started -> Done`
+- **Owner:** Engineering
+- **Reason:** Synchronized README, activity tracking, status board, milestones/gates, context index, and risk/decision register for completed Gate G3 scope.
+- **Evidence:** `README.md`, `PROJECT_CONTEXT_INDEX.md`, `Epics/BUILD_ACTIVITY_LOG.md`, `Epics/BUILD_STATUS_BOARD.md`, `Epics/MILESTONES_AND_GATES.md`, `Epics/RISKS_AND_DECISIONS.md`
+- **Next step:** Keep cross-doc updates atomic as F-series implementation begins.
 
 ---
 
