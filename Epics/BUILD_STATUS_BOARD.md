@@ -1,21 +1,21 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-02-28 19:46 PST
+Last Updated: 2026-02-28 20:04 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
 
 ## 1) Phase Progress Snapshot
 
-| Phase | Name                              | Status      | Progress | Notes                                                       |
-| ----- | --------------------------------- | ----------- | -------: | ----------------------------------------------------------- |
-| 1     | Foundation + First Vertical Slice | In Progress |      65% | EPIC-A and EPIC-B complete; Phase 1 focus shifts to E1 + D1 |
-| 2     | Validation MVP + Script Tooling   | Backlog     |       0% | Dependent on Phase 1 exits                                  |
-| 3     | Companion App + ACL Authoritative | Backlog     |       0% | Dependent on Phase 2 exits                                  |
-| 4     | Update Set MVP                    | Backlog     |       0% | Dependent on Phase 3 readiness                              |
-| 5     | Commit + Rollback Planning        | Backlog     |       0% | Dependent on Phase 4 readiness                              |
-| 6     | Flows + Workflows Coverage        | Backlog     |       0% | Dependent on core validation maturity                       |
-| 7     | Enterprise Hardening              | Backlog     |       0% | Final hardening and release prep                            |
+| Phase | Name                              | Status      | Progress | Notes                                                                                          |
+| ----- | --------------------------------- | ----------- | -------: | ---------------------------------------------------------------------------------------------- |
+| 1     | Foundation + First Vertical Slice | In Progress |      70% | EPIC-A and EPIC-B complete (including URL-first HTTP/SSE MCP); Phase 1 focus shifts to E1 + D1 |
+| 2     | Validation MVP + Script Tooling   | Backlog     |       0% | Dependent on Phase 1 exits                                                                     |
+| 3     | Companion App + ACL Authoritative | Backlog     |       0% | Dependent on Phase 2 exits                                                                     |
+| 4     | Update Set MVP                    | Backlog     |       0% | Dependent on Phase 3 readiness                                                                 |
+| 5     | Commit + Rollback Planning        | Backlog     |       0% | Dependent on Phase 4 readiness                                                                 |
+| 6     | Flows + Workflows Coverage        | Backlog     |       0% | Dependent on core validation maturity                                                          |
+| 7     | Enterprise Hardening              | Backlog     |       0% | Final hardening and release prep                                                               |
 
 ---
 
@@ -66,6 +66,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - A3 — Tier enforcement middleware
 - A4 — Policy engine (scope/global/break-glass)
 - A5 — Structured audit logging
+- A6 — HTTP/SSE transport endpoint + URL-first MCP runtime
 - B1 — Auth + client abstraction
 - B2 — Retry/pagination/error normalization
 - B3 — Instance capability discovery (`sn.instance.info`)

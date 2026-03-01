@@ -1,4 +1,5 @@
 import { loadConfig } from "./config.js";
+import { HttpSseTransport } from "./server/http-sse.js";
 import { MCPServer } from "./server/mcp.js";
 import { ServiceNowClient } from "./servicenow/client.js";
 
@@ -103,6 +104,7 @@ function registerBaselineTools(server) {
 }
 
 async function main() {
+  const isSmokeMode = process.argv.includes("--smoke");
   const config = loadConfig();
   const serviceNow = new ServiceNowClient({ config });
   const server = new MCPServer({
@@ -111,11 +113,20 @@ async function main() {
       serviceNow,
     },
   });
+  let transport = null;
 
   registerBaselineTools(server);
   await server.start();
 
+  if (!isSmokeMode && config.transport === "http-sse") {
+    transport = new HttpSseTransport({ mcpServer: server, config });
+    await transport.start();
+  }
+
   const shutdown = async () => {
+    if (transport) {
+      await transport.stop();
+    }
     await server.stop();
     process.exit(0);
   };
@@ -123,7 +134,7 @@ async function main() {
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
-  if (process.argv.includes("--smoke")) {
+  if (isSmokeMode) {
     const result = await server.invoke("sn.instance.info", {});
     const paged = await server.invoke("sn.table.list", {
       table: "sys_plugins",
@@ -164,6 +175,18 @@ async function main() {
   }
 
   console.log("ServiceNow MCP Server scaffold is running.");
+  console.log(`ServiceNow target instance URL: ${config.instanceUrl}`);
+  if (config.transport === "http-sse") {
+    const host = config.server?.host || "localhost";
+    const port = config.server?.port || 3001;
+    const path = config.server?.path || "/mcp";
+    console.log(`MCP endpoint URL: http://${host}:${port}${path}`);
+    console.log(`MCP SSE URL: http://${host}:${port}${path}/sse`);
+    console.log("MCP transport: http-sse (default)");
+  } else {
+    console.log("MCP transport: stdio");
+    console.log(`MCP launch command: node ${process.argv[1]}`);
+  }
   console.log("Registered tools:", server.listTools().map((t) => t.name).join(", "));
 }
 

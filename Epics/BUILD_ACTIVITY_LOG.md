@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 19:46 PST
+Last Updated: 2026-02-28 20:04 PST
 
 ---
 
@@ -164,6 +164,15 @@ Each entry should include:
 - **Reason:** All Epic B stories (B1–B4) implemented and smoke-validated with tracking artifacts synchronized.
 - **Evidence:** `src/config.js`, `src/servicenow/client.js`, `src/index.js`, `src/server/mcp.js`, `BUILD_STATUS_BOARD.md`, `MILESTONES_AND_GATES.md`, `IMPLEMENTATION_PLAN_EPICS_STORIES.md`; smoke run `npm run smoke`
 - **Next step:** Proceed to E1 (`sn.script.get` minimal path) and D1 validation runtime skeleton.
+
+### 2026-02-28 20:04 PST
+
+- **Item:** A6
+- **Change:** `Not Defined -> Done`
+- **Owner:** Engineering
+- **Reason:** Added URL-first MCP transport with HTTP/SSE endpoint support and JSON-RPC tool routing so LLM clients can connect via `http://localhost:3001/mcp`.
+- **Evidence:** `src/server/http-sse.js`, `src/config.js`, `src/index.js`, `package.json`; verification via `npm start`, `GET /mcp`, `POST /mcp`
+- **Next step:** Update README and integration docs with URL-based client examples and stdio fallback guidance.
 
 ---
 

@@ -3,20 +3,36 @@
 A **safe-by-default MCP (Model Context Protocol) server** for ServiceNow that enables LLM tooling to **read, validate, and (when allowed) change** ServiceNow artifacts with enterprise guardrails.
 
 This repository delivers:
+
 - **MCP Server (TypeScript)**: tool registry, tier enforcement, policy engine, validation engine, audit logs
 - **ServiceNow Companion App (Scoped)**: authoritative platform-native evaluation endpoints (e.g., ACL evaluation)
 - **Rulepacks**: versioned best-practice and governance validations
 
 ---
 
+## Transport & Connection Model
+
+This server supports two MCP transports:
+
+- **HTTP/SSE (default)** — URL-first integration for LLM clients
+  - Default endpoint: `http://localhost:3001/mcp`
+  - SSE stream: `http://localhost:3001/mcp/sse`
+- **stdio (optional fallback)** — command-based local process transport
+
+By default, this project starts in **HTTP/SSE mode** so it works with URL-based MCP client integrations out of the box.
+
+---
+
 ## Why this exists
 
 ServiceNow is not a generic CRUD system. External tooling cannot safely “guess”:
+
 - ACL outcomes (scripted ACLs, impersonation, domain separation context)
 - update set completeness (implicit dependencies and embedded references)
 - rollback reversibility from commits
 
 This project is designed to be **honest and safe**:
+
 - “Authoritative” actions require a **Companion App**.
 - Dependency tools return **confidence tiers**.
 - Commit and rollback are implemented as **preview + plan**, not false promises.
@@ -26,6 +42,7 @@ This project is designed to be **honest and safe**:
 ## Quick Start
 
 ### 1) Prerequisites
+
 - Node.js 18+
 - Access to a ServiceNow instance (dev/test recommended)
 - A least-privilege ServiceNow service account
@@ -38,6 +55,12 @@ Create `.env` (or set environment variables via your secret manager):
 ```bash
 # Edition: dev | itsm
 MCP_EDITION=dev
+
+# MCP transport (default is URL-based HTTP/SSE)
+MCP_TRANSPORT=http-sse      # http-sse | stdio
+MCP_SERVER_HOST=localhost
+MCP_SERVER_PORT=3001
+MCP_SERVER_PATH=/mcp
 
 # Instance connection
 SN_INSTANCE_URL=https://YOUR_INSTANCE.service-now.com
@@ -68,11 +91,22 @@ VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 
 ```bash
 npm install
-npm run build
 npm run start
 ```
 
+Expected startup output includes:
+
+- `MCP endpoint URL: http://localhost:3001/mcp`
+- `MCP SSE URL: http://localhost:3001/mcp/sse`
+
+Optional stdio mode:
+
+```bash
+npm run start:stdio
+```
+
 Expected behavior:
+
 - Tools above `MCP_TIER_MAX` are rejected before any ServiceNow call.
 - All artifact reads include a `validation_summary` block.
 - Writes are blocked on CRITICAL validation findings.
@@ -125,6 +159,7 @@ Expected behavior:
 - **T3** Dangerous: commit, delete, cross-scope operations (requires explicit confirm + reason)
 
 A typical enterprise posture:
+
 - prod: T0
 - test: T1–T2
 - dev: T3 (only when necessary)
@@ -135,11 +170,13 @@ A typical enterprise posture:
 
 Some platform truths cannot be reproduced externally.
 The Companion App provides:
+
 - **Authoritative ACL evaluation** via Scripted REST calling platform evaluation logic
 - **Scope guard checks** for cross-scope write protection
 - **Version contract** to ensure MCP server behavior is predictable
 
 If the Companion App is missing or outdated:
+
 - tools degrade safely or refuse “authoritative” operations
 - outputs explicitly declare what is and is not reliable
 
@@ -148,10 +185,12 @@ If the Companion App is missing or outdated:
 ## Validation Engine
 
 Validation is always-on:
+
 - On read: attach `validation_summary`
 - On write: block/warn/require-ack based on severity
 
 Severities:
+
 - **CRITICAL**: blocks write
 - **HIGH**: requires acknowledgment (`acknowledged_findings[]`)
 - **MEDIUM/LOW**: advisory
@@ -163,6 +202,7 @@ Rulepacks are versioned and can be tailored by enterprise policy.
 ## Audit Logging
 
 All tool calls emit structured JSON logs with:
+
 - instance, tool name, tier, policy decisions
 - validation summary counts
 - write metadata (table/sys_id/action)
@@ -173,17 +213,98 @@ All tool calls emit structured JSON logs with:
 ## Common Workflows
 
 ### Validate a Script Before Changing It
-1) `sn.script.get` → read + see `validation_summary`
-2) `sn.script.validate` → full findings
-3) Fix changes
-4) `sn.script.update` (tier gated) with `acknowledged_findings` if needed
+
+1. `sn.script.get` → read + see `validation_summary`
+2. `sn.script.validate` → full findings
+3. Fix changes
+4. `sn.script.update` (tier gated) with `acknowledged_findings` if needed
 
 ### Update Set Deployment Readiness
-1) `sn.changeset.get`
-2) `sn.changeset.gaps` (confidence-tier output)
-3) `sn.updateset.capture.verify` for key records
-4) `sn.changeset.commit.preview`
-5) `sn.changeset.commit` (if allowed) + `sn.rollback.plan.generate`
+
+1. `sn.changeset.get`
+2. `sn.changeset.gaps` (confidence-tier output)
+3. `sn.updateset.capture.verify` for key records
+4. `sn.changeset.commit.preview`
+5. `sn.changeset.commit` (if allowed) + `sn.rollback.plan.generate`
+
+---
+
+## MCP Endpoint Verification (HTTP/SSE)
+
+Check endpoint metadata:
+
+```bash
+curl -H "Accept: application/json" http://localhost:3001/mcp
+```
+
+Expected response includes transport metadata and supported methods.
+
+> Note: Opening `http://localhost:3001/mcp` in a browser returns an informational HTML page.
+> MCP clients should use `POST /mcp` (JSON-RPC), and scripts can force metadata JSON with `Accept: application/json`.
+
+Basic MCP JSON-RPC initialize request:
+
+```bash
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {}
+  }'
+```
+
+List tools:
+
+```bash
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list",
+    "params": {}
+  }'
+```
+
+Call a tool (`sn.instance.info`):
+
+```bash
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {
+      "name": "sn.instance.info",
+      "arguments": {}
+    }
+  }'
+```
+
+---
+
+## Connecting LLM Clients
+
+### URL-based MCP clients (recommended)
+
+Use this MCP endpoint URL:
+
+- `http://localhost:3001/mcp`
+
+If the client supports separate SSE configuration, also use:
+
+- `http://localhost:3001/mcp/sse`
+
+### Command/stdio clients (fallback)
+
+If your client only supports stdio MCP servers, use:
+
+- command: `node`
+- args: `D:/Personal Projects/ServiceNow-MCP/ServiceNow-MCP/src/index.js`
+- env: set `MCP_TRANSPORT=stdio` plus your `SN_*` and `MCP_*` variables
 
 ---
 
@@ -202,4 +323,5 @@ All tool calls emit structured JSON logs with:
 ---
 
 ## License
+
 TBD (choose per organizational policy)

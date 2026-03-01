@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-02-28 19:46 PST
+Last Updated: 2026-02-28 20:04 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -29,6 +29,7 @@ Status: `In Progress`
 - [x] A2 complete: response envelope implemented for all tools
 - [x] A3 complete: tier enforcement + T3 confirm/reason contract
 - [x] A5 complete: structured logs with redaction + correlation IDs
+- [x] A6 complete: HTTP/SSE MCP endpoint exposed with URL-first default transport
 - [x] B1 complete: auth abstraction (OAuth first)
 - [x] B4 complete: README-aligned structure adoption documented and applied for new Epic B assets
 - [x] B2 baseline complete: retries/pagination/error normalization
@@ -111,4 +112,5 @@ Status: `Not Started`
 | 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                 |
 | 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence   |
 | 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence |
+| 2026-02-28 | G1   | In Progress | A6 completed: URL-first HTTP/SSE MCP endpoint added (`http://localhost:3001/mcp`) with stdio fallback  |
 | 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                      |

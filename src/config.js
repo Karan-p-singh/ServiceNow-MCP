@@ -1,5 +1,9 @@
 const DEFAULTS = {
   edition: "dev",
+  transport: "http-sse",
+  serverHost: "localhost",
+  serverPort: 3001,
+  serverPath: "/mcp",
   instanceUrl: "https://example.service-now.com",
   instanceKey: "default",
   authMode: "oauth",
@@ -121,6 +125,12 @@ export function loadConfig(env = process.env) {
 
   return {
     edition: env.MCP_EDITION || DEFAULTS.edition,
+    transport: env.MCP_TRANSPORT || DEFAULTS.transport,
+    server: {
+      host: env.MCP_SERVER_HOST || DEFAULTS.serverHost,
+      port: parseInteger(env.MCP_SERVER_PORT, DEFAULTS.serverPort),
+      path: env.MCP_SERVER_PATH || DEFAULTS.serverPath,
+    },
     instanceUrl: selectedInstance?.instanceUrl || DEFAULTS.instanceUrl,
     defaultInstance: instanceConfig.defaultInstance,
     instances: instanceConfig.instances,

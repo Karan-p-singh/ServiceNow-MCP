@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-02-28 19:46 PST
+Last Updated: 2026-02-28 20:03 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -8,7 +8,7 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 
 - EPIC-A is complete (`Done`)
 - EPIC-B is complete (`Done`)
-- Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`
+- Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`, `A6 — HTTP/SSE transport endpoint + URL-first MCP runtime`
 - Completed in EPIC-B: `B1 — Auth + client abstraction`, `B2 — Retry/pagination/error normalization`, `B3 — Instance capability discovery`, `B4 — README-aligned structure adoption`
 - Next queued cross-epic focus: `E1`, `D1`, `D2`, `D3`
 
@@ -104,6 +104,19 @@ Goal: Establish safe request lifecycle, standardized envelope, tier/policy enfor
   - A5-T2 Include policy/validation decisions and write metadata
 - **Acceptance Criteria:**
   - All calls logged with redaction and correlation IDs
+
+### Story A6 — HTTP/SSE transport endpoint + URL-first MCP runtime
+
+- **Priority:** P0 | **Effort:** M | **Depends on:** A1, A2
+- **User Story:** As an LLM platform integrator, I need a true MCP URL endpoint so clients can connect over HTTP/SSE without local stdio command wiring.
+- **Tasks:**
+  - A6-T1 Add MCP transport configuration (`http-sse` default, `stdio` fallback)
+  - A6-T2 Implement HTTP endpoint (`/mcp`) + SSE stream (`/mcp/sse`) with JSON-RPC handling
+  - A6-T3 Update startup output and documentation for URL-first integration
+- **Acceptance Criteria:**
+  - Default startup exposes `http://localhost:3001/mcp`
+  - `tools/list` and `tools/call` available via MCP JSON-RPC over HTTP
+  - `stdio` remains available as explicit override for legacy clients
 
 ---
 
