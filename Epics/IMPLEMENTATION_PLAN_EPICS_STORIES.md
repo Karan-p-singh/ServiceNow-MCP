@@ -1,14 +1,16 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-02-28 18:22 PST
+Last Updated: 2026-02-28 19:46 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
 Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 
 - EPIC-A is complete (`Done`)
+- EPIC-B is complete (`Done`)
 - Completed in EPIC-A: `A1 — Server bootstrap + tool registry`, `A2 — Standard response envelope`, `A3 — Tier enforcement middleware`, `A4 — Policy engine (scope/global/break-glass)`, `A5 — Structured audit logging`
-- Next queued cross-epic focus: `B1`, `B2`, `B3` (then `E1`, `D1`)
+- Completed in EPIC-B: `B1 — Auth + client abstraction`, `B2 — Retry/pagination/error normalization`, `B3 — Instance capability discovery`, `B4 — README-aligned structure adoption`
+- Next queued cross-epic focus: `E1`, `D1`, `D2`, `D3`
 
 ---
 
@@ -126,6 +128,19 @@ Goal: Reliable, secure, and release-tolerant ServiceNow API foundation.
 - **Priority:** P0 | **Effort:** M | **Depends on:** B2
 - **Tasks:** instance metadata + plugin/release/capability summary
 - **Acceptance Criteria:** Capability response supports conditional rule/tool behavior
+
+### Story B4 — README-aligned structure adoption (incremental, migration-safe)
+
+- **Priority:** P1 | **Effort:** M | **Depends on:** B1
+- **User Story:** As a platform engineer, I need implementation work to follow the README target layout (`src/server`, `src/servicenow`, `src/validation`) so Epic B+ delivery stays predictable while preserving current runtime stability.
+- **Tasks:**
+  - B4-T1 Define and document target folder ownership boundaries for server, ServiceNow client, and validation layers
+  - B4-T2 Route new Epic B artifacts into README-aligned paths by default
+  - B4-T3 Document temporary deviations with rationale and migration notes toward TS/v2 target
+- **Acceptance Criteria:**
+  - New/updated Epic B assets follow README-recommended structure by default
+  - Any temporary deviation is tracked with explicit rationale and migration intent
+  - Existing JS runtime remains stable while incremental alignment is applied
 
 ---
 
@@ -295,7 +310,7 @@ Goal: Security/governance readiness for enterprise adoption.
 ## 4) Initial Sequenced Story Queue (Execution Order)
 
 1. A1 → A2 → A3 → A5
-2. B1 → B2 → B3
+2. B1 → B4 → B2 → B3
 3. E1 (minimal script.get) + D1 (engine skeleton)
 4. D2 → D3
 5. E1 full + E2 + E3

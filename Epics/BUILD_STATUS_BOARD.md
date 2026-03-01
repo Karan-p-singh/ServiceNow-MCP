@@ -1,21 +1,21 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-02-28 18:22 PST
+Last Updated: 2026-02-28 19:46 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
 
 ## 1) Phase Progress Snapshot
 
-| Phase | Name                              | Status      | Progress | Notes                                                  |
-| ----- | --------------------------------- | ----------- | -------: | ------------------------------------------------------ |
-| 1     | Foundation + First Vertical Slice | In Progress |      40% | EPIC-A complete; Phase 1 focus shifts to B1/B2/B3 + E1 |
-| 2     | Validation MVP + Script Tooling   | Backlog     |       0% | Dependent on Phase 1 exits                             |
-| 3     | Companion App + ACL Authoritative | Backlog     |       0% | Dependent on Phase 2 exits                             |
-| 4     | Update Set MVP                    | Backlog     |       0% | Dependent on Phase 3 readiness                         |
-| 5     | Commit + Rollback Planning        | Backlog     |       0% | Dependent on Phase 4 readiness                         |
-| 6     | Flows + Workflows Coverage        | Backlog     |       0% | Dependent on core validation maturity                  |
-| 7     | Enterprise Hardening              | Backlog     |       0% | Final hardening and release prep                       |
+| Phase | Name                              | Status      | Progress | Notes                                                       |
+| ----- | --------------------------------- | ----------- | -------: | ----------------------------------------------------------- |
+| 1     | Foundation + First Vertical Slice | In Progress |      65% | EPIC-A and EPIC-B complete; Phase 1 focus shifts to E1 + D1 |
+| 2     | Validation MVP + Script Tooling   | Backlog     |       0% | Dependent on Phase 1 exits                                  |
+| 3     | Companion App + ACL Authoritative | Backlog     |       0% | Dependent on Phase 2 exits                                  |
+| 4     | Update Set MVP                    | Backlog     |       0% | Dependent on Phase 3 readiness                              |
+| 5     | Commit + Rollback Planning        | Backlog     |       0% | Dependent on Phase 4 readiness                              |
+| 6     | Flows + Workflows Coverage        | Backlog     |       0% | Dependent on core validation maturity                       |
+| 7     | Enterprise Hardening              | Backlog     |       0% | Final hardening and release prep                            |
 
 ---
 
@@ -24,7 +24,7 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 | Epic ID | Epic Name                           | Owner   | Status  | Start      | Target End | Progress | Blocking Dependencies     |
 | ------- | ----------------------------------- | ------- | ------- | ---------- | ---------- | -------: | ------------------------- |
 | EPIC-A  | Core MCP Framework                  | Eng     | Done    | 2026-02-28 | 2026-02-28 |     100% | None                      |
-| EPIC-B  | ServiceNow Client & Connectivity    | Eng     | Ready   | TBD        | TBD        |       0% | EPIC-A (A1 baseline)      |
+| EPIC-B  | ServiceNow Client & Connectivity    | Eng     | Done    | 2026-02-28 | 2026-02-28 |     100% | EPIC-A (A1 baseline)      |
 | EPIC-C  | Companion App                       | SN Dev  | Backlog | TBD        | TBD        |       0% | EPIC-B                    |
 | EPIC-D  | Validation Engine & Rulepacks       | Eng     | Ready   | TBD        | TBD        |       0% | EPIC-A, EPIC-B            |
 | EPIC-E  | Developer Artifact Tooling          | Eng     | Ready   | TBD        | TBD        |       0% | EPIC-B, EPIC-D            |
@@ -38,18 +38,15 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ## In Progress
 
-- None (next up: B1)
+- None (next up: E1)
 
 ## Ready
 
-- B1 — Auth + client abstraction
 - D1 — Validation runtime framework
 - E1 — Script read/list/search tools
 
 ## Backlog
 
-- B2 — Retry/pagination/error normalization
-- B3 — Instance capability discovery
 - C1, C2, C3, C4 — Companion app and ACL dual-mode
 - D2, D3, D4 — Rulepack and gating governance
 - E2, E3, E4, E5 — refs/deps, writes, flows, workflows
@@ -69,18 +66,22 @@ Legend: `Backlog | Ready | In Progress | Blocked | Done`
 - A3 — Tier enforcement middleware
 - A4 — Policy engine (scope/global/break-glass)
 - A5 — Structured audit logging
+- B1 — Auth + client abstraction
+- B2 — Retry/pagination/error normalization
+- B3 — Instance capability discovery (`sn.instance.info`)
+- B4 — README-aligned structure adoption (incremental, migration-safe)
 
 ---
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. B1 — Auth + client abstraction
-2. B2 — Retry/pagination/error normalization
-3. B3 — Instance capability discovery
-4. D1 — Validation runtime framework skeleton
-5. E1 — `sn.script.get` minimal read path + validation summary
-6. D2 — Script rulepack v1 baseline
-7. D3 — Read summary + write gating integration
-8. E2 — Script refs/deps with evidence
-9. E3 — Script create/update (tiered)
-10. C1 — Scoped app packaging + version contract
+1. E1 — `sn.script.get` minimal read path + validation summary
+2. D1 — Validation runtime framework skeleton
+3. D2 — Script rulepack v1 baseline
+4. D3 — Read summary + write gating integration
+5. E2 — Script refs/deps with evidence
+6. E3 — Script create/update (tiered)
+7. C1 — Scoped app packaging + version contract
+8. C2 — ACL authoritative endpoint
+9. F1 — Changeset read tools
+10. G1 — Unit tests for core + validation

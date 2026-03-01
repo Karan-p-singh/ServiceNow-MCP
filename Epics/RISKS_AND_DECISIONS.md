@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Risks & Decisions Register
 
-Last Updated: 2026-02-28 17:59 PST
+Last Updated: 2026-02-28 19:40 PST
 
 ---
 
@@ -26,13 +26,14 @@ Scales:
 
 ## 2) Decision Log (ADR-lite)
 
-| Decision ID | Date       | Decision                                              | Rationale                                        | Alternatives Considered            | Consequences                                         |
-| ----------- | ---------- | ----------------------------------------------------- | ------------------------------------------------ | ---------------------------------- | ---------------------------------------------------- |
-| D-001       | 2026-02-28 | Build is organized by epics/stories with phase gates  | Enables predictable execution and accountability | Flat task checklist only           | Better traceability but requires disciplined updates |
-| D-002       | 2026-02-28 | Track status in separate project files                | User requirement + durable history in repo       | External tracker only              | Repo-native transparency, low setup overhead         |
-| D-003       | 2026-02-28 | Safe-by-default posture with tier/policy first        | Security/governance precede feature breadth      | Feature-first then hardening       | Slower early velocity, lower operational risk        |
-| D-004       | 2026-02-28 | Companion app as authoritative source for ACL truth   | External reproduction is inherently incomplete   | Best-effort ACL only               | Requires SN app deployment but improves correctness  |
-| D-005       | 2026-02-28 | Update set intelligence must declare confidence tiers | Avoid false certainty claims                     | Binary complete/incomplete scoring | More nuanced outputs, better risk communication      |
+| Decision ID | Date       | Decision                                                                       | Rationale                                                           | Alternatives Considered            | Consequences                                                         |
+| ----------- | ---------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| D-001       | 2026-02-28 | Build is organized by epics/stories with phase gates                           | Enables predictable execution and accountability                    | Flat task checklist only           | Better traceability but requires disciplined updates                 |
+| D-002       | 2026-02-28 | Track status in separate project files                                         | User requirement + durable history in repo                          | External tracker only              | Repo-native transparency, low setup overhead                         |
+| D-003       | 2026-02-28 | Safe-by-default posture with tier/policy first                                 | Security/governance precede feature breadth                         | Feature-first then hardening       | Slower early velocity, lower operational risk                        |
+| D-004       | 2026-02-28 | Companion app as authoritative source for ACL truth                            | External reproduction is inherently incomplete                      | Best-effort ACL only               | Requires SN app deployment but improves correctness                  |
+| D-005       | 2026-02-28 | Update set intelligence must declare confidence tiers                          | Avoid false certainty claims                                        | Binary complete/incomplete scoring | More nuanced outputs, better risk communication                      |
+| D-006       | 2026-02-28 | README structure is target architecture for Epic B+ with incremental migration | Maintain architectural consistency without disruptive refactor risk | Immediate full TS/v2 restructure   | Predictable folder ownership now; controlled path to TS/v2 over time |
 
 ---
 

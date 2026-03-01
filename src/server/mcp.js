@@ -203,9 +203,10 @@ function createAuditEvent({ stage, requestContext, tool, config, input, policy, 
 }
 
 export class MCPServer {
-  constructor({ config, logger = console } = {}) {
+  constructor({ config, logger = console, services = {} } = {}) {
     this.config = config;
     this.logger = logger;
+    this.services = services;
     this.registry = new ToolRegistry();
     this.started = false;
   }
@@ -247,6 +248,7 @@ export class MCPServer {
     const runtimeContext = {
       request: requestContext,
       config: this.config,
+      services: this.services,
       tool: {
         name: tool.name,
         tier: tool.tier,

@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-02-28 18:22 PST
+Last Updated: 2026-02-28 19:46 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -29,9 +29,10 @@ Status: `In Progress`
 - [x] A2 complete: response envelope implemented for all tools
 - [x] A3 complete: tier enforcement + T3 confirm/reason contract
 - [x] A5 complete: structured logs with redaction + correlation IDs
-- [ ] B1 complete: auth abstraction (OAuth first)
-- [ ] B2 baseline complete: retries/pagination/error normalization
-- [ ] B3 complete: `sn.instance.info`
+- [x] B1 complete: auth abstraction (OAuth first)
+- [x] B4 complete: README-aligned structure adoption documented and applied for new Epic B assets
+- [x] B2 baseline complete: retries/pagination/error normalization
+- [x] B3 complete: `sn.instance.info`
 - [ ] E1 minimal complete: `sn.script.get` + validation summary attachment
 - [ ] Demo evidence captured for end-to-end first vertical slice
 
@@ -102,10 +103,12 @@ Status: `Not Started`
 
 ## 3) Gate Decision Log
 
-| Date       | Gate | Decision    | Notes                                                                                  |
-| ---------- | ---- | ----------- | -------------------------------------------------------------------------------------- |
-| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                        |
-| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                  |
-| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                       |
-| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence |
-| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables      |
+| Date       | Gate | Decision    | Notes                                                                                                  |
+| ---------- | ---- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| 2026-02-28 | G1   | In Progress | Planning/tracking initialized; implementation started at EPIC-A                                        |
+| 2026-02-28 | G1   | In Progress | A1 marked complete; continuing with A2/A3/A5 and B1/B2/B3 for M1 exit                                  |
+| 2026-02-28 | G1   | In Progress | A2 marked complete; next focus is A3 tier enforcement middleware                                       |
+| 2026-02-28 | G1   | In Progress | A3 and A5 marked complete; remaining G1 dependencies are B1/B2/B3/E1 and demo evidence                 |
+| 2026-02-28 | G1   | In Progress | Added B4 structure-alignment checkpoint; remaining dependencies are B1/B4/B2/B3/E1 and demo evidence   |
+| 2026-02-28 | G1   | In Progress | B1/B2/B3/B4 completed in code and smoke-validated; remaining G1 items are E1 minimal and demo evidence |
+| 2026-02-28 | G3   | Not Started | A4 implementation completed early; Gate G3 remains pending companion deliverables                      |

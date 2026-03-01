@@ -1,16 +1,52 @@
 import { loadConfig } from "./config.js";
 import { MCPServer } from "./server/mcp.js";
+import { ServiceNowClient } from "./servicenow/client.js";
 
 function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.instance.info",
     tier: "T0",
-    handler: async (_input, context) => {
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const details = await client.getInstanceInfo({
+        instanceKey: input?.instance_key,
+      });
+
       return {
-        instance: context.config.instanceUrl,
-        edition: context.config.edition,
-        tier_max: context.config.tierMax,
-        status: "ok",
+        data: {
+          instance: details.instance,
+          auth: {
+            mode: details.auth.mode,
+            credentials_configured: details.auth.credentials_configured,
+          },
+          connectivity: details.connectivity,
+          capabilities: details.capabilities,
+          edition: context.config.edition,
+          tier_max: context.config.tierMax,
+        },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.table.list",
+    tier: "T0",
+    handler: async (input, context) => {
+      const client = context.services?.serviceNow;
+      const result = await client.listTable({
+        table: input?.table || "sys_plugins",
+        limit: Number(input?.limit || 25),
+        offset: Number(input?.offset || 0),
+        query: input?.query || "",
+        instanceKey: input?.instance_key,
+      });
+
+      return {
+        data: {
+          table: input?.table || "sys_plugins",
+          records: result.records,
+          page: result.page,
+        },
       };
     },
   });
@@ -68,7 +104,13 @@ function registerBaselineTools(server) {
 
 async function main() {
   const config = loadConfig();
-  const server = new MCPServer({ config });
+  const serviceNow = new ServiceNowClient({ config });
+  const server = new MCPServer({
+    config,
+    services: {
+      serviceNow,
+    },
+  });
 
   registerBaselineTools(server);
   await server.start();
@@ -83,6 +125,11 @@ async function main() {
 
   if (process.argv.includes("--smoke")) {
     const result = await server.invoke("sn.instance.info", {});
+    const paged = await server.invoke("sn.table.list", {
+      table: "sys_plugins",
+      limit: 2,
+      offset: 0,
+    });
     const tierBlocked = await server.invoke("sn.script.update", {
       scope: "x_demo_scope",
       sys_id: "abc123",
@@ -106,6 +153,7 @@ async function main() {
     console.log(JSON.stringify({
       tools: server.listTools(),
       smoke_result: result,
+      table_list_result: paged,
       tier_blocked_result: tierBlocked,
       t3_blocked_result: t3Blocked,
       policy_blocked_result: policyBlocked,

@@ -1,7 +1,7 @@
 # ServiceNow MCP Server v2 — Build Activity Log
 
 Purpose: Chronological execution log of planning/build activity with status transitions.
-Last Updated: 2026-02-28 18:22 PST
+Last Updated: 2026-02-28 19:46 PST
 
 ---
 
@@ -110,6 +110,60 @@ Each entry should include:
 - **Reason:** All EPIC-A stories (A1–A5) now implemented and validated in scaffold with tracking artifacts synchronized.
 - **Evidence:** `BUILD_STATUS_BOARD.md`, `MILESTONES_AND_GATES.md`, `IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `src/*`
 - **Next step:** Start B1 (Auth + client abstraction).
+
+### 2026-02-28 19:40 PST
+
+- **Item:** B4
+- **Change:** `Not Defined -> Backlog`
+- **Owner:** Engineering
+- **Reason:** Added Epic B structure-governance story to enforce README-aligned project layout adoption (`src/server`, `src/servicenow`, `src/validation`) through incremental, migration-safe execution.
+- **Evidence:** `IMPLEMENTATION_PLAN_EPICS_STORIES.md`, `BUILD_STATUS_BOARD.md`, `MILESTONES_AND_GATES.md`, `RISKS_AND_DECISIONS.md`
+- **Next step:** Start B1 implementation and apply B4 acceptance criteria to all new Epic B artifacts.
+
+### 2026-02-28 19:46 PST
+
+- **Item:** B1
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** Implemented ServiceNow client abstraction with OAuth-first/basic-optional auth wiring and per-instance configuration isolation.
+- **Evidence:** `src/config.js`, `src/servicenow/client.js`, `src/server/mcp.js`, `src/index.js`
+- **Next step:** Complete retry/pagination/error normalization and capability discovery tooling.
+
+### 2026-02-28 19:46 PST
+
+- **Item:** B2
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Added retry/backoff request behavior, timeout handling, pagination metadata, and normalized ServiceNow error mapping (401/403/404/429/5xx).
+- **Evidence:** `src/servicenow/client.js`; smoke run `npm run smoke`
+- **Next step:** Finalize instance capability discovery output contract.
+
+### 2026-02-28 19:46 PST
+
+- **Item:** B3
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Upgraded `sn.instance.info` to use client capability discovery with auth/connectivity/plugin/support summaries.
+- **Evidence:** `src/index.js`, `src/servicenow/client.js`; smoke run `npm run smoke`
+- **Next step:** Close structure-alignment story and mark EPIC-B complete.
+
+### 2026-02-28 19:46 PST
+
+- **Item:** B4
+- **Change:** `Backlog -> Done`
+- **Owner:** Engineering
+- **Reason:** Applied README-aligned structure adoption by introducing `src/servicenow/` service layer and wiring service dependency injection through MCP runtime.
+- **Evidence:** `src/servicenow/client.js`, `src/server/mcp.js`, `src/index.js`, `src/config.js`
+- **Next step:** Mark EPIC-B complete and continue with E1 + D1.
+
+### 2026-02-28 19:46 PST
+
+- **Item:** EPIC-B
+- **Change:** `Ready -> Done`
+- **Owner:** Engineering
+- **Reason:** All Epic B stories (B1–B4) implemented and smoke-validated with tracking artifacts synchronized.
+- **Evidence:** `src/config.js`, `src/servicenow/client.js`, `src/index.js`, `src/server/mcp.js`, `BUILD_STATUS_BOARD.md`, `MILESTONES_AND_GATES.md`, `IMPLEMENTATION_PLAN_EPICS_STORIES.md`; smoke run `npm run smoke`
+- **Next step:** Proceed to E1 (`sn.script.get` minimal path) and D1 validation runtime skeleton.
 
 ---
 
