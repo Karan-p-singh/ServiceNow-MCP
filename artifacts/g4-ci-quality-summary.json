@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-03-01T12:26:15.184Z",
+  "gate": "G4",
+  "validation_type": "ci_quality_gates",
+  "passed": true,
+  "checks": [
+    {
+      "id": "UNIT",
+      "label": "Unit tests",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G2-VALIDATION",
+      "label": "Gate G2 checklist",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G2-INTEGRATION",
+      "label": "Gate G2 integration",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G3-FIXTURES",
+      "label": "Gate G3 golden fixtures",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G4-VALIDATION",
+      "label": "Gate G4 checklist",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G5-VALIDATION",
+      "label": "Gate G5 checklist",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G6-VALIDATION",
+      "label": "Gate G6 checklist",
+      "passed": true,
+      "exit_code": 0
+    }
+  ]
+}

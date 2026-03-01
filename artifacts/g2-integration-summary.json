@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-03-01T12:26:11.668Z",
+  "gate": "G2",
+  "validation_type": "integration",
+  "passed": true,
+  "criteria": [
+    {
+      "id": "G2-INT-1",
+      "label": "Tier contract blocks T2 tool when tier_max=T1",
+      "passed": true
+    },
+    {
+      "id": "G2-INT-2",
+      "label": "Companion-disabled ACL trace returns discovery mode",
+      "passed": true
+    },
+    {
+      "id": "G2-INT-3",
+      "label": "Policy contract blocks denied global writes",
+      "passed": true
+    },
+    {
+      "id": "G2-INT-4",
+      "label": "Deploy profile/bundle policy can disable high-risk tools",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "tier_policy_scenario": {
+      "initialize_ok": true,
+      "listed_tools_count": 25,
+      "tier_error_codes": [
+        "TIER_MAX_EXCEEDED"
+      ],
+      "acl_mode": "discovery"
+    },
+    "policy_bundle_scenario": {
+      "policy_error_codes": [
+        "POLICY_BLOCKED"
+      ],
+      "bundle_error_codes": [
+        "TOOL_DISABLED_BY_BUNDLE"
+      ]
+    }
+  }
+}

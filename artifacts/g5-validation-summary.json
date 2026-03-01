@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T11:55:49.556Z",
+  "generated_at": "2026-03-01T12:26:14.249Z",
   "gate": "G5",
   "passed": true,
   "criteria": [
@@ -24,10 +24,10 @@
       "d1_runtime_deterministic": true,
       "d2_rulepack_versioned": true,
       "d3_critical_blocks_write": true,
-      "d3_high_ack_required_or_satisfied": false,
+      "d3_high_ack_required_or_satisfied": true,
       "e1_get_list_search_available": true,
       "e2_refs_deps_evidence_available": true,
-      "e3_create_update_auditable": false,
+      "e3_create_update_auditable": true,
       "f1_changeset_read_tools_available": true,
       "f2_changeset_gap_detection_available": true,
       "f3_capture_verify_reason_codes_deterministic": true,
@@ -66,47 +66,35 @@
     ],
     "controlled_commit": {
       "commit_requested": true,
-      "commit_executed": false,
-      "execution_mode": "controlled_noop",
-      "reason_code": "COMMIT_NOT_EXECUTED_LIVE_SAFE_MODE",
+      "commit_executed": true,
+      "execution_mode": "mock_commit",
+      "reason_code": "COMMIT_EXECUTED_MOCK",
       "changeset": {
-        "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+        "sys_id": "a1111111b2222222c3333333d4444444",
         "found": true,
         "record": {
-          "base_update_set": "",
-          "parent": "",
-          "origin_sys_id": "",
-          "batch_install_plan": "",
-          "completed_on": "2026-03-01 08:55:15",
-          "installed_from": "",
-          "sys_mod_count": "0",
-          "description": "Automatically created by the system",
-          "remote_sys_id": "",
-          "sys_updated_on": "2026-03-01 08:55:15",
-          "is_default": "true",
-          "sys_tags": "",
-          "merged_to": "",
-          "sys_id": "8c1fa566839f321071f3cbb6feaad382",
-          "sys_updated_by": "admin",
-          "application": {
-            "link": "https://dev317439.service-now.com/api/now/table/sys_scope/74ae6926839f321071f3cbb6feaad368",
-            "value": "74ae6926839f321071f3cbb6feaad368"
-          },
-          "release_date": "",
-          "sys_created_on": "2026-03-01 08:55:15",
-          "name": "Default",
-          "install_date": "",
+          "sys_id": "a1111111b2222222c3333333d4444444",
+          "name": "u_demo_changeset",
           "state": "in progress",
-          "completed_by": "",
-          "sys_created_by": "admin"
+          "application": "global",
+          "sys_created_on": "2026-03-01 01:00:00",
+          "sys_updated_on": "2026-03-01 01:15:00"
         }
       },
       "snapshot_coverage_matrix": {
-        "captured": 0,
-        "restorable": 0,
+        "captured": 1,
+        "restorable": 1,
         "non_restorable": 0,
         "unknown": 0,
-        "by_artifact_type": []
+        "by_artifact_type": [
+          {
+            "artifact_type": "sys_script_include",
+            "captured": 1,
+            "restorable": 1,
+            "non_restorable": 0,
+            "unknown": 0
+          }
+        ]
       },
       "high_risk_audit_trace": {
         "operation": "sn.changeset.commit",
@@ -114,19 +102,19 @@
         "confirm_required": true,
         "confirm_received": true,
         "reason": "Gate G5 controlled commit contract validation",
-        "requested_at": "2026-03-01T11:55:47.965Z",
+        "requested_at": "2026-03-01T12:26:14.231Z",
         "actor": "mcp",
-        "source_scope": "74ae6926839f321071f3cbb6feaad368",
-        "global_scope_detected": false
+        "source_scope": "global",
+        "global_scope_detected": true
       },
       "limitations": [
         "Controlled commit output is evidence-driven and does not guarantee transactional rollback semantics.",
-        "Live mode currently returns controlled_noop to avoid unsafe write side effects without platform-native transaction controls."
+        "Mock mode marks commit_executed for contract testing only."
       ],
       "page": {
         "limit": 500,
         "offset": 0,
-        "returned": 0,
+        "returned": 1,
         "has_more": false,
         "next_offset": null
       }
@@ -134,38 +122,26 @@
     "rollback_plan": {
       "generated": true,
       "changeset": {
-        "sys_id": "8c1fa566839f321071f3cbb6feaad382",
+        "sys_id": "a1111111b2222222c3333333d4444444",
         "found": true,
         "record": {
-          "base_update_set": "",
-          "parent": "",
-          "origin_sys_id": "",
-          "batch_install_plan": "",
-          "completed_on": "2026-03-01 08:55:15",
-          "installed_from": "",
-          "sys_mod_count": "0",
-          "description": "Automatically created by the system",
-          "remote_sys_id": "",
-          "sys_updated_on": "2026-03-01 08:55:15",
-          "is_default": "true",
-          "sys_tags": "",
-          "merged_to": "",
-          "sys_id": "8c1fa566839f321071f3cbb6feaad382",
-          "sys_updated_by": "admin",
-          "application": {
-            "link": "https://dev317439.service-now.com/api/now/table/sys_scope/74ae6926839f321071f3cbb6feaad368",
-            "value": "74ae6926839f321071f3cbb6feaad368"
-          },
-          "release_date": "",
-          "sys_created_on": "2026-03-01 08:55:15",
-          "name": "Default",
-          "install_date": "",
+          "sys_id": "a1111111b2222222c3333333d4444444",
+          "name": "u_demo_changeset",
           "state": "in progress",
-          "completed_by": "",
-          "sys_created_by": "admin"
+          "application": "global",
+          "sys_created_on": "2026-03-01 01:00:00",
+          "sys_updated_on": "2026-03-01 01:15:00"
         }
       },
-      "restorable": [],
+      "restorable": [
+        {
+          "table": "sys_script_include",
+          "sys_id": "9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          "name": "sys_script_include_9f2b2d3fdb001010a1b2c3d4e5f6a7b8",
+          "update_xml": "x1111111x2222222x3333333x4444444",
+          "rollback_method": "restore_previous_version_or_reapply_prior_update_set"
+        }
+      ],
       "non_restorable": [],
       "declarations": {
         "fully_restorable": true,
@@ -177,7 +153,7 @@
         "For non-restorable entries, execute documented manual remediation and verify post-state in instance.",
         "Run smoke/integration checks after rollback to confirm platform stability."
       ],
-      "risk_level": "medium",
+      "risk_level": "high",
       "reason_code": "ROLLBACK_RESTORABLE_WITH_STEPS",
       "limitations": [
         "Rollback planning is advisory and does not perform automatic revert operations.",
@@ -186,7 +162,7 @@
       "page": {
         "limit": 500,
         "offset": 0,
-        "returned": 0,
+        "returned": 1,
         "has_more": false,
         "next_offset": null
       }

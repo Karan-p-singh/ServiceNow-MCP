@@ -26,6 +26,13 @@ const DEFAULTS = {
   changesetScope: "",
   breakGlassEnabled: false,
   exceptionAllowlist: [],
+  auditWebhookEnabled: false,
+  auditWebhookUrl: "",
+  auditWebhookTimeoutMs: 2000,
+  auditWebhookFilter: "writes",
+  toolingDeployProfile: "dev_full",
+  toolingBundles: "",
+  toolingDisabledTools: "",
 };
 
 function loadDotEnvFile(cwd = process.cwd()) {
@@ -215,5 +222,19 @@ export function loadConfig(env = process.env) {
       DEFAULTS.breakGlassEnabled,
     ),
     exceptionAllowlist: parseCsv(mergedEnv.MCP_EXCEPTION_ALLOWLIST, DEFAULTS.exceptionAllowlist),
+    auditWebhook: {
+      enabled: parseBoolean(mergedEnv.MCP_AUDIT_WEBHOOK_ENABLED, DEFAULTS.auditWebhookEnabled),
+      url: mergedEnv.MCP_AUDIT_WEBHOOK_URL || DEFAULTS.auditWebhookUrl,
+      timeoutMs: parseInteger(
+        mergedEnv.MCP_AUDIT_WEBHOOK_TIMEOUT_MS,
+        DEFAULTS.auditWebhookTimeoutMs,
+      ),
+      filter: (mergedEnv.MCP_AUDIT_WEBHOOK_FILTER || DEFAULTS.auditWebhookFilter).toLowerCase(),
+    },
+    tooling: {
+      deployProfile: mergedEnv.MCP_DEPLOY_PROFILE || DEFAULTS.toolingDeployProfile,
+      bundles: mergedEnv.MCP_ENABLED_BUNDLES || DEFAULTS.toolingBundles,
+      disabledTools: mergedEnv.MCP_DISABLED_TOOLS || DEFAULTS.toolingDisabledTools,
+    },
   };
 }

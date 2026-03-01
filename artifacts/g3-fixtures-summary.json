@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-03-01T12:26:12.503Z",
+  "gate": "G3",
+  "validation_type": "golden_fixtures",
+  "fixture_path": "D:\\Personal Projects\\ServiceNow-MCP\\ServiceNow-MCP\\tests\\fixtures\\g3-smoke-contract.snapshot.json",
+  "passed": true,
+  "mismatch": null,
+  "current_snapshot": {
+    "tools_registered": [
+      "sn.script.get",
+      "sn.script.list",
+      "sn.script.search",
+      "sn.script.refs",
+      "sn.script.deps",
+      "sn.instance.info",
+      "sn.acl.trace",
+      "sn.table.list",
+      "sn.changeset.list",
+      "sn.changeset.get",
+      "sn.changeset.contents",
+      "sn.changeset.export",
+      "sn.changeset.gaps",
+      "sn.updateset.capture.verify",
+      "sn.changeset.commit.preview",
+      "sn.flow.list",
+      "sn.flow.get",
+      "sn.flow.validate",
+      "sn.workflow.list",
+      "sn.workflow.get",
+      "sn.workflow.validate",
+      "sn.script.update",
+      "sn.script.create",
+      "sn.changeset.commit",
+      "sn.rollback.plan.generate"
+    ],
+    "smoke_summary_keys": [
+      "d1_runtime_deterministic",
+      "d2_rulepack_versioned",
+      "d3_critical_blocks_write",
+      "d3_high_ack_required_or_satisfied",
+      "e1_get_list_search_available",
+      "e2_refs_deps_evidence_available",
+      "e3_create_update_auditable",
+      "e4_flow_list_get_validate_available",
+      "e5_workflow_list_get_validate_available",
+      "f1_changeset_read_tools_available",
+      "f2_changeset_gap_detection_available",
+      "f3_capture_verify_reason_codes_deterministic",
+      "f4_commit_preview_dry_run_available",
+      "f5_controlled_commit_contract_available",
+      "f6_rollback_plan_generator_available"
+    ],
+    "smoke_summary_type_contract": {
+      "d1_runtime_deterministic": "boolean",
+      "d2_rulepack_versioned": "boolean",
+      "d3_critical_blocks_write": "boolean",
+      "d3_high_ack_required_or_satisfied": "boolean",
+      "e1_get_list_search_available": "boolean",
+      "e2_refs_deps_evidence_available": "boolean",
+      "e3_create_update_auditable": "boolean",
+      "e4_flow_list_get_validate_available": "boolean",
+      "e5_workflow_list_get_validate_available": "boolean",
+      "f1_changeset_read_tools_available": "boolean",
+      "f2_changeset_gap_detection_available": "boolean",
+      "f3_capture_verify_reason_codes_deterministic": "boolean",
+      "f4_commit_preview_dry_run_available": "boolean",
+      "f5_controlled_commit_contract_available": "boolean",
+      "f6_rollback_plan_generator_available": "boolean"
+    },
+    "envelope_keys": [
+      "correlation_id",
+      "data",
+      "edition",
+      "errors",
+      "instance",
+      "policy",
+      "request_id",
+      "tier",
+      "tool",
+      "validation_summary"
+    ],
+    "deterministic_error_codes": {
+      "policy_blocked": [
+        "POLICY_BLOCKED"
+      ],
+      "t3_blocked": [
+        "T3_CONFIRMATION_REQUIRED"
+      ],
+      "script_create_blocked": [
+        "VALIDATION_BLOCKED_CRITICAL"
+      ]
+    },
+    "rulepack_contract": {
+      "script": {
+        "id": "scripts-v1",
+        "version": "1.0.0",
+        "artifact_type": "sys_script_include"
+      },
+      "flow": {
+        "id": "flows-v1",
+        "version": "1.0.0",
+        "artifact_type": "sys_hub_flow"
+      },
+      "workflow": {
+        "id": "workflows-v1",
+        "version": "1.0.0",
+        "artifact_type": "wf_workflow"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T11:55:19.379Z",
+  "generated_at": "2026-03-01T12:26:15.157Z",
   "gate": "G6",
   "passed": true,
   "criteria": [
@@ -24,10 +24,10 @@
       "d1_runtime_deterministic": true,
       "d2_rulepack_versioned": true,
       "d3_critical_blocks_write": true,
-      "d3_high_ack_required_or_satisfied": false,
+      "d3_high_ack_required_or_satisfied": true,
       "e1_get_list_search_available": true,
       "e2_refs_deps_evidence_available": true,
-      "e3_create_update_auditable": false,
+      "e3_create_update_auditable": true,
       "f1_changeset_read_tools_available": true,
       "f2_changeset_gap_detection_available": true,
       "f3_capture_verify_reason_codes_deterministic": true,
@@ -67,7 +67,7 @@
     "flow_validation": {
       "request_id": "req-000038",
       "correlation_id": "corr-000037",
-      "instance": "https://dev317439.service-now.com/",
+      "instance": "https://example.service-now.com",
       "edition": "dev",
       "tool": "sn.flow.validate",
       "tier": "T0",
@@ -79,7 +79,7 @@
       "validation_summary": {
         "findings_count_by_severity": {
           "CRITICAL": 0,
-          "HIGH": 1,
+          "HIGH": 0,
           "MEDIUM": 1,
           "LOW": 1
         },
@@ -94,21 +94,27 @@
         "deterministic": true
       },
       "data": {
-        "found": false,
+        "found": true,
         "artifact_type": "sys_hub_flow",
         "query": {
           "sys_id": null,
           "name": "x_demo_scheduled_flow",
           "sysparm_query": "name=x_demo_scheduled_flow"
         },
-        "record": {},
+        "record": {
+          "sys_id": "f5555555f6666666f7777777f8888888",
+          "name": "x_demo_scheduled_flow",
+          "description": "",
+          "status": "active",
+          "trigger_type": "schedule",
+          "steps": [
+            {
+              "id": "step_1",
+              "type": "wait"
+            }
+          ]
+        },
         "findings": [
-          {
-            "id": "FLOW_MISSING_NAME",
-            "severity": "HIGH",
-            "message": "Flow is missing a stable name identifier.",
-            "evidence": []
-          },
           {
             "id": "FLOW_MISSING_DESCRIPTION",
             "severity": "LOW",
@@ -116,10 +122,15 @@
             "evidence": []
           },
           {
-            "id": "FLOW_NO_STEPS",
+            "id": "FLOW_SCHEDULED_TRIGGER",
             "severity": "MEDIUM",
-            "message": "Flow does not define executable steps/actions.",
-            "evidence": []
+            "message": "Scheduled flow trigger detected; verify execution windows and safeguards.",
+            "evidence": [
+              {
+                "type": "trigger_type",
+                "value": "schedule"
+              }
+            ]
           }
         ]
       },
@@ -128,7 +139,7 @@
     "workflow_validation": {
       "request_id": "req-000044",
       "correlation_id": "corr-000043",
-      "instance": "https://dev317439.service-now.com/",
+      "instance": "https://example.service-now.com",
       "edition": "dev",
       "tool": "sn.workflow.validate",
       "tier": "T0",
@@ -140,7 +151,7 @@
       "validation_summary": {
         "findings_count_by_severity": {
           "CRITICAL": 0,
-          "HIGH": 1,
+          "HIGH": 0,
           "MEDIUM": 1,
           "LOW": 1
         },
@@ -155,21 +166,26 @@
         "deterministic": true
       },
       "data": {
-        "found": false,
+        "found": true,
         "artifact_type": "wf_workflow",
         "query": {
           "sys_id": null,
           "name": "x_demo_wait_workflow",
           "sysparm_query": "name=x_demo_wait_workflow"
         },
-        "record": {},
+        "record": {
+          "sys_id": "w5555555w6666666w7777777w8888888",
+          "name": "x_demo_wait_workflow",
+          "description": "",
+          "active": "true",
+          "activities": [
+            {
+              "id": "activity_1",
+              "type": "wait_timer"
+            }
+          ]
+        },
         "findings": [
-          {
-            "id": "WORKFLOW_MISSING_NAME",
-            "severity": "HIGH",
-            "message": "Workflow is missing a stable name identifier.",
-            "evidence": []
-          },
           {
             "id": "WORKFLOW_MISSING_DESCRIPTION",
             "severity": "LOW",
@@ -177,9 +193,9 @@
             "evidence": []
           },
           {
-            "id": "WORKFLOW_NO_ACTIVITIES",
+            "id": "WORKFLOW_WAIT_ACTIVITY_PRESENT",
             "severity": "MEDIUM",
-            "message": "Workflow has no modeled activities/stages.",
+            "message": "Workflow contains wait/timer style activity; verify timeout and deadlock handling.",
             "evidence": []
           }
         ]

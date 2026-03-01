@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-03-01T12:26:16.497Z",
+  "gate": "G7",
+  "validation_type": "enterprise_readiness",
+  "passed": true,
+  "checks": [
+    {
+      "id": "G4-CI",
+      "label": "CI quality gate aggregation",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "G7-DOCS",
+      "label": "Gate 7 docs package exists",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "id": "DOCS-PACK",
+      "label": "H3/H4 docs pack files present",
+      "passed": true,
+      "exit_code": 0
+    }
+  ],
+  "docs_status": [
+    {
+      "path": "docs/SECURITY_MODEL_AND_GOVERNANCE.md",
+      "present": true
+    },
+    {
+      "path": "docs/ADMIN_RUNBOOK.md",
+      "present": true
+    },
+    {
+      "path": "docs/RELEASE_READINESS_G7_CHECKLIST.md",
+      "present": true
+    }
+  ]
+}

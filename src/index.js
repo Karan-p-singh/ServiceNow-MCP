@@ -1,5 +1,7 @@
 import { loadConfig } from "./config.js";
+import { AuditWebhookSink } from "./server/audit-webhook.js";
 import { HttpSseTransport } from "./server/http-sse.js";
+import { getToolingPolicySummary } from "./server/tool-bundles.js";
 import { MCPServer } from "./server/mcp.js";
 import { CompanionClient } from "./servicenow/companion-client.js";
 import { ServiceNowClient } from "./servicenow/client.js";
@@ -279,6 +281,7 @@ function registerBaselineTools(server) {
           connectivity: details.connectivity,
           capabilities: details.capabilities,
           companion,
+          tooling: getToolingPolicySummary(context.config),
           edition: context.config.edition,
           tier_max: context.config.tierMax,
         },
@@ -897,12 +900,17 @@ async function main() {
   const runtimeLogger = isSmokeMode ? smokeLogger : console;
   const serviceNow = new ServiceNowClient({ config, logger: runtimeLogger });
   const companion = new CompanionClient({ serviceNowClient: serviceNow, config });
+  const auditWebhook = new AuditWebhookSink({
+    config: config.auditWebhook,
+    logger: runtimeLogger,
+  });
   const server = new MCPServer({
     config,
     logger: runtimeLogger,
     services: {
       serviceNow,
       companion,
+      auditWebhook,
     },
   });
   let transport = null;

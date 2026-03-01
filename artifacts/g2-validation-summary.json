@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-01T11:56:31.814Z",
+  "generated_at": "2026-03-01T12:26:09.678Z",
   "gate": "G2",
-  "passed": false,
+  "passed": true,
   "criteria": [
     {
       "id": "D1",
@@ -21,7 +21,7 @@
     {
       "id": "D3-HIGH",
       "label": "HIGH findings require/satisfy acknowledgment",
-      "passed": false
+      "passed": true
     },
     {
       "id": "E1",
@@ -36,7 +36,7 @@
     {
       "id": "E3",
       "label": "create/update include audit metadata",
-      "passed": false
+      "passed": true
     }
   ],
   "evidence": {
@@ -44,10 +44,10 @@
       "d1_runtime_deterministic": true,
       "d2_rulepack_versioned": true,
       "d3_critical_blocks_write": true,
-      "d3_high_ack_required_or_satisfied": false,
+      "d3_high_ack_required_or_satisfied": true,
       "e1_get_list_search_available": true,
       "e2_refs_deps_evidence_available": true,
-      "e3_create_update_auditable": false,
+      "e3_create_update_auditable": true,
       "f1_changeset_read_tools_available": true,
       "f2_changeset_gap_detection_available": true,
       "f3_capture_verify_reason_codes_deterministic": true,

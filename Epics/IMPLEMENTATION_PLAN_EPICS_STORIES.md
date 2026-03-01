@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Implementation Plan (Epics & Stories)
 
-Last Updated: 2026-03-01 03:38 PST
+Last Updated: 2026-03-01 04:25 PST
 Planning Horizon: MVP → v1 → v1.1 (Enterprise Hardening) → Optional ITSM Edition
 Status Model: `Backlog | Ready | In Progress | Blocked | Done`
 
@@ -14,8 +14,10 @@ Current Execution Snapshot (source of live truth: `BUILD_STATUS_BOARD.md`):
 - Completed in EPIC-C optional pilot: `C1 — Scoped app packaging + version contract`, `C2 — ACL authoritative endpoint`, `C4 — Dual-mode sn.acl.trace`
 - EPIC-F is now complete through F6, including controlled commit and rollback planning deliverables (`sn.changeset.commit`, `sn.rollback.plan.generate`)
 - EPIC-E is now complete through E5 with flow/workflow tooling parity (`sn.flow.*`, `sn.workflow.*`)
-- Gate G5 and Gate G6 are now passed with checklist evidence artifacts (`artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`)
-- Next queued cross-epic focus: `G2`, `G4`, `D4`
+- EPIC-G is complete through G4 with integration/fixtures/CI gate automation (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`)
+- EPIC-H is complete through H4 with audit webhook export, deploy-profile/tool-bundle policy controls, and enterprise docs pack
+- Gate G5, Gate G6, and Gate G7 are passed with evidence artifacts (`artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`, `artifacts/g7-readiness-summary.json`)
+- Next queued cross-epic focus: `C3`, `D4`, and optional companion scoped-ownership pilot hardening closure
 
 ---
 

@@ -231,6 +231,46 @@ Machine-readable report is generated at:
 
 - `artifacts/g6-validation-summary.json`
 
+Run the Gate G2 integration harness (dev-instance style integration checks for tier/policy/bundle behavior):
+
+```bash
+npm run test:g2:integration
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g2-integration-summary.json`
+
+Run the Gate G3 fixture/snapshot regression checks:
+
+```bash
+npm run test:g3:fixtures
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g3-fixtures-summary.json`
+
+Run CI-style quality gate aggregation (unit + gates G2/G3/G4/G5/G6):
+
+```bash
+npm run test:g4:ci
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g4-ci-quality-summary.json`
+
+Run Gate G7 enterprise readiness validation:
+
+```bash
+npm run test:g7
+```
+
+Machine-readable report is generated at:
+
+- `artifacts/g7-readiness-summary.json`
+
 Run the non-prod live integration validation used for final Gate G4 exit evidence:
 
 ```bash

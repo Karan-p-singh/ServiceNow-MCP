@@ -1,5 +1,6 @@
 import { createRequestContext } from "./request-context.js";
 import { ToolRegistry } from "./tool-registry.js";
+import { isToolEnabledForConfig } from "./tool-bundles.js";
 
 const TIER_ORDER = {
   T0: 0,
@@ -265,6 +266,67 @@ export class MCPServer {
       throw new Error(`Tool not found: ${toolName}`);
     }
 
+    if (!isToolEnabledForConfig(toolName, this.config)) {
+      const requestContext = createRequestContext(input);
+      const policy = {
+        evaluated: true,
+        allowed: false,
+        decisions: [
+          {
+            check: "tool_bundle_policy",
+            passed: false,
+            details: {
+              tool: toolName,
+              reason: "Tool is disabled by deploy profile / bundle policy",
+            },
+          },
+        ],
+      };
+
+      const envelope = buildEnvelope({
+        requestContext,
+        config: this.config,
+        tool,
+        output: {
+          data: null,
+          policy,
+          validation_summary: defaultValidationSummary(),
+          errors: [
+            {
+              code: "TOOL_DISABLED_BY_BUNDLE",
+              message: `Tool ${toolName} is disabled by configured bundle/profile policy`,
+            },
+          ],
+        },
+      });
+
+      this.logger.warn?.("[mcp] bundle blocked", createAuditEvent({
+        stage: "preflight_bundle_block",
+        requestContext,
+        tool,
+        config: this.config,
+        input,
+        policy,
+        validationSummary: envelope.validation_summary,
+        errors: envelope.errors,
+      }));
+
+      await this.services?.auditWebhook?.send?.(
+        createAuditEvent({
+          stage: "preflight_bundle_block",
+          requestContext,
+          tool,
+          config: this.config,
+          input,
+          policy,
+          validationSummary: envelope.validation_summary,
+          errors: envelope.errors,
+        }),
+      );
+
+      return envelope;
+    }
+
     const requestContext = createRequestContext(input);
     const runtimeContext = {
       request: requestContext,
@@ -331,6 +393,19 @@ export class MCPServer {
         errors: envelope.errors,
       }));
 
+      await this.services?.auditWebhook?.send?.(
+        createAuditEvent({
+          stage: "preflight_tier_block",
+          requestContext,
+          tool,
+          config: this.config,
+          input,
+          policy,
+          validationSummary: envelope.validation_summary,
+          errors: envelope.errors,
+        }),
+      );
+
       return envelope;
     }
 
@@ -381,6 +456,19 @@ export class MCPServer {
           errors: envelope.errors,
         }));
 
+        await this.services?.auditWebhook?.send?.(
+          createAuditEvent({
+            stage: "preflight_t3_block",
+            requestContext,
+            tool,
+            config: this.config,
+            input,
+            policy,
+            validationSummary: envelope.validation_summary,
+            errors: envelope.errors,
+          }),
+        );
+
         return envelope;
       }
     }
@@ -415,6 +503,19 @@ export class MCPServer {
         errors: envelope.errors,
       }));
 
+      await this.services?.auditWebhook?.send?.(
+        createAuditEvent({
+          stage: "preflight_policy_block",
+          requestContext,
+          tool,
+          config: this.config,
+          input,
+          policy,
+          validationSummary: envelope.validation_summary,
+          errors: envelope.errors,
+        }),
+      );
+
       return envelope;
     }
 
@@ -428,6 +529,19 @@ export class MCPServer {
       validationSummary: defaultValidationSummary(),
       errors: [],
     }));
+
+    await this.services?.auditWebhook?.send?.(
+      createAuditEvent({
+        stage: "pre_handler",
+        requestContext,
+        tool,
+        config: this.config,
+        input,
+        policy,
+        validationSummary: defaultValidationSummary(),
+        errors: [],
+      }),
+    );
 
     try {
       const handlerOutput = await tool.handler(input, runtimeContext);
@@ -462,6 +576,19 @@ export class MCPServer {
         validationSummary: envelope.validation_summary,
         errors: envelope.errors,
       }));
+
+      await this.services?.auditWebhook?.send?.(
+        createAuditEvent({
+          stage: "post_handler_success",
+          requestContext,
+          tool,
+          config: this.config,
+          input,
+          policy: envelope.policy,
+          validationSummary: envelope.validation_summary,
+          errors: envelope.errors,
+        }),
+      );
 
       return envelope;
     } catch (error) {
@@ -506,6 +633,19 @@ export class MCPServer {
         validationSummary: envelope.validation_summary,
         errors: envelope.errors,
       }));
+
+      await this.services?.auditWebhook?.send?.(
+        createAuditEvent({
+          stage: "post_handler_failure",
+          requestContext,
+          tool,
+          config: this.config,
+          input,
+          policy: envelope.policy,
+          validationSummary: envelope.validation_summary,
+          errors: envelope.errors,
+        }),
+      );
 
       return envelope;
     }
