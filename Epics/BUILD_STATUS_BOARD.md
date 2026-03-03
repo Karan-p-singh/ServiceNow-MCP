@@ -123,7 +123,7 @@ Operational integrity cadence (required for release claims):
 - D5 — Validation addendum expansion completed: `sn.validate.script_include`, `sn.validate.business_rule`, `sn.validate.client_script`, `sn.validate.ui_script`, `sn.validate.flow`, `sn.validate.workflow`, `sn.validate.catalog_policy`, `sn.validate.fix`
 - R1 catalog reconciliation completed: runtime and matrix aligned and preserved through subsequent release-cadence checks
 - R2 increment (diagnostics/metadata/script parity batch) completed: `sn.health.check`, `sn.config.get`, `sn.policy.test`, `sn.audit.ping`, `sn.instance.capabilities.get`, `sn.instance.plugins.list`, `sn.table.get`, `sn.table.count`, `sn.script.history`, `sn.script.diff`
-- R2 catalog reconciliation completed: runtime and matrix now aligned at `43/101` after `npm run smoke:summary`
+- R2 catalog reconciliation completed: runtime and matrix now aligned at `101/101` after `npm run smoke:summary`
 - G5 validation harness added: `scripts/test-g5-validation.js` + `npm run test:g5` and `artifacts/g5-validation-summary.json`
 - G6 validation harness added: `scripts/test-g6-validation.js` + `npm run test:g6` and `artifacts/g6-validation-summary.json`
 - G4 validation harness added: `scripts/test-g4-validation.js` + `npm run test:g4` and `artifacts/g4-validation-summary.json`

@@ -1,0 +1,1560 @@
+{
+  "generated_at": "2026-03-03T13:50:40.745Z",
+  "category": "tool_coverage_contract",
+  "passed": true,
+  "contract_passed": true,
+  "operational_passed": false,
+  "strict_operational_mode": false,
+  "tools_registered_count": 101,
+  "covered_count": 101,
+  "not_covered_count": 0,
+  "coverage_percent": 100,
+  "successful_count": 96,
+  "expected_blocked_count": 4,
+  "unexpected_failure_count": 1,
+  "success_percent": 95.05,
+  "covered": [
+    {
+      "tool": "sn.health.check",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.config.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.policy.test",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.audit.ping",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.search",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refs",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.deps",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.info",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.capabilities.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.plugins.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.acl.trace",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.list",
+      "status": "UNEXPECTED_FAILURE",
+      "error_code": "SN_AUTH_FORBIDDEN",
+      "error_codes": [
+        "SN_AUTH_FORBIDDEN"
+      ],
+      "notes": "Tool reached MCP envelope but failed with unexpected runtime/service error."
+    },
+    {
+      "tool": "sn.table.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.count",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.history",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.diff",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.contents",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.export",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.gaps",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.verify",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.commit.preview",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.validate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.validate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.script_include",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.business_rule",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.client_script",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.ui_script",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.flow",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.workflow",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.catalog_policy",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.fix",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.update",
+      "status": "EXPECTED_BLOCKED",
+      "error_code": "POLICY_BLOCKED",
+      "error_codes": [
+        "POLICY_BLOCKED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.create",
+      "status": "EXPECTED_BLOCKED",
+      "error_code": "POLICY_BLOCKED",
+      "error_codes": [
+        "POLICY_BLOCKED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.changeset.commit",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.plan.generate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.tool.catalog",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.tool.describe",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.schema.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.dictionary.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.user.role.check",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.scope.inspect",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.scope.guard.check",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.dependency.graph.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.release.compatibility.check",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.logs.tail",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.compare",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.delete",
+      "status": "EXPECTED_BLOCKED",
+      "error_code": "T3_CONFIRMATION_REQUIRED",
+      "error_codes": [
+        "T3_CONFIRMATION_REQUIRED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.clone",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.lint",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.test.stub.generate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.bulk.search",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.bulk.validate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refactors.preview",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refactors.apply",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.scope.migrate.preview",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.scope.migrate.apply",
+      "status": "EXPECTED_BLOCKED",
+      "error_code": "T3_CONFIRMATION_REQUIRED",
+      "error_codes": [
+        "T3_CONFIRMATION_REQUIRED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.guardrails.explain",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.diff",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.validate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.dependencies.map",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.records.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.record.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.record.validate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.rollback.preview",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.create",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.plan.review",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.execute.manualguide",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.force",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.status",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.search",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.refs",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.deps",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.publish",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.activate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.search",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.refs",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.deps",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.publish",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.activate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.suite.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.suite.run",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.test.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.coverage_signals",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.quality.gate.evaluate",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.quality.report.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.create",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.update",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.change.list",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.change.get",
+      "status": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    }
+  ],
+  "not_covered": [],
+  "successful": [
+    {
+      "tool": "sn.health.check",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.config.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.policy.test",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.audit.ping",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.search",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refs",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.deps",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.info",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.capabilities.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.instance.plugins.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.acl.trace",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.count",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.history",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.diff",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.contents",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.export",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.gaps",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.verify",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.commit.preview",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.validate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.validate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.script_include",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.business_rule",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.client_script",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.ui_script",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.flow",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.workflow",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.catalog_policy",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.validate.fix",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.commit",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.plan.generate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.tool.catalog",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.tool.describe",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.schema.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.table.dictionary.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.user.role.check",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.scope.inspect",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.scope.guard.check",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.dependency.graph.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.release.compatibility.check",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.logs.tail",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.compare",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.clone",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.lint",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.test.stub.generate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.bulk.search",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.bulk.validate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refactors.preview",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.refactors.apply",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.scope.migrate.preview",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.script.guardrails.explain",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.diff",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.validate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.dependencies.map",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.records.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.record.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.record.validate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.changeset.rollback.preview",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.create",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.snapshot.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.plan.review",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.rollback.execute.manualguide",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.force",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.updateset.capture.status",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.search",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.refs",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.deps",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.publish",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.flow.activate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.search",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.refs",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.deps",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.publish",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.workflow.activate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.suite.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.suite.run",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.test.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.atf.coverage_signals",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.quality.gate.evaluate",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.quality.report.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.create",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.incident.update",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.change.list",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    },
+    {
+      "tool": "sn.change.get",
+      "invocation_covered": true,
+      "category": "LIVE_SUCCESS",
+      "error_code": null,
+      "error_codes": [],
+      "notes": "Tool invocation succeeded without envelope errors."
+    }
+  ],
+  "expected_blocked": [
+    {
+      "tool": "sn.script.update",
+      "invocation_covered": true,
+      "category": "EXPECTED_BLOCKED",
+      "error_code": "POLICY_BLOCKED",
+      "error_codes": [
+        "POLICY_BLOCKED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.create",
+      "invocation_covered": true,
+      "category": "EXPECTED_BLOCKED",
+      "error_code": "POLICY_BLOCKED",
+      "error_codes": [
+        "POLICY_BLOCKED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.delete",
+      "invocation_covered": true,
+      "category": "EXPECTED_BLOCKED",
+      "error_code": "T3_CONFIRMATION_REQUIRED",
+      "error_codes": [
+        "T3_CONFIRMATION_REQUIRED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    },
+    {
+      "tool": "sn.script.scope.migrate.apply",
+      "invocation_covered": true,
+      "category": "EXPECTED_BLOCKED",
+      "error_code": "T3_CONFIRMATION_REQUIRED",
+      "error_codes": [
+        "T3_CONFIRMATION_REQUIRED"
+      ],
+      "notes": "Tool reached expected governance/policy gate."
+    }
+  ],
+  "unexpected_failures": [
+    {
+      "tool": "sn.table.list",
+      "invocation_covered": true,
+      "category": "UNEXPECTED_FAILURE",
+      "error_code": "SN_AUTH_FORBIDDEN",
+      "error_codes": [
+        "SN_AUTH_FORBIDDEN"
+      ],
+      "notes": "Tool reached MCP envelope but failed with unexpected runtime/service error."
+    }
+  ]
+}
