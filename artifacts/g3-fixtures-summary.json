@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T15:07:34.159Z",
+  "generated_at": "2026-03-03T14:02:05.818Z",
   "gate": "G3",
   "validation_type": "golden_fixtures",
   "fixture_path": "/app/tests/fixtures/g3-smoke-contract.snapshot.json",

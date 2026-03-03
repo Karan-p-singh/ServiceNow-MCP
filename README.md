@@ -280,13 +280,13 @@ This prints only:
 Run the end-user Gate G2 validation checklist (human-readable + JSON artifact):
 
 ```bash
-npm run test:g2
+npm run test:suite -- --gate g2
 ```
 
 Run the same checklist against your **actual ServiceNow instance from `.env`**:
 
 ```bash
-npm run test:g2:live
+npm run test:suite -- --gate g2 --live
 ```
 
 Expected output includes a criterion-by-criterion checklist like:
@@ -306,13 +306,13 @@ Machine-readable report is generated at:
 Run the end-user Gate G4 validation checklist (human-readable + JSON artifact):
 
 ```bash
-npm run test:g4
+npm run test:suite -- --gate g4
 ```
 
 Run the same Gate G4 checklist against your **actual ServiceNow instance from `.env`**:
 
 ```bash
-npm run test:g4:live:gate
+npm run test:suite -- --gate g4 --live
 ```
 
 Machine-readable report is generated at:
@@ -322,13 +322,13 @@ Machine-readable report is generated at:
 Run the end-user Gate G5 validation checklist (human-readable + JSON artifact):
 
 ```bash
-npm run test:g5
+npm run test:suite -- --gate g5
 ```
 
 Run the same checklist against your **actual ServiceNow instance from `.env`**:
 
 ```bash
-npm run test:g5:live
+npm run test:suite -- --gate g5 --live
 ```
 
 Machine-readable report is generated at:
@@ -338,13 +338,13 @@ Machine-readable report is generated at:
 Run the end-user Gate G6 validation checklist (human-readable + JSON artifact):
 
 ```bash
-npm run test:g6
+npm run test:suite -- --gate g6
 ```
 
 Run the same checklist against your **actual ServiceNow instance from `.env`**:
 
 ```bash
-npm run test:g6:live
+npm run test:suite -- --gate g6 --live
 ```
 
 Machine-readable report is generated at:
@@ -354,7 +354,7 @@ Machine-readable report is generated at:
 Run the Gate G2 integration harness (dev-instance style integration checks for tier/policy/bundle behavior):
 
 ```bash
-npm run test:g2:integration
+npm run test:suite -- --gate g2:integration
 ```
 
 Machine-readable report is generated at:
@@ -364,7 +364,7 @@ Machine-readable report is generated at:
 Run the Gate G3 fixture/snapshot regression checks:
 
 ```bash
-npm run test:g3:fixtures
+npm run test:suite -- --gate g3:fixtures
 ```
 
 Machine-readable report is generated at:
@@ -374,7 +374,7 @@ Machine-readable report is generated at:
 Run CI-style quality gate aggregation (unit + gates G2/G3/G4/G5/G6):
 
 ```bash
-npm run test:g4:ci
+npm run test:ci
 ```
 
 Machine-readable report is generated at:
@@ -384,7 +384,7 @@ Machine-readable report is generated at:
 Run Gate G7 enterprise readiness validation:
 
 ```bash
-npm run test:g7
+npm run test:suite -- --gate g7
 ```
 
 Machine-readable report is generated at:
@@ -394,18 +394,18 @@ Machine-readable report is generated at:
 Run the non-prod live integration validation used for final Gate G4 exit evidence:
 
 ```bash
-npm run test:g4:live
+npm run test:suite -- --gate g4:live
 ```
 
 Run all current G1–G6 live validations in one sequence:
 
 ```bash
-npm run test:gates:g1-g6:live
+npm run test:suite:live
 ```
 
 Live gate safety guards:
 
-- `test:g2:live`, `test:g4:live:gate`, `test:g5:live`, and `test:g6:live` require:
+- Live gate tests (`--gate g2 --live`, `--gate g4 --live`, etc.) require:
   - `GATE_TEST_TARGET=live`
   - `ALLOW_LIVE_GATE_TESTS=true`
   - `ALLOW_LIVE_GATE_WRITES=true`
@@ -421,7 +421,7 @@ Machine-readable report is generated at:
 Run expanded live instance diagnostics (outside smoke):
 
 ```bash
-npm run test:live
+npm run test:suite -- --gate live
 ```
 
 This verifies:
@@ -436,7 +436,7 @@ This verifies:
 Run MCP transport diagnostics:
 
 ```bash
-npm run test:live:mcp
+npm run test:suite -- --gate live:mcp
 ```
 
 This validates:

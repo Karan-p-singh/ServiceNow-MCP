@@ -1446,6 +1446,12 @@ function registerBaselineTools(server) {
         instanceKey: input?.instance_key,
       });
 
+      return {
+        data: result,
+      };
+    },
+  });
+
   server.registerTool({
     name: "sn.tool.catalog",
     tier: "T0",
@@ -3122,14 +3128,6 @@ function registerBaselineTools(server) {
         offset: input?.offset,
         instanceKey: input?.instance_key
       });
-      return {
-        data: result,
-      };
-    },
-  });
-
-
-
       return {
         data: result,
       };

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T15:07:34.916Z",
+  "generated_at": "2026-03-03T14:02:06.181Z",
   "gate": "G5",
   "passed": true,
   "criteria": [
@@ -182,7 +182,7 @@
         "confirm_required": true,
         "confirm_received": true,
         "reason": "Gate G5 controlled commit contract validation",
-        "requested_at": "2026-03-01T15:07:34.891Z",
+        "requested_at": "2026-03-03T14:02:06.156Z",
         "actor": "mcp",
         "source_scope": "global",
         "global_scope_detected": true

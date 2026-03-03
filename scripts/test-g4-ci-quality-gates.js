@@ -44,19 +44,19 @@ async function writeArtifact(report) {
 
 async function main() {
   const checks = [
-    { id: "UNIT", label: "Unit tests", args: ["run", "test"] },
-    { id: "G2-VALIDATION", label: "Gate G2 checklist", args: ["run", "test:g2"] },
-    { id: "G2-INTEGRATION", label: "Gate G2 integration", args: ["run", "test:g2:integration"] },
-    { id: "G3-FIXTURES", label: "Gate G3 golden fixtures", args: ["run", "test:g3:fixtures"] },
-    { id: "G4-VALIDATION", label: "Gate G4 checklist", args: ["run", "test:g4"] },
-    { id: "G5-VALIDATION", label: "Gate G5 checklist", args: ["run", "test:g5"] },
-    { id: "G6-VALIDATION", label: "Gate G6 checklist", args: ["run", "test:g6"] },
+    { id: "UNIT", label: "Unit tests", cmd: process.execPath, args: ["--test", "tests/**/*.test.js"] },
+    { id: "G2-VALIDATION", label: "Gate G2 checklist", cmd: process.execPath, args: ["scripts/test-g2-validation.js"] },
+    { id: "G2-INTEGRATION", label: "Gate G2 integration", cmd: process.execPath, args: ["scripts/test-g2-integration.js"] },
+    { id: "G3-FIXTURES", label: "Gate G3 golden fixtures", cmd: process.execPath, args: ["scripts/test-g3-fixtures.js"] },
+    { id: "G4-VALIDATION", label: "Gate G4 checklist", cmd: process.execPath, args: ["scripts/test-g4-validation.js"] },
+    { id: "G5-VALIDATION", label: "Gate G5 checklist", cmd: process.execPath, args: ["scripts/test-g5-validation.js"] },
+    { id: "G6-VALIDATION", label: "Gate G6 checklist", cmd: process.execPath, args: ["scripts/test-g6-validation.js"] },
   ];
 
   const results = [];
   for (const check of checks) {
     console.log(`\n=== ${check.id}: ${check.label} ===`);
-    const result = await runCommand(npmExecutable(), check.args);
+    const result = await runCommand(check.cmd, check.args);
     results.push({
       id: check.id,
       label: check.label,

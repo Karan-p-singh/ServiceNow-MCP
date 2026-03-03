@@ -32,7 +32,7 @@ Truth policy: Runtime (`npm run smoke:summary`) > `docs/MCP_TOOL_CATALOG_101_MAT
 
 ### Do
 
-- State implemented tools as 43 unless fresh runtime evidence says otherwise.
+- State implemented tools using current runtime evidence (`npm run smoke:summary`) and keep matrix/docs synchronized.
 - Distinguish implemented vs planned tools explicitly.
 - Describe ACL discovery outputs as diagnostic/confidence-scored.
 - Describe changeset gap outputs as evidence-tiered, non-complete.
