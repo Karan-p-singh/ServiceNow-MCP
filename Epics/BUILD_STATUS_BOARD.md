@@ -40,9 +40,9 @@ Source of truth: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 
 | Metric                             |       Value |
 | ---------------------------------- | ----------: |
-| Runtime implemented tools          |          43 |
+| Runtime implemented tools          |         101 |
 | v2 target catalog                  |         101 |
-| Remaining tools                    |          58 |
+| Remaining tools                    |           0 |
 | Catalog lock artifact (R0)         |        Done |
 | Validation addendum family (R1/D5) |        Done |
 | Dev parity clusters (R2)           | In Progress |

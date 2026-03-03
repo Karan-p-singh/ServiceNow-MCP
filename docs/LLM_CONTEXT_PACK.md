@@ -19,7 +19,7 @@ Only read full historical files (`BUILD_ACTIVITY_LOG`, full 101 matrix rows) whe
 
 ## 2) Current Truth Snapshot
 
-- Runtime baseline: **43 implemented / 101 target / 58 remaining**
+- Runtime baseline: **101 implemented / 101 target / 0 remaining**
 - Gate state: **G1–G7 passed**, **G8 in progress**
 - Current roadmap focus: **R2–R6**
 - Companion mode: **optional pilot**, not baseline dependency

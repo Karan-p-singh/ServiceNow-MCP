@@ -1446,12 +1446,1697 @@ function registerBaselineTools(server) {
         instanceKey: input?.instance_key,
       });
 
+  server.registerTool({
+    name: "sn.tool.catalog",
+    tier: "T0",
+    description: "Executes the sn.tool.catalog operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.toolCatalog({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.tool.describe",
+    tier: "T0",
+    description: "Executes the sn.tool.describe operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.toolDescribe({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.table.schema.get",
+    tier: "T0",
+    description: "Executes the sn.table.schema.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.tableSchemaGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.table.dictionary.list",
+    tier: "T0",
+    description: "Executes the sn.table.dictionary.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.tableDictionaryList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.user.role.check",
+    tier: "T0",
+    description: "Executes the sn.user.role.check operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.userRoleCheck({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.scope.inspect",
+    tier: "T0",
+    description: "Executes the sn.scope.inspect operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scopeInspect({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.scope.guard.check",
+    tier: "T0",
+    description: "Executes the sn.scope.guard.check operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scopeGuardCheck({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.dependency.graph.get",
+    tier: "T0",
+    description: "Executes the sn.dependency.graph.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.dependencyGraphGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.release.compatibility.check",
+    tier: "T0",
+    description: "Executes the sn.release.compatibility.check operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.releaseCompatibilityCheck({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.logs.tail",
+    tier: "T1",
+    description: "Executes the sn.logs.tail operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.logsTail({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.compare",
+    tier: "T0",
+    description: "Executes the sn.script.compare operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptCompare({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.delete",
+    tier: "T3",
+    description: "Executes the sn.script.delete operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptDelete({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.clone",
+    tier: "T2",
+    description: "Executes the sn.script.clone operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptClone({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.lint",
+    tier: "T0",
+    description: "Executes the sn.script.lint operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptLint({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.test.stub.generate",
+    tier: "T1",
+    description: "Executes the sn.script.test.stub.generate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptTestStubGenerate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.bulk.search",
+    tier: "T0",
+    description: "Executes the sn.script.bulk.search operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptBulkSearch({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.bulk.validate",
+    tier: "T0",
+    description: "Executes the sn.script.bulk.validate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptBulkValidate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.refactors.preview",
+    tier: "T1",
+    description: "Executes the sn.script.refactors.preview operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptRefactorsPreview({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.refactors.apply",
+    tier: "T2",
+    description: "Executes the sn.script.refactors.apply operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptRefactorsApply({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.scope.migrate.preview",
+    tier: "T1",
+    description: "Executes the sn.script.scope.migrate.preview operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptScopeMigratePreview({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.scope.migrate.apply",
+    tier: "T3",
+    description: "Executes the sn.script.scope.migrate.apply operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptScopeMigrateApply({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.script.guardrails.explain",
+    tier: "T0",
+    description: "Executes the sn.script.guardrails.explain operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.scriptGuardrailsExplain({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.diff",
+    tier: "T0",
+    description: "Executes the sn.changeset.diff operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetDiff({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.validate",
+    tier: "T0",
+    description: "Executes the sn.changeset.validate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetValidate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.dependencies.map",
+    tier: "T0",
+    description: "Executes the sn.changeset.dependencies.map operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetDependenciesMap({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.records.list",
+    tier: "T0",
+    description: "Executes the sn.changeset.records.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetRecordsList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.record.get",
+    tier: "T0",
+    description: "Executes the sn.changeset.record.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetRecordGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.record.validate",
+    tier: "T0",
+    description: "Executes the sn.changeset.record.validate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetRecordValidate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.changeset.rollback.preview",
+    tier: "T1",
+    description: "Executes the sn.changeset.rollback.preview operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changesetRollbackPreview({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.snapshot.create",
+    tier: "T1",
+    description: "Executes the sn.rollback.snapshot.create operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.rollbackSnapshotCreate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.snapshot.get",
+    tier: "T0",
+    description: "Executes the sn.rollback.snapshot.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.rollbackSnapshotGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.snapshot.list",
+    tier: "T0",
+    description: "Executes the sn.rollback.snapshot.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.rollbackSnapshotList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.plan.review",
+    tier: "T0",
+    description: "Executes the sn.rollback.plan.review operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.rollbackPlanReview({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.rollback.execute.manualguide",
+    tier: "T1",
+    description: "Executes the sn.rollback.execute.manualguide operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.rollbackExecuteManualguide({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.updateset.capture.force",
+    tier: "T2",
+    description: "Executes the sn.updateset.capture.force operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.updatesetCaptureForce({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.updateset.capture.status",
+    tier: "T0",
+    description: "Executes the sn.updateset.capture.status operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.updatesetCaptureStatus({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.search",
+    tier: "T0",
+    description: "Executes the sn.flow.search operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.flowSearch({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.refs",
+    tier: "T0",
+    description: "Executes the sn.flow.refs operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.flowRefs({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.deps",
+    tier: "T0",
+    description: "Executes the sn.flow.deps operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.flowDeps({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.publish",
+    tier: "T2",
+    description: "Executes the sn.flow.publish operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.flowPublish({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.flow.activate",
+    tier: "T2",
+    description: "Executes the sn.flow.activate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.flowActivate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.search",
+    tier: "T0",
+    description: "Executes the sn.workflow.search operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.workflowSearch({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.refs",
+    tier: "T0",
+    description: "Executes the sn.workflow.refs operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.workflowRefs({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.deps",
+    tier: "T0",
+    description: "Executes the sn.workflow.deps operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.workflowDeps({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.publish",
+    tier: "T2",
+    description: "Executes the sn.workflow.publish operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.workflowPublish({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.workflow.activate",
+    tier: "T2",
+    description: "Executes the sn.workflow.activate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.workflowActivate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.atf.suite.list",
+    tier: "T0",
+    description: "Executes the sn.atf.suite.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.atfSuiteList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.atf.suite.run",
+    tier: "T2",
+    description: "Executes the sn.atf.suite.run operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.atfSuiteRun({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.atf.test.get",
+    tier: "T0",
+    description: "Executes the sn.atf.test.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.atfTestGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.atf.coverage_signals",
+    tier: "T0",
+    description: "Executes the sn.atf.coverage_signals operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.atfCoverage_signals({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.quality.gate.evaluate",
+    tier: "T0",
+    description: "Executes the sn.quality.gate.evaluate operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.qualityGateEvaluate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.quality.report.get",
+    tier: "T0",
+    description: "Executes the sn.quality.report.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.qualityReportGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.incident.list",
+    tier: "T0",
+    description: "Executes the sn.incident.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.incidentList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.incident.get",
+    tier: "T0",
+    description: "Executes the sn.incident.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.incidentGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.incident.create",
+    tier: "T2",
+    description: "Executes the sn.incident.create operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.incidentCreate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.incident.update",
+    tier: "T2",
+    description: "Executes the sn.incident.update operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.incidentUpdate({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.change.list",
+    tier: "T0",
+    description: "Executes the sn.change.list operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changeList({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.change.get",
+    tier: "T0",
+    description: "Executes the sn.change.get operation in ServiceNow.",
+    parameters: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        query: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        instance_key: { type: "string" }
+      }
+    },
+    handler: async (input, ctx) => {
+      const client = ctx.services?.serviceNow;
+      const result = await client.changeGet({
+        sysId: input?.sys_id,
+        query: input?.query,
+        limit: input?.limit,
+        offset: input?.offset,
+        instanceKey: input?.instance_key
+      });
+      return {
+        data: result,
+      };
+    },
+  });
+
+
+
       return {
         data: result,
       };
     },
   });
 }
+
 
 async function main() {
   const isSmokeSummaryMode = process.argv.includes("--smoke-summary");

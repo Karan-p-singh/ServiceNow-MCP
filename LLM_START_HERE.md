@@ -32,7 +32,7 @@ Load deep/history-heavy docs only on demand:
 
 ## 3) Current Truth Snapshot
 
-- Runtime baseline: **43 implemented / 101 target / 58 remaining**
+- Runtime baseline: **101 implemented / 101 target / 0 remaining**
 - Gates **G1–G7 passed**; **G8 in progress**
 - Companion authority is **optional pilot**, not baseline requirement
 

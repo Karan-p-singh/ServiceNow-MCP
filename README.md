@@ -168,7 +168,7 @@ Canonical catalog governance for 100+ enablement:
 
 - Authoritative 101-tool program matrix: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 - Runtime implementation truth command: `npm run smoke:summary`
-- Current baseline: **43 implemented / 101 target**
+- Current baseline: **101 implemented / 101 target**
 
 When any count differs across docs, use this precedence:
 
