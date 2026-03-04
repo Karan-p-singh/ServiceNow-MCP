@@ -1,6 +1,6 @@
 # LLM Start Here (Root Context Entrypoint)
 
-Last Updated: 2026-03-01 06:22 PST
+Last Updated: 2026-03-03 22:00 PST
 Purpose: Root-level, token-efficient starting point for LLM sessions in this repository.
 
 ---
@@ -32,8 +32,9 @@ Load deep/history-heavy docs only on demand:
 
 ## 3) Current Truth Snapshot
 
-- Runtime baseline: **101 implemented / 101 target / 0 remaining**
-- Gates **G1–G7 passed**; **G8 in progress**
+- Runtime: **101 registered / target 101 / remaining 0**
+- Last verified: **2026-03-03** via `npm run smoke:summary`
+- Gates **G1–G7 passed**; **G8 tracking remains in progress only for release-cadence evidence collection**
 - Companion authority is **optional pilot**, not baseline requirement
 
 ---

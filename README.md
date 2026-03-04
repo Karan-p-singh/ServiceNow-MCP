@@ -104,9 +104,9 @@ MCP_ALLOWED_SCOPES=x_your_scope,global
 MCP_DENY_GLOBAL_WRITES=true
 MCP_ENFORCE_CHANGESET_SCOPE=true
 
-# Validation
-VALIDATION_RULEPACK_VERSION=1.0.0
-VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
+# Validation (reserved settings; optional)
+# VALIDATION_RULEPACK_VERSION=1.0.0
+# VALIDATION_FAIL_ON=CRITICAL     # CRITICAL or HIGH
 
 # Companion integration (deprioritized/optional)
 # Default baseline: discovery-only ACL mode
@@ -162,13 +162,14 @@ Expected behavior:
 
 ## MCP Tool Catalog
 
-This section includes the list of tools currently available in this server runtime, plus planned v2 tool families.
+This runtime currently registers the full catalog baseline.
 
-Canonical catalog governance for 100+ enablement:
+Canonical catalog governance:
 
 - Authoritative 101-tool program matrix: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 - Runtime implementation truth command: `npm run smoke:summary`
-- Current baseline: **101 implemented / 101 target**
+- Runtime: **101 registered / target 101 / remaining 0**
+- Last verified: **2026-03-03** via `npm run smoke:summary`
 
 When any count differs across docs, use this precedence:
 
@@ -176,87 +177,29 @@ When any count differs across docs, use this precedence:
 2. `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 3. summary docs (README/PRD/epics)
 
-### A) Currently implemented tools (runtime-registered)
+### Implemented Family Summary (concise)
 
-Use `npm run smoke:summary` to verify the live registered tool list.
+- Core/platform/governance tools are runtime-registered, including `sn.tool.catalog` and `sn.tool.describe`.
+- Script tooling family is runtime-registered across read, analysis, validation, create/update, and advanced parity operations.
+- Validation addendum family (`sn.validate.*`) is runtime-registered.
+- Changeset/update set/rollback family is runtime-registered, including `sn.rollback.snapshot.create` and rollback-plan surfaces.
+- Flow/workflow families are runtime-registered across list/get/validate plus parity tools.
+- ATF/quality family is runtime-registered, including `sn.atf.coverage_signals` with evidence-only contract language.
+- ITSM/Admin edition tools included in the 101 catalog are runtime-registered under edition boundaries.
 
-#### Core / platform (T0)
+For the exact 1..101 table (name, tier, owner, evidence), use `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
 
-- `sn.health.check`
-- `sn.config.get`
-- `sn.policy.test`
-- `sn.audit.ping`
-- `sn.instance.info`
-- `sn.instance.capabilities.get`
-- `sn.instance.plugins.list`
-- `sn.table.list`
-- `sn.table.get`
-- `sn.table.count`
-- `sn.acl.trace`
+### Roadmap History (R0–R6)
 
-#### Script developer tooling
+- `R0`: catalog lock + matrix governance artifact established.
+- `R1 (D5)`: validation addendum family implemented and reconciled.
+- `R2`: dev parity clusters implemented and runtime-registered.
+- `R3`: ATF signal track implemented (`sn.atf.coverage_signals`).
+- `R4`: rollback snapshot maturity implemented (`sn.rollback.snapshot.create` family).
+- `R5`: ITSM/Admin edition pack registered under policy boundaries.
+- `R6`: drift-guard and claim-integrity process remains an ongoing release-cadence control.
 
-- `sn.script.get` (T0)
-- `sn.script.list` (T0)
-- `sn.script.search` (T0)
-- `sn.script.refs` (T0)
-- `sn.script.deps` (T0)
-- `sn.script.history` (T0)
-- `sn.script.diff` (T0)
-- `sn.script.create` (T2)
-- `sn.script.update` (T2)
-
-#### Changeset / update set tooling
-
-- `sn.changeset.list` (T0)
-- `sn.changeset.get` (T0)
-- `sn.changeset.contents` (T0)
-- `sn.changeset.export` (T0)
-- `sn.changeset.gaps` (T0)
-- `sn.updateset.capture.verify` (T0)
-- `sn.changeset.commit.preview` (T0)
-- `sn.changeset.commit` (T3)
-- `sn.rollback.plan.generate` (T0)
-
-#### Flow / workflow tooling
-
-- `sn.flow.list` (T0)
-- `sn.flow.get` (T0)
-- `sn.flow.validate` (T0)
-- `sn.workflow.list` (T0)
-- `sn.workflow.get` (T0)
-- `sn.workflow.validate` (T0)
-
-#### Validation addendum tooling (`sn.validate.*`)
-
-- `sn.validate.script_include` (T0)
-- `sn.validate.business_rule` (T0)
-- `sn.validate.client_script` (T0)
-- `sn.validate.ui_script` (T0)
-- `sn.validate.flow` (T0)
-- `sn.validate.workflow` (T0)
-- `sn.validate.catalog_policy` (T0)
-- `sn.validate.fix` (T1)
-
-### B) Planned v2 expansion (documentation target)
-
-- `sn.rollback.snapshot.create`
-- `sn.atf.coverage_signals`
-- broader dev and ITSM catalogs from the architecture plan
-
-Roadmap alignment for full 101-tool enablement:
-
-- `R0`: catalog lock + matrix governance
-- `R1 (D5)`: `sn.validate.*` completion
-- `R2`: dev parity clusters (metadata/diagnostics/script/flow/workflow/changeset)
-- `R3`: ATF + `sn.atf.coverage_signals`
-- `R4`: rollback snapshot maturity (`sn.rollback.snapshot.create` and related surfaces)
-- `R5`: ITSM/Admin edition pack under strict edition boundaries
-- `R6`: docs/runtime drift guards and release-proof claim checks
-
-> Planned tools are not implied as currently implemented. Runtime truth is the registered list returned by MCP `tools/list` and `npm run smoke:summary`.
-
-> For full tool-by-tool status, owner mapping, and enablement track, use `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
+> Historical roadmap labels are retained for traceability; runtime truth is always the registered list from MCP `tools/list` and `npm run smoke:summary`.
 
 ---
 
@@ -456,31 +399,47 @@ Transport diagnostics output now includes an interpretation section that explici
 
 ---
 
-## Project Layout (Recommended)
+## Project Layout (Current JS Runtime)
 
 ```text
 /
   src/
+    index.js
+    config.js
     server/
-      mcp.ts
-      tool-registry.ts
-      tiering.ts
-      policy-engine.ts
-      audit.ts
+      audit-webhook.js
+      http-sse.js
+      mcp.js
+      request-context.js
+      tool-bundles.js
+      tool-registry.js
     servicenow/
-      client.ts
-      tables.ts
-      pagination.ts
-      companion.ts
+      client.js
+      companion-client.js
     validation/
-      engine.ts
+      engine.js
       rulepacks/
-        1.0.0/
-          scripts/
-          flows/
-          workflows/
-          catalog/
-      report.ts
+        flows-v1.js
+        scripts-v1.js
+        workflows-v1.js
+  scripts/
+    publish-project-structure.js
+    test-suite.js
+    test-live-connection.js
+    test-live-mcp-transport.js
+    test-g2-*.js
+    test-g3-*.js
+    test-g4-*.js
+    test-g5-*.js
+    test-g6-*.js
+    test-g7-*.js
+    build-companion-updateset.js
+    deploy-companion-update-set.js
+    test-companion-live.js
+    test-tool-coverage.js
+  tests/
+    *.test.js
+    fixtures/
   companion-app/
     update-set.xml
     scoped-app/
@@ -488,8 +447,11 @@ Transport diagnostics output now includes an interpretation section that explici
       script-includes/
       roles/
   docs/
-    PRD_ServiceNow_MCP_Server.md
-    BUILD_TIMELINE_ServiceNow_MCP_Server.md
+    *.md
+  Epics/
+    *.md
+  Project PRD/
+    *.md
 ```
 
 ---

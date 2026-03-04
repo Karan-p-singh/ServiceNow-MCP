@@ -1,6 +1,6 @@
 # LLM Context Pack (Token-Optimized Entrypoint)
 
-Last Updated: 2026-03-01 06:22 PST
+Last Updated: 2026-03-03 22:00 PST
 Purpose: Single low-token entrypoint for LLM sessions. Use this before loading long governance docs.
 
 ---
@@ -19,9 +19,10 @@ Only read full historical files (`BUILD_ACTIVITY_LOG`, full 101 matrix rows) whe
 
 ## 2) Current Truth Snapshot
 
-- Runtime baseline: **101 implemented / 101 target / 0 remaining**
-- Gate state: **G1–G7 passed**, **G8 in progress**
-- Current roadmap focus: **R2–R6**
+- Runtime: **101 registered / target 101 / remaining 0**
+- Last verified: **2026-03-03** via `npm run smoke:summary`
+- Gate state: **G1–G7 passed**
+- G8 status: **In progress for process evidence only** (owner: Release Engineering, next cadence check: 2026-03-08)
 - Companion mode: **optional pilot**, not baseline dependency
 
 Truth precedence:

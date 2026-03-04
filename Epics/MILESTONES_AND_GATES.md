@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Milestones & Gate Criteria
 
-Last Updated: 2026-03-01 05:46 PST
+Last Updated: 2026-03-03 22:00 PST
 Gate Status Values: `Not Started | In Progress | At Risk | Passed | Failed`
 
 ---
@@ -121,13 +121,13 @@ Status: `In Progress`
 - [x] Runtime implemented baseline documented (`101` tools)
 - [x] Runtime and matrix counts reconciled on every release-candidate cut
 - [x] R1/D5 `sn.validate.*` family moved from planned to implemented with runtime evidence
-- [ ] R2 parity clusters completed with runtime registration evidence
-- [ ] R3 `sn.atf.coverage_signals` implemented with non-overclaim contract language
-- [ ] R4 rollback snapshot family implemented (`sn.rollback.snapshot.create` and related tools)
-- [ ] R5 ITSM/Admin edition separation validated for catalog claims
-- [ ] R6 docs/runtime drift checks integrated into release gate automation
+- [x] R2 parity clusters completed with runtime registration evidence
+- [x] R3 `sn.atf.coverage_signals` implemented with non-overclaim contract language
+- [x] R4 rollback snapshot family implemented (`sn.rollback.snapshot.create` and related tools)
+- [x] R5 ITSM/Admin edition separation validated for catalog claims
+- [ ] R6 docs/runtime drift checks integrated into release gate automation (process-only remaining criterion; owner: Release Engineering; target: 2026-03-08)
 
-Exit Rule: G8 passes only when any public/internal “100+ tools enabled” claim is backed by runtime registration output and synchronized matrix + governance trackers.
+Exit Rule: G8 passes only when any public/internal “100+ tools enabled” claim is backed by runtime registration output, synchronized matrix + governance trackers, and release-cadence evidence records for R6 automation checks.
 
 Operational cadence for release-claim integrity:
 
@@ -170,3 +170,4 @@ Operational cadence for release-claim integrity:
 | 2026-03-01 | G7   | Passed      | Completed enterprise readiness scope: EPIC-G quality harnesses (`test:g2:integration`, `test:g3:fixtures`, `test:g4:ci`) + EPIC-H hardening (`audit webhook`, `tool bundles/profiles`) + docs pack (`SECURITY_MODEL_AND_GOVERNANCE`, `ADMIN_RUNBOOK`, `RELEASE_READINESS_G7_CHECKLIST`); gate evidence captured via `npm run test:g7` and `artifacts/g7-readiness-summary.json`. |
 | 2026-03-01 | G7   | Passed      | Documentation integrity pass completed (H5): governance and operations Markdown now consistently enforce non-overclaim contract language, implemented-vs-planned tool boundaries, and companion-as-optional pilot positioning aligned with Architecture v2 + Validation Addendum.                                                                                                |
 | 2026-03-01 | G8   | In Progress | Completed R1/D5 implementation evidence sync: full `sn.validate.*` family now runtime-registered, matrix status moved to implemented, and runtime/matrix counts reconciled to `101/101` via `npm run smoke:summary`.                                                                                                                                                             |
+| 2026-03-03 | G8   | In Progress | Runtime implementation criteria for R2/R3/R4/R5 were revalidated against `npm run smoke:summary` (101/101). Remaining scope is process-only R6 release-cadence evidence automation, owned by Release Engineering, target checkpoint 2026-03-08.                                                                                                                                  |

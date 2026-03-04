@@ -1,0 +1,178 @@
+{
+  "generated_at": "2026-03-04T03:52:09.493Z",
+  "repo_root": "D:/Personal Projects/ServiceNow-MCP/ServiceNow-MCP",
+  "scripts": [
+    {
+      "path": "scripts/build-companion-updateset.js",
+      "category": "script",
+      "size_bytes": 12781,
+      "last_modified": "2026-03-01T09:46:18.979Z",
+      "tags": [
+        "build",
+        "script"
+      ]
+    },
+    {
+      "path": "scripts/deploy-companion-update-set.js",
+      "category": "script",
+      "size_bytes": 16865,
+      "last_modified": "2026-03-01T09:36:56.149Z",
+      "tags": [
+        "deploy",
+        "script"
+      ]
+    },
+    {
+      "path": "scripts/publish-project-structure.js",
+      "category": "script",
+      "size_bytes": 7964,
+      "last_modified": "2026-03-04T03:52:09.493Z",
+      "tags": [
+        "script",
+        "structure-publish"
+      ]
+    },
+    {
+      "path": "scripts/test-companion-live.js",
+      "category": "script",
+      "size_bytes": 14911,
+      "last_modified": "2026-03-01T09:17:08.170Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g2-integration.js",
+      "category": "script",
+      "size_bytes": 7301,
+      "last_modified": "2026-03-01T12:11:17.914Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g2-validation.js",
+      "category": "script",
+      "size_bytes": 7351,
+      "last_modified": "2026-03-01T11:54:10.369Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g3-fixtures.js",
+      "category": "script",
+      "size_bytes": 5055,
+      "last_modified": "2026-03-01T12:13:34.616Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g4-ci-quality-gates.js",
+      "category": "script",
+      "size_bytes": 3448,
+      "last_modified": "2026-03-01T12:16:46.843Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g4-integration-live.js",
+      "category": "script",
+      "size_bytes": 6866,
+      "last_modified": "2026-03-01T10:42:27.338Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g4-validation.js",
+      "category": "script",
+      "size_bytes": 6626,
+      "last_modified": "2026-03-01T11:54:31.292Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g5-validation.js",
+      "category": "script",
+      "size_bytes": 6604,
+      "last_modified": "2026-03-01T11:54:32.348Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g6-validation.js",
+      "category": "script",
+      "size_bytes": 6210,
+      "last_modified": "2026-03-01T11:54:33.415Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-g7-readiness.js",
+      "category": "script",
+      "size_bytes": 3747,
+      "last_modified": "2026-03-01T12:18:27.239Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-live-connection.js",
+      "category": "script",
+      "size_bytes": 12555,
+      "last_modified": "2026-03-01T06:07:44.126Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-live-mcp-transport.js",
+      "category": "script",
+      "size_bytes": 15446,
+      "last_modified": "2026-03-01T11:52:07.033Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-suite.js",
+      "category": "script",
+      "size_bytes": 2563,
+      "last_modified": "2026-03-03T13:45:04.319Z",
+      "tags": [
+        "script",
+        "suite",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/test-tool-coverage.js",
+      "category": "script",
+      "size_bytes": 13264,
+      "last_modified": "2026-03-03T13:50:11.513Z",
+      "tags": [
+        "script",
+        "test"
+      ]
+    }
+  ],
+  "context_files": []
+}

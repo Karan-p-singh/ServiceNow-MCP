@@ -1,6 +1,6 @@
 # Epics — Compact LLM Context
 
-Last Updated: 2026-03-01 06:23 PST
+Last Updated: 2026-03-03 22:00 PST
 Purpose: Low-token operational summary of all `Epics/*.md` files for LLM prompting.
 Truth policy: Runtime (`npm run smoke:summary`) > matrix (`docs/MCP_TOOL_CATALOG_101_MATRIX.md`) > summary docs.
 
@@ -9,22 +9,24 @@ Truth policy: Runtime (`npm run smoke:summary`) > matrix (`docs/MCP_TOOL_CATALOG
 ## 1) Program Snapshot (Current)
 
 - Gates **G1–G7: Passed**
-- Gate **G8: In Progress** (catalog claim integrity for 101-tool program)
-- Runtime tools: **101 implemented / 101 target / 0 remaining**
-- Current execution focus: **R2–R6** roadmap (R1/D5 validation family completed)
+- Gate **G8: In Progress (process evidence only)**
+- Runtime tools: **101 registered / target 101 / remaining 0**
+- Last verified: **2026-03-03** via `npm run smoke:summary`
 - Companion authority: **optional pilot**, not baseline dependency
+- G8 process owner: **Release Engineering**
+- G8 next evidence checkpoint: **2026-03-08**
 
 ---
 
 ## 2) File-by-File Compact Purpose (Epics Folder)
 
-| Source File                                           | Keep in LLM context    | One-line meaning                                                   |
-| ----------------------------------------------------- | ---------------------- | ------------------------------------------------------------------ |
-| `Epics/BUILD_STATUS_BOARD.md`                         | Yes (high)             | Live backlog/ready/done board and immediate next execution queue   |
-| `Epics/MILESTONES_AND_GATES.md`                       | Yes (high)             | Gate checklists, gate state, and release-decision criteria         |
-| `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`          | Yes (medium)           | Canonical epic/story structure and R0–R6 roadmap framing           |
-| `Epics/RISKS_AND_DECISIONS.md`                        | Yes (medium)           | Active risks, ADR-lite decisions, blockers                         |
-| `Epics/BUILD_ACTIVITY_LOG.md`                         | Yes (low, recent only) | Historical transition log; use latest entries only unless auditing |
+| Source File                                            | Keep in LLM context    | One-line meaning                                                   |
+| ------------------------------------------------------ | ---------------------- | ------------------------------------------------------------------ |
+| `Epics/BUILD_STATUS_BOARD.md`                          | Yes (high)             | Live backlog/ready/done board and immediate next execution queue   |
+| `Epics/MILESTONES_AND_GATES.md`                        | Yes (high)             | Gate checklists, gate state, and release-decision criteria         |
+| `Epics/IMPLEMENTATION_PLAN_EPICS_STORIES.md`           | Yes (medium)           | Canonical epic/story structure and R0–R6 roadmap framing           |
+| `Epics/RISKS_AND_DECISIONS.md`                         | Yes (medium)           | Active risks, ADR-lite decisions, blockers                         |
+| `Epics/BUILD_ACTIVITY_LOG.md`                          | Yes (low, recent only) | Historical transition log; use latest entries only unless auditing |
 | `Epics/ALIGNMENT_REVIEW_PRD_EPICS_CODE_2026-02-28.md` | Optional (historical)  | Historical alignment snapshot, not current execution truth         |
 
 ---
@@ -46,14 +48,14 @@ Truth policy: Runtime (`npm run smoke:summary`) > matrix (`docs/MCP_TOOL_CATALOG
 - Flow/workflow parity complete (E4/E5)
 - Enterprise readiness automation + docs pack complete (G7)
 - Validation addendum family complete (`sn.validate.*`, R1/D5)
+- R2/R3/R4/R5 implementation families present in runtime catalog
 
-### 3.3 Gate G8 unfinished tracks
+### 3.3 Gate G8 remaining criterion (process only)
 
-- R2: Dev parity clusters
-- R3: ATF signals (`sn.atf.coverage_signals`)
-- R4: rollback snapshot family (`sn.rollback.snapshot.create` + related)
-- R5: ITSM/Admin edition separation
-- R6: docs/runtime drift checks in release automation
+- R6 release-cadence evidence must be captured on each release candidate:
+  - command bundle: `smoke:summary`, `test:g4:ci`, `test:g7`
+  - owner: Release Engineering
+  - next scheduled evidence refresh: 2026-03-08
 
 ---
 

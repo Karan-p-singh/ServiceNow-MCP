@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Build Status Board
 
-Last Updated: 2026-03-01 06:24 PST
+Last Updated: 2026-03-03 22:00 PST
 Legend: `Backlog | Ready | In Progress | Blocked | Done`
 
 ---
@@ -45,11 +45,11 @@ Source of truth: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 | Remaining tools                    |           0 |
 | Catalog lock artifact (R0)         |        Done |
 | Validation addendum family (R1/D5) |        Done |
-| Dev parity clusters (R2)           | In Progress |
-| ATF signal track (R3)              |     Pending |
-| Rollback snapshot maturity (R4)    |     Pending |
-| ITSM/Admin edition track (R5)      |     Pending |
-| Drift guards + claim checks (R6)   |     Pending |
+| Dev parity clusters (R2)           | Done        |
+| ATF signal track (R3)              | Done        |
+| Rollback snapshot maturity (R4)    | Done        |
+| ITSM/Admin edition track (R5)      | Done        |
+| Drift guards + claim checks (R6)   | In Progress |
 
 Operational integrity cadence (required for release claims):
 
@@ -144,13 +144,13 @@ Operational integrity cadence (required for release claims):
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. R2 — Close Dev Edition missing tool clusters (metadata/diagnostics/tool parity)
-2. R3 — Implement ATF suite + `sn.atf.coverage_signals` evidence contract
-3. R4 — Add `sn.rollback.snapshot.create` and complete rollback trio cohesion
-4. R2 — Add remaining changeset/record/property parity tools from v2 Dev catalog
-5. R5 — Begin ITSM/Admin Edition track (strictly separated by edition policy)
-6. R6 — Add docs/runtime drift guards and catalog-claim CI checks
-7. Catalog reconciliation cadence — keep `smoke:summary` synchronized with 101 matrix before release claims
-8. Companion pilot hardening closure (optional/deprioritized track only)
-9. Release packaging + final v2 catalog proof artifacts
-10. Rulepack governance suppression controls (D4) with auditable policy contract
+1. G8 process cadence: run and archive release evidence bundle (`smoke:summary`, `test:g4:ci`, `test:g7`) on each release candidate.
+2. R6 hardening: add CI assertion that checks docs/runtime tool-count parity before release tag.
+3. D4 governance: add explicit rulepack suppression policy docs and audit expectations.
+4. C3 optional companion helpers: close remaining optional scope/capture helper backlog.
+5. Expand structure publish tags to include owner mapping from matrix.
+6. Add structure-publish check into CI quality gate suite.
+7. Refresh docs timestamp + last-verified fields as part of release checklist.
+8. Continue policy review for edition-boundary protections in ITSM/Admin tools.
+9. Maintain artifact retention policy for G4/G7 + structure publish outputs.
+10. Quarterly audit: verify matrix ownership and evidence links remain current.

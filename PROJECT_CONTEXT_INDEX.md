@@ -1,6 +1,6 @@
 # ServiceNow MCP Server v2 — Project Context Index
 
-Last Updated: 2026-03-01 05:59 PST
+Last Updated: 2026-03-03 22:00 PST
 Purpose: Central guide for humans/LLMs to quickly find the right markdown source of truth.
 
 ---
@@ -72,12 +72,12 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 
 ### `README.md`
 
-- Use for: architecture overview, safety model summary, expected project layout, and MCP tool catalog (implemented vs planned).
+- Use for: architecture overview, safety model summary, current project layout, and MCP tool catalog governance/truth boundaries.
 - Best when: onboarding or aligning implementation details to intended structure.
 
 ### `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 
-- Use for: authoritative 101-tool catalog tracking (implemented vs planned vs enablement track).
+- Use for: authoritative 101-tool catalog tracking (runtime reconciliation, ownership, and evidence).
 - Best when: validating any claim about 100+ tool readiness, ownership, tier mapping, and roadmap sequencing.
 - Truth precedence: runtime `npm run smoke:summary` → 101 matrix → summary docs.
 
@@ -133,7 +133,7 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 ## 5) Status Snapshot (Current)
 
 - Phase 1 through Phase 7 are complete with **G1–G7 passed**.
-- Runtime currently registers **101 tools**; program target remains **101 tools**.
+- Runtime currently registers **101 tools**; program target remains **101 tools** (**101/101, remaining 0**).
 - Canonical catalog governance now lives in `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
 - Phase 3 companion authority is now treated as **optional pilot capability** rather than baseline dependency.
 - **EPIC-D** is complete and script lifecycle scope in **EPIC-E** (`E1/E2/E3`) is complete.
@@ -142,14 +142,14 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Known operational behavior: diagnostics now probe plugin tables with `v_plugin` preferred and `sys_plugins` fallback; if both are restricted, `test:live` classifies it as a limited-access warning while preserving overall connectivity signal.
 - Runtime default is now **Phase A**: `SN_COMPANION_ENABLED=false`, `SN_COMPANION_MODE=none`, and discovery-mode ACL tracing.
 - **Phase B** is optional: enable companion in `scoped` or `global` mode for authoritative ACL tracing.
-- Documentation now follows an explicit **implemented vs planned** contract model to avoid over-claiming runtime coverage.
-- README includes an MCP tool catalog section with runtime-registered tool inventory and planned v2 expansions.
+- Documentation now follows runtime-first catalog claim governance with explicit evidence reconciliation to avoid over-claiming runtime coverage.
+- README includes an MCP tool catalog section with runtime-registered family summary, matrix pointer, and roadmap history notes.
 - EPIC-F is complete through **F6** and EPIC-E is complete through **E5**.
 - EPIC-G and EPIC-H are complete with enterprise hardening controls and docs-pack deliverables.
 - Gates **G4**, **G5**, **G6**, and **G7** are **Passed** with validation artifacts in `artifacts/g4-*.json`, `artifacts/g5-validation-summary.json`, `artifacts/g6-validation-summary.json`, `artifacts/g4-ci-quality-summary.json`, and `artifacts/g7-readiness-summary.json`.
 - `sn.changeset.commit` now exposes the controlled T3 commit contract (confirm/reason + snapshot coverage + high-risk audit trace), and `sn.rollback.plan.generate` provides rollback planning with restorable/non-restorable declarations.
 - Flow/workflow parity tooling is available via `sn.flow.*` and `sn.workflow.*`, each with deterministic rulepack-backed validation summaries.
 - Enterprise controls now include optional audit webhook export and deploy-profile/tool-bundle gating (`TOOL_DISABLED_BY_BUNDLE`) for runtime policy enforcement.
-- R1/D5 (`sn.validate.*` family) is now implemented and reconciled in runtime + matrix evidence.
-- Next queued catalog-enablement focus is **R2**, **R3**, **R4**, **R5**, and **R6** after R1 completion.
+- R1/D5 (`sn.validate.*` family) is implemented and reconciled in runtime + matrix evidence.
+- R2/R3/R4/R5 implementation families are runtime-registered; remaining G8 scope is process-only R6 release-cadence evidence automation (owner: Release Engineering; next checkpoint: 2026-03-08).
 - For latest live status, always prioritize `Epics/BUILD_STATUS_BOARD.md`.

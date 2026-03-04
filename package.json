@@ -36,7 +36,9 @@
 		"test:g4:live": "node scripts/test-g4-integration-live.js",
 		"test:gates:g1-g6:live": "npm run test:live && npm run test:live:mcp && npm run test:g2:live && npm run test:g4:live:gate && npm run test:g4:live && npm run test:g5:live && npm run test:g6:live",
 		"test:live": "node scripts/test-live-connection.js",
-		"test:live:mcp": "node scripts/test-live-mcp-transport.js"
+		"test:live:mcp": "node scripts/test-live-mcp-transport.js",
+		"structure:publish": "node scripts/publish-project-structure.js --write",
+		"structure:check": "node scripts/publish-project-structure.js --check"
 	},
 	"engines": {
 		"node": ">=18"
