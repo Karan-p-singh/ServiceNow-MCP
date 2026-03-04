@@ -20,13 +20,13 @@ Truth policy: Runtime (`npm run smoke:summary`) > `docs/MCP_TOOL_CATALOG_101_MAT
 
 ## 2) File-by-File Compact Purpose (docs Folder)
 
-| Source File                              | Keep in LLM context | One-line meaning                                                             |
-| ---------------------------------------- | ------------------- | ---------------------------------------------------------------------------- |
-| `docs/MCP_TOOL_CATALOG_101_MATRIX.md`    | Yes (high)          | Canonical 101-tool status, ownership, and evidence for the full 1..101 set  |
-| `docs/RELEASE_READINESS_G7_CHECKLIST.md` | Yes (high)          | Gate G7 checklist and G7→G8 claim-integrity bridge commands                  |
-| `docs/SECURITY_MODEL_AND_GOVERNANCE.md`  | Yes (medium)        | Policy/tier/security contract and non-overclaim controls                     |
-| `docs/ADMIN_RUNBOOK.md`                  | Yes (medium)        | Operational runbook for startup, triage, tests, and release cadence          |
-| `docs/PROJECT_STRUCTURE_PUBLISH.md`      | Yes (medium)        | Published structure index for scripts and context markdown with machine sync |
+| Source File                             | Keep in LLM context | One-line meaning                                                             |
+| --------------------------------------- | ------------------- | ---------------------------------------------------------------------------- |
+| `docs/MCP_TOOL_CATALOG_101_MATRIX.md`   | Yes (high)          | Canonical 101-tool status, ownership, and evidence for the full 1..101 set   |
+| `docs/OPERATIONS_AND_RELEASE.md`        | Yes (high)          | Unified runbook + release readiness + G7→G8 integrity cadence                |
+| `docs/SECURITY_MODEL_AND_GOVERNANCE.md` | Yes (medium)        | Policy/tier/security contract and non-overclaim controls                     |
+| `docs/PRODUCT_AND_DELIVERY_MASTER.md`   | Yes (medium)        | Consolidated product + delivery contract (replaces split PRD/timeline docs)  |
+| `docs/PROJECT_STRUCTURE_PUBLISH.md`     | Yes (medium)        | Published structure index for scripts and context markdown with machine sync |
 
 ---
 

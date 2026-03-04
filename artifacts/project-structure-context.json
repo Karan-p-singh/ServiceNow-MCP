@@ -1,23 +1,13 @@
 {
-  "generated_at": "2026-03-04T03:36:43.100Z",
+  "generated_at": "2026-03-04T09:50:43.632Z",
   "repo_root": "D:/Personal Projects/ServiceNow-MCP/ServiceNow-MCP",
   "scripts": [],
   "context_files": [
     {
-      "path": "docs/ADMIN_RUNBOOK.md",
-      "category": "context",
-      "size_bytes": 5047,
-      "last_modified": "2026-03-03T12:55:42.865Z",
-      "tags": [
-        "context",
-        "runbook"
-      ]
-    },
-    {
       "path": "docs/DOCS_CONTEXT_COMPACT.md",
       "category": "context",
-      "size_bytes": 3047,
-      "last_modified": "2026-03-04T03:23:37.046Z",
+      "size_bytes": 3041,
+      "last_modified": "2026-03-04T09:46:19.035Z",
       "tags": [
         "context",
         "context-pack"
@@ -43,13 +33,21 @@
       ]
     },
     {
-      "path": "docs/RELEASE_READINESS_G7_CHECKLIST.md",
+      "path": "docs/OPERATIONS_AND_RELEASE.md",
       "category": "context",
-      "size_bytes": 3136,
-      "last_modified": "2026-03-03T12:55:42.869Z",
+      "size_bytes": 4931,
+      "last_modified": "2026-03-04T09:42:12.941Z",
       "tags": [
-        "context",
-        "gate"
+        "context"
+      ]
+    },
+    {
+      "path": "docs/PRODUCT_AND_DELIVERY_MASTER.md",
+      "category": "context",
+      "size_bytes": 3704,
+      "last_modified": "2026-03-04T09:43:25.365Z",
+      "tags": [
+        "context"
       ]
     },
     {
@@ -85,8 +83,8 @@
     {
       "path": "Epics/BUILD_STATUS_BOARD.md",
       "category": "context",
-      "size_bytes": 12853,
-      "last_modified": "2026-03-04T03:34:16.211Z",
+      "size_bytes": 12938,
+      "last_modified": "2026-03-04T09:47:17.364Z",
       "tags": [
         "context",
         "epic",
@@ -146,30 +144,31 @@
       ]
     },
     {
-      "path": "Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md",
+      "path": "Project PRD/PRD_ServiceNow_MCP_Server.md",
       "category": "context",
-      "size_bytes": 18074,
-      "last_modified": "2026-03-03T13:15:14.613Z",
+      "size_bytes": 15767,
+      "last_modified": "2026-03-04T09:50:28.369Z",
       "tags": [
         "context",
         "prd"
       ]
     },
     {
-      "path": "Project PRD/PRD_ServiceNow_MCP_Server.md",
+      "path": "Project PRD/README.md",
       "category": "context",
-      "size_bytes": 15321,
-      "last_modified": "2026-03-03T13:13:49.122Z",
+      "size_bytes": 210,
+      "last_modified": "2026-03-04T09:50:43.632Z",
       "tags": [
         "context",
-        "prd"
+        "prd",
+        "readme"
       ]
     },
     {
       "path": "PROJECT_CONTEXT_INDEX.md",
       "category": "context",
-      "size_bytes": 9868,
-      "last_modified": "2026-03-04T03:36:43.100Z",
+      "size_bytes": 9487,
+      "last_modified": "2026-03-04T09:45:55.631Z",
       "tags": [
         "context",
         "context-pack"
@@ -178,8 +177,8 @@
     {
       "path": "README.md",
       "category": "context",
-      "size_bytes": 19911,
-      "last_modified": "2026-03-04T03:36:28.782Z",
+      "size_bytes": 21452,
+      "last_modified": "2026-03-04T09:44:25.614Z",
       "tags": [
         "context",
         "readme"

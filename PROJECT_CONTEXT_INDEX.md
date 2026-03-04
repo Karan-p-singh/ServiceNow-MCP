@@ -27,15 +27,10 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 - Use for: condensed governance/runbook/catalog guidance and LLM-safe claims.
 - Best when: you need docs-layer policy/claim truth in minimal tokens.
 
-### `Project PRD/PRD_ServiceNow_MCP_Server.md`
+### `docs/PRODUCT_AND_DELIVERY_MASTER.md`
 
-- Use for: product goals, scope, constraints, safety model, acceptance expectations.
-- Best when: deciding **what** to build and validating requirement intent.
-
-### `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md`
-
-- Use for: phase-by-phase delivery approach, task sequencing, release gates.
-- Best when: deciding **when/how** to implement and what should come next.
+- Use for: consolidated product goals, scope, constraints, safety model, roadmap, and delivery sequencing.
+- Best when: deciding **what/when/how** to build from a single canonical source.
 
 ---
 
@@ -110,17 +105,15 @@ Purpose: Central guide for humans/LLMs to quickly find the right markdown source
 ### Key Documentation Contract Files (v2 alignment)
 
 - `docs/MCP_TOOL_CATALOG_101_MATRIX.md` → authoritative tool-count and per-tool status contract for 101-tool enablement program.
-- `Project PRD/PRD_ServiceNow_MCP_Server.md` → authoritative product contract language, including revised high-risk tools and validation expansion targets.
-- `Project PRD/BUILD_TIMELINE_ServiceNow_MCP_Server.md` → phased delivery sequencing aligned to non-overclaim contracts.
+- `docs/PRODUCT_AND_DELIVERY_MASTER.md` → authoritative consolidated product and phased delivery contract.
 - `docs/SECURITY_MODEL_AND_GOVERNANCE.md` → governance controls, tier/policy behavior, discovery-first security posture.
-- `docs/ADMIN_RUNBOOK.md` → operational runbooks and diagnostics flows.
-- `docs/RELEASE_READINESS_G7_CHECKLIST.md` → release evidence checklist for enterprise readiness.
+- `docs/OPERATIONS_AND_RELEASE.md` → operational runbooks, diagnostics flows, and release readiness checklist.
 
 ---
 
 ## 4) Recommended LLM Workflow
 
-1. Read PRD (`PRD_ServiceNow_MCP_Server.md`) for requirement intent.
+1. Read product master (`docs/PRODUCT_AND_DELIVERY_MASTER.md`) for requirement intent and delivery sequence.
 2. Read implementation plan (`IMPLEMENTATION_PLAN_EPICS_STORIES.md`) for story scope/dependencies.
 3. Read status board (`BUILD_STATUS_BOARD.md`) to identify current story.
 4. Read activity log (`BUILD_ACTIVITY_LOG.md`) for latest transition evidence.

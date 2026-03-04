@@ -65,8 +65,8 @@ async function main() {
 
   const requiredDocs = [
     "docs/SECURITY_MODEL_AND_GOVERNANCE.md",
-    "docs/ADMIN_RUNBOOK.md",
-    "docs/RELEASE_READINESS_G7_CHECKLIST.md",
+    "docs/OPERATIONS_AND_RELEASE.md",
+    "docs/PRODUCT_AND_DELIVERY_MASTER.md",
   ];
   const docsStatus = [];
   for (const docPath of requiredDocs) {

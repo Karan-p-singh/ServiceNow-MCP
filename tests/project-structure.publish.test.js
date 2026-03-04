@@ -20,7 +20,7 @@ test("project structure discovery includes required context scope", () => {
   assert.ok(context.includes("PROJECT_CONTEXT_INDEX.md"));
   assert.ok(context.some((p) => p.startsWith("docs/") && p.endsWith(".md")));
   assert.ok(context.some((p) => p.startsWith("Epics/") && p.endsWith(".md")));
-  assert.ok(context.some((p) => p.startsWith("Project PRD/") && p.endsWith(".md")));
+  assert.ok(context.includes("Project PRD/README.md"));
 });
 
 test("project structure artifacts expose stable schema with ISO timestamps", () => {

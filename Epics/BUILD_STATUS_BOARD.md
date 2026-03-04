@@ -45,10 +45,10 @@ Source of truth: `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 | Remaining tools                    |           0 |
 | Catalog lock artifact (R0)         |        Done |
 | Validation addendum family (R1/D5) |        Done |
-| Dev parity clusters (R2)           | Done        |
-| ATF signal track (R3)              | Done        |
-| Rollback snapshot maturity (R4)    | Done        |
-| ITSM/Admin edition track (R5)      | Done        |
+| Dev parity clusters (R2)           |        Done |
+| ATF signal track (R3)              |        Done |
+| Rollback snapshot maturity (R4)    |        Done |
+| ITSM/Admin edition track (R5)      |        Done |
 | Drift guards + claim checks (R6)   | In Progress |
 
 Operational integrity cadence (required for release claims):
@@ -133,8 +133,8 @@ Operational integrity cadence (required for release claims):
 - G4 CI quality gate aggregator completed: `scripts/test-g4-ci-quality-gates.js` + `npm run test:g4:ci` and `artifacts/g4-ci-quality-summary.json`
 - H1 completed: non-fatal audit webhook sink (`src/server/audit-webhook.js`) with filter modes (`writes|high_risk|all`) and timeout controls
 - H2 completed: deploy profiles/tool bundles policy (`src/server/tool-bundles.js`) with deterministic bundle-block code `TOOL_DISABLED_BY_BUNDLE`
-- H3 completed: security docs pack (`docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/RELEASE_READINESS_G7_CHECKLIST.md`)
-- H4 completed: admin runbook (`docs/ADMIN_RUNBOOK.md`)
+- H3 completed: security docs pack (`docs/SECURITY_MODEL_AND_GOVERNANCE.md`, `docs/OPERATIONS_AND_RELEASE.md`, `docs/PRODUCT_AND_DELIVERY_MASTER.md`)
+- H4 completed: operations/release runbook consolidation (`docs/OPERATIONS_AND_RELEASE.md`)
 - G7 readiness automation completed: `scripts/test-g7-readiness.js` + `npm run test:g7` and `artifacts/g7-readiness-summary.json`
 - Gate G7 passed: enterprise readiness checks (`G4-CI`, `G7-DOCS`, `DOCS-PACK`) all green
 - Docs v2 contract alignment pass completed: README tool catalog now distinguishes implemented vs planned tools; PRD/timeline updated to revised high-risk tool contracts and validation addendum semantics

@@ -189,6 +189,61 @@ When any count differs across docs, use this precedence:
 
 For the exact 1..101 table (name, tier, owner, evidence), use `docs/MCP_TOOL_CATALOG_101_MATRIX.md`.
 
+### Tool Catalog Usage (`sn.tool.catalog` + `sn.tool.describe`)
+
+Use these two tools as your discovery/introspection pair before calling high-impact tools:
+
+1. `tools/list` → get currently registered runtime tools
+2. `sn.tool.catalog` → enumerate/search catalog entries
+3. `sn.tool.describe` → inspect one tool's expected shape and semantics
+4. execute the target tool with validated arguments
+
+#### Example: catalog query
+
+```bash
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 21,
+    "method": "tools/call",
+    "params": {
+      "name": "sn.tool.catalog",
+      "arguments": {
+        "query": "sn.script",
+        "limit": 25,
+        "offset": 0
+      }
+    }
+  }'
+```
+
+#### Example: tool describe query
+
+```bash
+curl -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 22,
+    "method": "tools/call",
+    "params": {
+      "name": "sn.tool.describe",
+      "arguments": {
+        "query": "sn.script.update",
+        "limit": 1,
+        "offset": 0
+      }
+    }
+  }'
+```
+
+Operational note:
+
+- Use `sn.tool.catalog` for breadth (what exists now)
+- Use `sn.tool.describe` for depth (how to call safely and correctly)
+- For governance claims (counts/status), still defer to `npm run smoke:summary` and `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
+
 ### Roadmap History (R0–R6)
 
 - `R0`: catalog lock + matrix governance artifact established.
