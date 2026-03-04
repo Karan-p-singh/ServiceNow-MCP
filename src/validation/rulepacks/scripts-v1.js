@@ -15,38 +15,56 @@ function countLines(text) {
   if (!text) {
     return 0;
   }
-  return String(text).split(/\r?\n/).length;
+  const source = String(text);
+  let count = 1;
+  for (let i = 0; i < source.length; i++) {
+    if (source[i] === "\n") {
+      count++;
+    }
+  }
+  return count;
 }
 
 export function evaluateScriptRulepackV1({ script = "", record = {} } = {}) {
   const findings = [];
   const source = String(script || "");
-  const lines = source.split(/\r?\n/);
 
   const evalRegex = /\beval\s*\(/;
-  if (evalRegex.test(source)) {
-    const lineIndex = lines.findIndex((line) => evalRegex.test(line));
+  const evalMatch = source.match(evalRegex);
+  if (evalMatch) {
+    let line = 1;
+    for (let i = 0; i < evalMatch.index; i++) {
+      if (source[i] === "\n") {
+        line++;
+      }
+    }
     findings.push(
       buildFinding({
         id: "SCRIPT_EVAL_USAGE",
         severity: "CRITICAL",
         category: "SECURITY",
         message: "Avoid eval(); use safer parsing/execution alternatives.",
-        evidence: [{ type: "line", line: lineIndex + 1 }],
+        evidence: [{ type: "line", line }],
       }),
     );
   }
 
   const glideRecordRegex = /\bnew\s+GlideRecord\s*\(/;
-  if (glideRecordRegex.test(source)) {
-    const lineIndex = lines.findIndex((line) => glideRecordRegex.test(line));
+  const glideRecordMatch = source.match(glideRecordRegex);
+  if (glideRecordMatch) {
+    let line = 1;
+    for (let i = 0; i < glideRecordMatch.index; i++) {
+      if (source[i] === "\n") {
+        line++;
+      }
+    }
     findings.push(
       buildFinding({
         id: "SCRIPT_GLIDERECORD_USAGE",
         severity: "HIGH",
         category: "PERFORMANCE",
         message: "GlideRecord usage detected; verify query constraints and performance impacts.",
-        evidence: [{ type: "line", line: lineIndex + 1 }],
+        evidence: [{ type: "line", line }],
       }),
     );
   }
