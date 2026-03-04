@@ -10,6 +10,7 @@ import {
   evaluateUiScriptValidation,
   evaluateWorkflowValidation,
   evaluateWriteGate,
+  buildValidationSummaryFromFindings,
 } from "../src/validation/engine.js";
 
 test("evaluateScriptValidation returns deterministic summary and rulepack metadata", () => {
@@ -153,4 +154,53 @@ test("evaluateFixValidation returns remapped artifact rulepack metadata", () => 
   assert.equal(result.summary.rulepack.id, "fix-scripts-v1");
   assert.equal(result.summary.rulepack.artifact_type, "sys_script_fix");
   assert.equal(result.summary.deterministic, true);
+});
+
+test("buildValidationSummaryFromFindings returns default summary with no arguments", () => {
+  const summary = buildValidationSummaryFromFindings();
+
+  assert.deepEqual(summary.findings_count_by_severity, {
+    CRITICAL: 0,
+    HIGH: 0,
+    MEDIUM: 0,
+    LOW: 0,
+  });
+  assert.equal(summary.blocked, false);
+  assert.equal(summary.source, "validation-runtime");
+  assert.equal(summary.execution_ms, 0);
+  assert.equal(summary.deterministic, true);
+  assert.equal(summary.rulepack, undefined);
+});
+
+test("buildValidationSummaryFromFindings maps findings to severity counts", () => {
+  const findings = [
+    { severity: "high" },
+    { severity: "HIGH" },
+    { severity: "critical" },
+    { severity: "medium" },
+    { severity: "low" },
+    { severity: "unknown" },
+  ];
+
+  const summary = buildValidationSummaryFromFindings({ findings });
+
+  assert.deepEqual(summary.findings_count_by_severity, {
+    CRITICAL: 1,
+    HIGH: 2,
+    MEDIUM: 1,
+    LOW: 1,
+  });
+});
+
+test("buildValidationSummaryFromFindings includes rulepack and execution metadata", () => {
+  const rulepack = { id: "test-pack", version: "2.0.0" };
+  const summary = buildValidationSummaryFromFindings({
+    rulepack,
+    executionMs: 150,
+    blocked: true,
+  });
+
+  assert.deepEqual(summary.rulepack, rulepack);
+  assert.equal(summary.execution_ms, 150);
+  assert.equal(summary.blocked, true);
 });
