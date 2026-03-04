@@ -3516,20 +3516,20 @@ async function main() {
     return;
   }
 
-  console.log("ServiceNow MCP Server scaffold is running.");
-  console.log(`ServiceNow target instance URL: ${config.instanceUrl}`);
+  runtimeLogger.info("ServiceNow MCP Server scaffold is running.");
+  runtimeLogger.info(`ServiceNow target instance URL: ${config.instanceUrl}`);
   if (config.transport === "http-sse") {
     const host = config.server?.host || "localhost";
     const port = config.server?.port || 3001;
     const path = config.server?.path || "/mcp";
-    console.log(`MCP endpoint URL: http://${host}:${port}${path}`);
-    console.log(`MCP SSE URL: http://${host}:${port}${path}/sse`);
-    console.log("MCP transport: http-sse (default)");
+    runtimeLogger.info(`MCP endpoint URL: http://${host}:${port}${path}`);
+    runtimeLogger.info(`MCP SSE URL: http://${host}:${port}${path}/sse`);
+    runtimeLogger.info("MCP transport: http-sse (default)");
   } else {
-    console.log("MCP transport: stdio");
-    console.log(`MCP launch command: node ${process.argv[1]}`);
+    runtimeLogger.info("MCP transport: stdio");
+    runtimeLogger.info(`MCP launch command: node ${process.argv[1]}`);
   }
-  console.log("Registered tools:", server.listTools().map((t) => t.name).join(", "));
+  runtimeLogger.info(`Registered tools: ${server.listTools().map((t) => t.name).join(", ")}`);
 }
 
 main().catch((error) => {
