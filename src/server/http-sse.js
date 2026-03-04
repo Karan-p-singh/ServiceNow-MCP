@@ -27,6 +27,7 @@ function parseJsonBody(req) {
       raw += chunk;
       if (raw.length > 1_000_000) {
         reject(new Error("Payload too large"));
+        req.destroy();
       }
     });
     req.on("end", () => {
