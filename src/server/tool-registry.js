@@ -33,6 +33,8 @@ export class ToolRegistry {
     return Array.from(this.tools.values()).map((tool) => ({
       name: tool.name,
       tier: tool.tier,
+      description: tool.description,
+      inputSchema: tool.inputSchema || tool.parameters,
     }));
   }
 

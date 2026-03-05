@@ -108,7 +108,15 @@ function redactConfigForTool(value) {
 }
 
 function evaluatePolicyPreview({ input, config }) {
-  const scope = String(input?.scope || "global");
+  const resolvedScope =
+    typeof input?.scope === "string" && input.scope.trim()
+      ? input.scope.trim()
+      : typeof input?.target_scope === "string" && input.target_scope.trim()
+        ? input.target_scope.trim()
+        : typeof input?.artifact_scope === "string" && input.artifact_scope.trim()
+          ? input.artifact_scope.trim()
+          : "";
+  const scope = resolvedScope || null;
   const toolTier = String(input?.tool_tier || "T0").toUpperCase();
   const tierOrder = { T0: 0, T1: 1, T2: 2, T3: 3 };
   const tierMax = String(config?.tierMax || "T0").toUpperCase();
@@ -120,6 +128,17 @@ function evaluatePolicyPreview({ input, config }) {
   if (writeLike) {
     const tierAllowed = (tierOrder[toolTier] ?? 0) <= (tierOrder[tierMax] ?? 0);
     checks.push({ check: "tier_max", passed: tierAllowed, details: { tool_tier: toolTier, tier_max: tierMax } });
+
+    if (config?.requireScopeForWrites) {
+      checks.push({
+        check: "scope_required_for_writes",
+        passed: Boolean(scope) || allowlisted,
+        details: {
+          scope,
+          exception_allowlisted: allowlisted,
+        },
+      });
+    }
 
     if (Array.isArray(config?.allowedScopes) && config.allowedScopes.length > 0) {
       checks.push({
@@ -254,9 +273,50 @@ function registerBaselineTools(server) {
         data: {
           tool_name: input?.tool_name || null,
           tool_tier: input?.tool_tier || "T0",
-          scope: input?.scope || "global",
+          scope:
+            input?.scope ||
+            input?.target_scope ||
+            input?.artifact_scope ||
+            null,
           policy_preview: evaluatePolicyPreview({ input, config: context.config }),
         },
+      };
+    },
+  });
+
+  server.registerTool({
+    name: "sn.preflight.write",
+    tier: "T0",
+    description: "Runs deterministic preflight policy checks for a candidate write tool call.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        tool_name: { type: "string" },
+        arguments: { type: "object" },
+      },
+      required: ["tool_name"],
+      additionalProperties: false,
+    },
+    handler: async (input, context) => {
+      const toolName = String(input?.tool_name || "").trim();
+      if (!toolName) {
+        return {
+          data: null,
+          errors: [
+            {
+              code: "TARGET_REQUIRED",
+              message: "tool_name is required",
+            },
+          ],
+        };
+      }
+
+      const preview = context?.services?.mcpServer?.preflight?.(
+        toolName,
+        input?.arguments && typeof input.arguments === "object" ? input.arguments : {},
+      );
+      return {
+        data: preview,
       };
     },
   });
@@ -451,6 +511,14 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.instance.info",
     tier: "T0",
+    description: "Gets normalized instance connectivity, capability, and tooling policy metadata.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        instance_key: { type: "string" },
+      },
+      additionalProperties: false,
+    },
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
       const companionClient = context.services?.companion;
@@ -578,6 +646,18 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.table.list",
     tier: "T0",
+    description: "Lists table records with paging controls.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        table: { type: "string" },
+        limit: { type: "number" },
+        offset: { type: "number" },
+        query: { type: "string" },
+        instance_key: { type: "string" },
+      },
+      additionalProperties: false,
+    },
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
       const result = await client.listTable({
@@ -1240,6 +1320,26 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.script.update",
     tier: "T2",
+    description: "Updates a Script Include with validation gating and auditable metadata.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        sys_id: { type: "string" },
+        name: { type: "string" },
+        script: { type: "string" },
+        description: { type: "string" },
+        scope: { type: "string" },
+        target_scope: { type: "string" },
+        artifact_scope: { type: "string" },
+        acknowledged_findings: { type: "array" },
+        break_glass: { type: "boolean" },
+        break_glass_reason: { type: "string" },
+        reason: { type: "string" },
+        instance_key: { type: "string" },
+        response_mode: { type: "string", enum: ["compact", "full"] },
+      },
+      additionalProperties: false,
+    },
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
       const current = await client.getScriptInclude({
@@ -1339,6 +1439,28 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.script.create",
     tier: "T2",
+    description: "Creates a Script Include with validation gating and auditable metadata.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        api_name: { type: "string" },
+        script: { type: "string" },
+        description: { type: "string" },
+        active: { type: "boolean" },
+        scope: { type: "string" },
+        target_scope: { type: "string" },
+        artifact_scope: { type: "string" },
+        acknowledged_findings: { type: "array" },
+        break_glass: { type: "boolean" },
+        break_glass_reason: { type: "string" },
+        reason: { type: "string" },
+        instance_key: { type: "string" },
+        response_mode: { type: "string", enum: ["compact", "full"] },
+      },
+      required: ["name"],
+      additionalProperties: false,
+    },
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
       const recordInput = {
@@ -1419,6 +1541,24 @@ function registerBaselineTools(server) {
   server.registerTool({
     name: "sn.changeset.commit",
     tier: "T3",
+    description: "Commits an update set under T3 confirmation and reason controls.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        changeset_sys_id: { type: "string" },
+        sys_id: { type: "string" },
+        confirm: { type: "boolean" },
+        reason: { type: "string" },
+        scope: { type: "string" },
+        target_scope: { type: "string" },
+        artifact_scope: { type: "string" },
+        break_glass: { type: "boolean" },
+        break_glass_reason: { type: "string" },
+        instance_key: { type: "string" },
+        response_mode: { type: "string", enum: ["compact", "full"] },
+      },
+      additionalProperties: false,
+    },
     handler: async (input, context) => {
       const client = context.services?.serviceNow;
       const resolvedChangesetSysId = input?.changeset_sys_id || input?.sys_id;
@@ -3140,6 +3280,9 @@ async function main() {
   const isSmokeSummaryMode = process.argv.includes("--smoke-summary");
   const isSmokeMode = process.argv.includes("--smoke") || isSmokeSummaryMode;
   const config = loadConfig();
+  if (isSmokeMode) {
+    config.responseModeDefault = "full";
+  }
   const smokeLogger = {
     info: () => {},
     warn: () => {},
@@ -3161,6 +3304,7 @@ async function main() {
       auditWebhook,
     },
   });
+  server.services.mcpServer = server;
   let transport = null;
 
   registerBaselineTools(server);

@@ -62,21 +62,68 @@ function isWriteLikeTool(tool) {
   return normalizeTier(tool?.tier) !== "T0";
 }
 
+function normalizeScopeValue(value) {
+  if (typeof value !== "string") {
+    return "";
+  }
+  return value.trim();
+}
+
+function resolveScopeFromInput(input = {}) {
+  const explicitScope = normalizeScopeValue(input?.scope);
+  if (explicitScope) {
+    return { value: explicitScope, source: "scope" };
+  }
+
+  const targetScope = normalizeScopeValue(input?.target_scope);
+  if (targetScope) {
+    return { value: targetScope, source: "target_scope" };
+  }
+
+  const artifactScope = normalizeScopeValue(input?.artifact_scope);
+  if (artifactScope) {
+    return { value: artifactScope, source: "artifact_scope" };
+  }
+
+  return { value: null, source: "unresolved" };
+}
+
 function evaluatePolicy({ tool, input, config }) {
   const decisions = [];
   let allowed = true;
 
   const toolName = tool?.name || "unknown";
-  const scope = input?.scope || input?.target_scope || input?.artifact_scope || "global";
+  const resolvedScope = resolveScopeFromInput(input);
+  const scope = resolvedScope.value;
   const allowlisted = (config?.exceptionAllowlist || []).includes(toolName);
   const isWrite = isWriteLikeTool(tool);
 
+  if (isWrite && config?.requireScopeForWrites && !scope) {
+    decisions.push({
+      check: "scope_required_for_writes",
+      passed: allowlisted,
+      details: {
+        scope,
+        scope_source: resolvedScope.source,
+        exception_allowlisted: allowlisted,
+      },
+    });
+    if (!allowlisted) {
+      allowed = false;
+    }
+  }
+
   if (isWrite && Array.isArray(config?.allowedScopes) && config.allowedScopes.length > 0) {
-    const scopeAllowed = config.allowedScopes.includes(scope);
+    const scopeAllowed = typeof scope === "string" && config.allowedScopes.includes(scope);
     decisions.push({
       check: "allowed_scopes",
       passed: scopeAllowed || allowlisted,
-      details: { scope, allowed_scopes: config.allowedScopes, exception_allowlisted: allowlisted },
+      details: {
+        scope,
+        scope_source: resolvedScope.source,
+        allowed_scopes: config.allowedScopes,
+        exception_allowlisted: allowlisted,
+      },
     });
     if (!scopeAllowed && !allowlisted) {
       allowed = false;
@@ -88,7 +135,7 @@ function evaluatePolicy({ tool, input, config }) {
     decisions.push({
       check: "deny_global_writes",
       passed,
-      details: { scope, exception_allowlisted: allowlisted },
+      details: { scope, scope_source: resolvedScope.source, exception_allowlisted: allowlisted },
     });
     if (!passed) {
       allowed = false;
@@ -102,6 +149,7 @@ function evaluatePolicy({ tool, input, config }) {
       passed,
       details: {
         scope,
+        scope_source: resolvedScope.source,
         changeset_scope: config.changesetScope,
         exception_allowlisted: allowlisted,
       },
@@ -134,6 +182,17 @@ function evaluatePolicy({ tool, input, config }) {
     evaluated: true,
     allowed,
     decisions,
+  };
+}
+
+function toCompactEnvelope(envelope) {
+  return {
+    request_id: envelope.request_id,
+    correlation_id: envelope.correlation_id,
+    tool: envelope.tool,
+    tier: envelope.tier,
+    data: envelope.data,
+    errors: envelope.errors,
   };
 }
 
@@ -324,7 +383,7 @@ export class MCPServer {
         }),
       );
 
-      return envelope;
+      return this.formatResponseEnvelope(envelope, input);
     }
 
     const requestContext = createRequestContext(input);
@@ -406,7 +465,7 @@ export class MCPServer {
         }),
       );
 
-      return envelope;
+      return this.formatResponseEnvelope(envelope, input);
     }
 
     if (normalizedTier === "T3") {
@@ -469,12 +528,15 @@ export class MCPServer {
           }),
         );
 
-        return envelope;
+        return this.formatResponseEnvelope(envelope, input);
       }
     }
 
     const policy = evaluatePolicy({ tool, input, config: this.config });
     if (!policy.allowed) {
+      const blockedByScopeRequirement = (policy.decisions || []).some(
+        (entry) => entry?.check === "scope_required_for_writes" && entry?.passed === false,
+      );
       const envelope = buildEnvelope({
         requestContext,
         config: this.config,
@@ -485,8 +547,10 @@ export class MCPServer {
           validation_summary: defaultValidationSummary(),
           errors: [
             {
-              code: "POLICY_BLOCKED",
-              message: "Invocation blocked by policy engine",
+              code: blockedByScopeRequirement ? "SCOPE_REQUIRED" : "POLICY_BLOCKED",
+              message: blockedByScopeRequirement
+                ? "Write invocation requires an explicit scope"
+                : "Invocation blocked by policy engine",
             },
           ],
         },
@@ -516,7 +580,7 @@ export class MCPServer {
         }),
       );
 
-      return envelope;
+      return this.formatResponseEnvelope(envelope, input);
     }
 
     this.logger.info?.("[mcp] audit", createAuditEvent({
@@ -590,7 +654,7 @@ export class MCPServer {
         }),
       );
 
-      return envelope;
+      return this.formatResponseEnvelope(envelope, input);
     } catch (error) {
       const invocationError = normalizeInvocationError(error);
 
@@ -647,7 +711,46 @@ export class MCPServer {
         }),
       );
 
+      return this.formatResponseEnvelope(envelope, input);
+    }
+  }
+
+  formatResponseEnvelope(envelope, input = {}) {
+    const requestedMode = String(input?.response_mode || this.config?.responseModeDefault || "compact")
+      .trim()
+      .toLowerCase();
+    if (requestedMode === "full") {
       return envelope;
     }
+
+    const hasErrors = Array.isArray(envelope?.errors) && envelope.errors.length > 0;
+    const blocked = envelope?.policy?.allowed === false || envelope?.validation_summary?.blocked === true;
+
+    if (hasErrors || blocked) {
+      return {
+        ...toCompactEnvelope(envelope),
+        policy: envelope.policy,
+        validation_summary: envelope.validation_summary,
+      };
+    }
+
+    return toCompactEnvelope(envelope);
+  }
+
+  preflight(toolName, input = {}) {
+    const tool = this.registry.get(toolName);
+    if (!tool) {
+      throw new Error(`Tool not found: ${toolName}`);
+    }
+
+    return {
+      tool: {
+        name: tool.name,
+        tier: tool.tier,
+        write_operation: isWriteLikeTool(tool),
+      },
+      scope_resolution: resolveScopeFromInput(input),
+      policy: evaluatePolicy({ tool, input, config: this.config }),
+    };
   }
 }

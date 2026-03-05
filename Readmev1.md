@@ -103,8 +103,6 @@ MCP_TIER_MAX=T1
 MCP_ALLOWED_SCOPES=x_your_scope,global
 MCP_DENY_GLOBAL_WRITES=true
 MCP_ENFORCE_CHANGESET_SCOPE=true
-MCP_REQUIRE_SCOPE_FOR_WRITES=true
-MCP_RESPONSE_MODE_DEFAULT=compact
 
 # Validation (reserved settings; optional)
 # VALIDATION_RULEPACK_VERSION=1.0.0
@@ -246,13 +244,6 @@ Operational note:
 - Use `sn.tool.describe` for depth (how to call safely and correctly)
 - For governance claims (counts/status), still defer to `npm run smoke:summary` and `docs/MCP_TOOL_CATALOG_101_MATRIX.md`
 
-### Write preflight and response mode
-
-- `sn.preflight.write` provides deterministic preflight policy checks before invoking a write tool.
-- Writes require explicit scope when `MCP_REQUIRE_SCOPE_FOR_WRITES=true`.
-- Runtime responses default to compact contract when `MCP_RESPONSE_MODE_DEFAULT=compact`.
-- Set tool argument `response_mode=full` to request full envelope details.
-
 ### Roadmap History (R0–R6)
 
 - `R0`: catalog lock + matrix governance artifact established.
@@ -272,28 +263,6 @@ Run unit tests for validation/runtime and script tooling:
 ```bash
 npm test
 ```
-
-Canonical grouped test runner (preferred):
-
-```bash
-npm run test:run -- --group fast
-npm run test:run -- --group ci
-npm run test:run -- --group gates
-npm run test:run -- --group live
-```
-
-Single gate execution via unified runner:
-
-```bash
-npm run test:run -- --gate g2
-# or
-npm run test:gate g2
-```
-
-Backward-compatible aliases retained:
-
-- `test:suite`, `test:fast`, `test:ci`, `test:gates`, `test:suite:live`
-- these currently route through the unified runner
 
 Run compact smoke summary output (short, console-friendly):
 

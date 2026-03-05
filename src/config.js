@@ -25,6 +25,8 @@ const DEFAULTS = {
   enforceChangesetScope: false,
   changesetScope: "",
   breakGlassEnabled: false,
+  requireScopeForWrites: true,
+  responseModeDefault: "compact",
   exceptionAllowlist: [],
   auditWebhookEnabled: false,
   auditWebhookUrl: "",
@@ -221,6 +223,14 @@ export function loadConfig(env = process.env) {
       mergedEnv.MCP_BREAK_GLASS_ENABLED,
       DEFAULTS.breakGlassEnabled,
     ),
+    requireScopeForWrites: parseBoolean(
+      mergedEnv.MCP_REQUIRE_SCOPE_FOR_WRITES,
+      DEFAULTS.requireScopeForWrites,
+    ),
+    responseModeDefault:
+      (mergedEnv.MCP_RESPONSE_MODE_DEFAULT || DEFAULTS.responseModeDefault).toLowerCase() === "full"
+        ? "full"
+        : "compact",
     exceptionAllowlist: parseCsv(mergedEnv.MCP_EXCEPTION_ALLOWLIST, DEFAULTS.exceptionAllowlist),
     auditWebhook: {
       enabled: parseBoolean(mergedEnv.MCP_AUDIT_WEBHOOK_ENABLED, DEFAULTS.auditWebhookEnabled),

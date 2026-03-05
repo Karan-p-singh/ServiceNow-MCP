@@ -42,37 +42,106 @@ function parseJsonBody(req) {
   });
 }
 
-function buildToolInputSchema(toolName) {
-  if (toolName === "sn.instance.info") {
+function normalizeToolInputSchema(schema) {
+  if (!schema || typeof schema !== "object") {
     return {
       type: "object",
-      properties: {
-        instance_key: {
-          type: "string",
-          description: "Optional configured ServiceNow instance key",
-        },
-      },
-      additionalProperties: false,
-    };
-  }
-
-  if (toolName === "sn.table.list") {
-    return {
-      type: "object",
-      properties: {
-        table: { type: "string" },
-        limit: { type: "number" },
-        offset: { type: "number" },
-        query: { type: "string" },
-        instance_key: { type: "string" },
-      },
       additionalProperties: true,
     };
   }
 
   return {
     type: "object",
-    additionalProperties: true,
+    properties: schema.properties || {},
+    required: Array.isArray(schema.required) ? schema.required : [],
+    additionalProperties:
+      schema.additionalProperties === undefined ? true : schema.additionalProperties,
+  };
+}
+
+function validateToolInput(schema, input) {
+  const normalizedSchema = normalizeToolInputSchema(schema);
+  const args = input && typeof input === "object" && !Array.isArray(input) ? input : {};
+  const errors = [];
+
+  for (const requiredKey of normalizedSchema.required || []) {
+    if (args[requiredKey] === undefined) {
+      errors.push({ code: "MISSING_REQUIRED_FIELD", field: requiredKey });
+    }
+  }
+
+  if (normalizedSchema.additionalProperties === false) {
+    const allowed = new Set(Object.keys(normalizedSchema.properties || {}));
+    for (const key of Object.keys(args)) {
+      if (!allowed.has(key)) {
+        errors.push({ code: "UNKNOWN_FIELD", field: key });
+      }
+    }
+  }
+
+  for (const [field, definition] of Object.entries(normalizedSchema.properties || {})) {
+    const value = args[field];
+    if (value === undefined || !definition || typeof definition !== "object") {
+      continue;
+    }
+    if (definition.type === "string" && typeof value !== "string") {
+      errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "string" });
+    }
+    if (definition.type === "number" && typeof value !== "number") {
+      errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "number" });
+    }
+    if (definition.type === "boolean" && typeof value !== "boolean") {
+      errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "boolean" });
+    }
+    if (
+      Array.isArray(definition.enum) &&
+      definition.enum.length > 0 &&
+      !definition.enum.includes(value)
+    ) {
+      errors.push({ code: "INVALID_ENUM_VALUE", field, allowed: definition.enum });
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
+
+function toCodexSafeToolName(name) {
+  return String(name || "")
+    .trim()
+    .replace(/[^a-zA-Z0-9_-]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function buildToolNameMaps(tools) {
+  const internalToExternal = new Map();
+  const externalToInternal = new Map();
+  const usedExternalNames = new Set();
+
+  for (const tool of tools) {
+    const internalName = String(tool?.name || "").trim();
+    if (!internalName) {
+      continue;
+    }
+
+    let externalName = toCodexSafeToolName(internalName) || "tool";
+    let suffix = 2;
+    while (usedExternalNames.has(externalName)) {
+      externalName = `${toCodexSafeToolName(internalName) || "tool"}_${suffix}`;
+      suffix += 1;
+    }
+
+    usedExternalNames.add(externalName);
+    internalToExternal.set(internalName, externalName);
+    externalToInternal.set(externalName, internalName);
+  }
+
+  return {
+    internalToExternal,
+    externalToInternal,
   };
 }
 
@@ -270,31 +339,48 @@ export class HttpSseTransport {
     }
 
     if (method === "tools/list") {
-      const tools = this.mcpServer.listTools().map((tool) => ({
-        name: tool.name,
-        description: `ServiceNow MCP tool (${tool.tier})`,
-        inputSchema: buildToolInputSchema(tool.name),
+      const registeredTools = this.mcpServer.listTools();
+      const maps = buildToolNameMaps(registeredTools);
+      const tools = registeredTools.map((tool) => ({
+        name: maps.internalToExternal.get(tool.name) || tool.name,
+        description: tool.description || `ServiceNow MCP tool (${tool.tier})`,
+        inputSchema: normalizeToolInputSchema(tool.inputSchema),
       }));
       return jsonRpcSuccess(id, { tools });
     }
 
     if (method === "tools/call") {
-      const toolName = params?.name;
+      const requestedToolName = params?.name;
       const toolInput = params?.arguments || {};
 
-      if (!toolName) {
+      if (!requestedToolName) {
         return jsonRpcError(id, -32602, "Invalid params", {
           reason: "tools/call requires params.name",
         });
       }
 
       try {
+        const registeredTools = this.mcpServer.listTools();
+        const maps = buildToolNameMaps(registeredTools);
+        const toolName =
+          maps.externalToInternal.get(requestedToolName) ||
+          String(requestedToolName);
+        const toolDefinition = registeredTools.find((entry) => entry.name === toolName);
+        const validation = validateToolInput(toolDefinition?.inputSchema, toolInput);
+        if (!validation.valid) {
+          return jsonRpcError(id, -32602, "Invalid params", {
+            code: "INVALID_TOOL_INPUT",
+            tool: toolName,
+            issues: validation.errors,
+          });
+        }
+
         const envelope = await this.mcpServer.invoke(toolName, toolInput);
         return jsonRpcSuccess(id, {
           content: [
             {
               type: "text",
-              text: JSON.stringify(envelope, null, 2),
+              text: JSON.stringify(envelope),
             },
           ],
           isError: Array.isArray(envelope?.errors) && envelope.errors.length > 0,

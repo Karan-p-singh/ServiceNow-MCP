@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T09:51:32.040Z",
+  "generated_at": "2026-03-05T02:05:38.358Z",
   "gate": "G2",
   "passed": true,
   "criteria": [
@@ -55,7 +55,7 @@
       "f2_changeset_gap_detection_available": true,
       "f3_capture_verify_reason_codes_deterministic": true,
       "f4_commit_preview_dry_run_available": true,
-      "f5_controlled_commit_contract_available": true,
+      "f5_controlled_commit_contract_available": false,
       "f6_rollback_plan_generator_available": true,
       "e4_flow_list_get_validate_available": true,
       "e5_workflow_list_get_validate_available": true,
@@ -65,6 +65,7 @@
       "sn.health.check",
       "sn.config.get",
       "sn.policy.test",
+      "sn.preflight.write",
       "sn.audit.ping",
       "sn.script.get",
       "sn.script.list",
