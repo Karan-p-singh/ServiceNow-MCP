@@ -63,7 +63,7 @@ Operational integrity cadence (required for release claims):
 
 ## In Progress
 
-- (none)
+- EPIC-I / TERP Phase T1 — token-efficiency transport hardening (compact text mode + tools/list detail profiles + low-token defaults + transport contract tests)
 
 ## Ready
 
@@ -144,13 +144,13 @@ Operational integrity cadence (required for release claims):
 
 ## 4) Immediate Next 10 Stories (Execution Queue)
 
-1. G8 process cadence: run and archive release evidence bundle (`smoke:summary`, `test:g4:ci`, `test:g7`) on each release candidate.
-2. R6 hardening: add CI assertion that checks docs/runtime tool-count parity before release tag.
-3. D4 governance: add explicit rulepack suppression policy docs and audit expectations.
-4. C3 optional companion helpers: close remaining optional scope/capture helper backlog.
-5. Expand structure publish tags to include owner mapping from matrix.
-6. Add structure-publish check into CI quality gate suite.
-7. Refresh docs timestamp + last-verified fields as part of release checklist.
-8. Continue policy review for edition-boundary protections in ITSM/Admin tools.
-9. Maintain artifact retention policy for G4/G7 + structure publish outputs.
-10. Quarterly audit: verify matrix ownership and evidence links remain current.
+1. EPIC-I I1/I2/I3: complete token-efficiency Phase T1 and capture before/after payload metrics.
+2. EPIC-I I4: integrate compact transport regression checks into release test cadence.
+3. G8 process cadence: run and archive release evidence bundle (`smoke:summary`, `test:g4:ci`, `test:g7`) on each release candidate.
+4. R6 hardening: add CI assertion that checks docs/runtime tool-count parity before release tag.
+5. D4 governance: add explicit rulepack suppression policy docs and audit expectations.
+6. C3 optional companion helpers: close remaining optional scope/capture helper backlog.
+7. Expand structure publish tags to include owner mapping from matrix.
+8. Add structure-publish check into CI quality gate suite.
+9. Refresh docs timestamp + last-verified fields as part of release checklist.
+10. Continue policy review for edition-boundary protections in ITSM/Admin tools.

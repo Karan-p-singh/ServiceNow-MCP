@@ -43,6 +43,43 @@ function parseJsonBody(req) {
 }
 
 function normalizeToolInputSchema(schema) {
+  function normalizePropertyDefinition(definition) {
+    if (!definition || typeof definition !== "object") {
+      return { type: "string" };
+    }
+
+    const normalized = { ...definition };
+
+    if (normalized.type === "array") {
+      const rawItems = normalized.items;
+      if (!rawItems || typeof rawItems !== "object") {
+        normalized.items = { type: "string" };
+      } else {
+        normalized.items = normalizePropertyDefinition(rawItems);
+      }
+    }
+
+    if (normalized.type === "object") {
+      const rawProps =
+        normalized.properties && typeof normalized.properties === "object"
+          ? normalized.properties
+          : {};
+      const properties = {};
+      for (const [key, childDefinition] of Object.entries(rawProps)) {
+        properties[key] = normalizePropertyDefinition(childDefinition);
+      }
+      normalized.properties = properties;
+      if (!Array.isArray(normalized.required)) {
+        normalized.required = [];
+      }
+      if (normalized.additionalProperties === undefined) {
+        normalized.additionalProperties = true;
+      }
+    }
+
+    return normalized;
+  }
+
   if (!schema || typeof schema !== "object") {
     return {
       type: "object",
@@ -50,9 +87,14 @@ function normalizeToolInputSchema(schema) {
     };
   }
 
+  const normalizedProperties = {};
+  for (const [field, definition] of Object.entries(schema.properties || {})) {
+    normalizedProperties[field] = normalizePropertyDefinition(definition);
+  }
+
   return {
     type: "object",
-    properties: schema.properties || {},
+    properties: normalizedProperties,
     required: Array.isArray(schema.required) ? schema.required : [],
     additionalProperties:
       schema.additionalProperties === undefined ? true : schema.additionalProperties,
@@ -93,6 +135,15 @@ function validateToolInput(schema, input) {
     if (definition.type === "boolean" && typeof value !== "boolean") {
       errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "boolean" });
     }
+    if (definition.type === "array" && !Array.isArray(value)) {
+      errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "array" });
+    }
+    if (
+      definition.type === "object" &&
+      (value === null || typeof value !== "object" || Array.isArray(value))
+    ) {
+      errors.push({ code: "INVALID_FIELD_TYPE", field, expected: "object" });
+    }
     if (
       Array.isArray(definition.enum) &&
       definition.enum.length > 0 &&
@@ -114,6 +165,34 @@ function toCodexSafeToolName(name) {
     .replace(/[^a-zA-Z0-9_-]/g, "_")
     .replace(/_+/g, "_")
     .replace(/^_+|_+$/g, "");
+}
+
+function truncateText(text, maxChars) {
+  const source = String(text || "");
+  const limit = Number.isFinite(maxChars) ? Math.max(80, Number(maxChars)) : 800;
+  if (source.length <= limit) {
+    return source;
+  }
+  return `${source.slice(0, limit)}… [truncated ${source.length - limit} chars]`;
+}
+
+function buildToolCallText({ envelope, requestedToolName, textMode, maxTextChars }) {
+  if (String(textMode || "summary").toLowerCase() === "full") {
+    return truncateText(JSON.stringify(envelope), maxTextChars);
+  }
+
+  const summary = {
+    tool: envelope?.tool || requestedToolName || null,
+    tier: envelope?.tier || null,
+    request_id: envelope?.request_id || null,
+    correlation_id: envelope?.correlation_id || null,
+    error_count: Array.isArray(envelope?.errors) ? envelope.errors.length : 0,
+    blocked:
+      envelope?.policy?.allowed === false ||
+      envelope?.validation_summary?.blocked === true,
+  };
+
+  return truncateText(JSON.stringify(summary), maxTextChars);
 }
 
 function buildToolNameMaps(tools) {
@@ -341,11 +420,37 @@ export class HttpSseTransport {
     if (method === "tools/list") {
       const registeredTools = this.mcpServer.listTools();
       const maps = buildToolNameMaps(registeredTools);
-      const tools = registeredTools.map((tool) => ({
-        name: maps.internalToExternal.get(tool.name) || tool.name,
-        description: tool.description || `ServiceNow MCP tool (${tool.tier})`,
-        inputSchema: normalizeToolInputSchema(tool.inputSchema),
-      }));
+      const requestedDetail = String(
+        params?.detail || this.config?.toolsListDetail || "standard",
+      ).toLowerCase();
+      const detail = ["minimal", "standard", "full"].includes(requestedDetail)
+        ? requestedDetail
+        : "standard";
+
+      const tools = registeredTools.map((tool) => {
+        const base = {
+          name: maps.internalToExternal.get(tool.name) || tool.name,
+          tier: tool.tier,
+        };
+
+        if (detail === "minimal") {
+          return base;
+        }
+
+        const withDescription = {
+          ...base,
+          description: tool.description || `ServiceNow MCP tool (${tool.tier})`,
+        };
+
+        if (detail === "full") {
+          return {
+            ...withDescription,
+            inputSchema: normalizeToolInputSchema(tool.inputSchema),
+          };
+        }
+
+        return withDescription;
+      });
       return jsonRpcSuccess(id, { tools });
     }
 
@@ -376,11 +481,19 @@ export class HttpSseTransport {
         }
 
         const envelope = await this.mcpServer.invoke(toolName, toolInput);
+        const textMode = String(this.config?.responseTextMode || "summary").toLowerCase();
+        const maxTextChars = Number(this.config?.maxTextChars || 800);
+        const text = buildToolCallText({
+          envelope,
+          requestedToolName,
+          textMode,
+          maxTextChars,
+        });
         return jsonRpcSuccess(id, {
           content: [
             {
               type: "text",
-              text: JSON.stringify(envelope),
+              text,
             },
           ],
           isError: Array.isArray(envelope?.errors) && envelope.errors.length > 0,

@@ -27,6 +27,9 @@ const DEFAULTS = {
   breakGlassEnabled: false,
   requireScopeForWrites: true,
   responseModeDefault: "compact",
+  responseTextMode: "summary",
+  maxTextChars: 800,
+  toolsListDetail: "minimal",
   exceptionAllowlist: [],
   auditWebhookEnabled: false,
   auditWebhookUrl: "",
@@ -231,6 +234,19 @@ export function loadConfig(env = process.env) {
       (mergedEnv.MCP_RESPONSE_MODE_DEFAULT || DEFAULTS.responseModeDefault).toLowerCase() === "full"
         ? "full"
         : "compact",
+    responseTextMode:
+      (mergedEnv.MCP_RESPONSE_TEXT_MODE || DEFAULTS.responseTextMode).toLowerCase() === "full"
+        ? "full"
+        : "summary",
+    maxTextChars: Math.max(
+      120,
+      parseInteger(mergedEnv.MCP_MAX_TEXT_CHARS, DEFAULTS.maxTextChars),
+    ),
+    toolsListDetail: ["minimal", "standard", "full"].includes(
+      String(mergedEnv.MCP_TOOLS_LIST_DETAIL || DEFAULTS.toolsListDetail).toLowerCase(),
+    )
+      ? String(mergedEnv.MCP_TOOLS_LIST_DETAIL || DEFAULTS.toolsListDetail).toLowerCase()
+      : DEFAULTS.toolsListDetail,
     exceptionAllowlist: parseCsv(mergedEnv.MCP_EXCEPTION_ALLOWLIST, DEFAULTS.exceptionAllowlist),
     auditWebhook: {
       enabled: parseBoolean(mergedEnv.MCP_AUDIT_WEBHOOK_ENABLED, DEFAULTS.auditWebhookEnabled),

@@ -105,6 +105,9 @@ MCP_DENY_GLOBAL_WRITES=true
 MCP_ENFORCE_CHANGESET_SCOPE=true
 MCP_REQUIRE_SCOPE_FOR_WRITES=true
 MCP_RESPONSE_MODE_DEFAULT=compact
+MCP_RESPONSE_TEXT_MODE=summary   # summary | full
+MCP_MAX_TEXT_CHARS=800
+MCP_TOOLS_LIST_DETAIL=minimal    # minimal | standard | full
 
 # Validation (reserved settings; optional)
 # VALIDATION_RULEPACK_VERSION=1.0.0
@@ -195,7 +198,7 @@ For the exact 1..101 table (name, tier, owner, evidence), use `docs/MCP_TOOL_CAT
 
 Use these two tools as your discovery/introspection pair before calling high-impact tools:
 
-1. `tools/list` → get currently registered runtime tools
+1. `tools/list` (prefer `detail=minimal`) → get currently registered runtime tools with low token overhead
 2. `sn.tool.catalog` → enumerate/search catalog entries
 3. `sn.tool.describe` → inspect one tool's expected shape and semantics
 4. execute the target tool with validated arguments
@@ -251,7 +254,25 @@ Operational note:
 - `sn.preflight.write` provides deterministic preflight policy checks before invoking a write tool.
 - Writes require explicit scope when `MCP_REQUIRE_SCOPE_FOR_WRITES=true`.
 - Runtime responses default to compact contract when `MCP_RESPONSE_MODE_DEFAULT=compact`.
+- `tools/call` text channel defaults to `summary` mode (`MCP_RESPONSE_TEXT_MODE=summary`) to avoid envelope duplication costs.
+- Text channel size is capped by `MCP_MAX_TEXT_CHARS`; `structuredContent` remains canonical full data.
 - Set tool argument `response_mode=full` to request full envelope details.
+
+### Low-Token Operating Profile (recommended)
+
+Use these defaults for cost-sensitive operation:
+
+- `MCP_RESPONSE_MODE_DEFAULT=compact`
+- `MCP_RESPONSE_TEXT_MODE=summary`
+- `MCP_MAX_TEXT_CHARS=800`
+- `MCP_TOOLS_LIST_DETAIL=minimal`
+
+Operational pattern:
+
+1. Use `tools/list` with `{"detail":"minimal"}` only when needed.
+2. Use `sn.tool.describe` for one target tool instead of loading all schemas.
+3. Keep list calls tightly scoped (`limit`, `offset`, `query`).
+4. Use `sn.preflight.write` before write calls to avoid iterative trial/error loops.
 
 ### Roadmap History (R0–R6)
 
@@ -713,7 +734,7 @@ curl -X POST http://localhost:3001/mcp \
     "jsonrpc": "2.0",
     "id": 2,
     "method": "tools/list",
-    "params": {}
+    "params": {"detail":"minimal"}
   }'
 ```
 

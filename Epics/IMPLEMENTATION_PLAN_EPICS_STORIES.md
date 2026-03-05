@@ -380,6 +380,58 @@ Goal: Security/governance readiness for enterprise adoption.
 
 ---
 
+## EPIC-I — Token Efficiency & Lean Runtime (TERP)
+
+Goal: Reduce MCP token consumption in planning and execution workflows while preserving safety, policy, and validation contracts.
+
+### Story I1 — Transport payload deduplication + compact text channel
+
+- **Priority:** P0 | **Effort:** M | **Depends on:** A2, A6
+- **User Story:** As an LLM operator, I need tool call responses to avoid duplicated payloads so prompts stay within context limits.
+- **Tasks:**
+  - I1-T1 Replace full text envelope echo with summary text by default
+  - I1-T2 Keep `structuredContent` as canonical full payload
+  - I1-T3 Add configurable text truncation guardrail
+- **Acceptance Criteria:**
+  - `tools/call` no longer emits full envelope in both text and structured channels by default
+  - summary text remains deterministic and bounded
+
+### Story I2 — Lean tool discovery contract (`tools/list` detail modes)
+
+- **Priority:** P0 | **Effort:** M | **Depends on:** I1
+- **User Story:** As an LLM operator, I need minimal/standard/full tool listing modes to avoid loading schemas unless needed.
+- **Tasks:**
+  - I2-T1 Add `detail=minimal|standard|full` handling for `tools/list`
+  - I2-T2 Set low-token default profile to minimal listing
+  - I2-T3 Preserve full schema mode for explicit introspection
+- **Acceptance Criteria:**
+  - default tool listing excludes schema payloads
+  - full schema listing remains available by explicit request
+
+### Story I3 — Low-token defaults and runbook alignment
+
+- **Priority:** P0 | **Effort:** S | **Depends on:** I1, I2
+- **User Story:** As an administrator, I need `.env` and README defaults to enforce a low-token profile out of the box.
+- **Tasks:**
+  - I3-T1 Add `MCP_RESPONSE_TEXT_MODE`, `MCP_MAX_TEXT_CHARS`, `MCP_TOOLS_LIST_DETAIL`
+  - I3-T2 Document low-token operating profile and call-order guidance
+- **Acceptance Criteria:**
+  - template config and docs align with lean runtime behavior
+  - operators can intentionally switch back to verbose modes
+
+### Story I4 — Token regression tests (transport contract)
+
+- **Priority:** P1 | **Effort:** M | **Depends on:** I1, I2
+- **User Story:** As release engineering, I need tests that verify compact response behavior so token regressions are caught early.
+- **Tasks:**
+  - I4-T1 Add tests for `tools/list` detail mode payload shape
+  - I4-T2 Add tests for compact `tools/call` text channel with full `structuredContent`
+- **Acceptance Criteria:**
+  - CI assertions enforce compact-by-default transport behavior
+  - regressions in response verbosity are detected before release
+
+---
+
 ## 4) Initial Sequenced Story Queue (Execution Order)
 
 1. A1 → A2 → A3 → A5
